@@ -1,30 +1,66 @@
+#load('R/sysdata.rda')
+
+#TODO - pick the  final public data model to save
+# nt_filename = '/home/cnuge/bin/DAPR/public_only_PHMMs/nt_train_all_bold_coi_v2_1perc_subsample-PublicOnly.PHMM'
+# new_nt = readPHMM(nt_filename)
+# nt_PHMM = new_nt
+
+# aa_filename = '/home/cnuge/bin/DAPR/public_only_PHMMs/aa_train_all_bold_coi_v2_1perc_subsample-PublicOnly.PHMM'
+# new_aa = readPHMM(aa_filename)
+# aa_PHMM = new_aa
+
+#use_data(nt_PHMM, aa_PHMM, trans_df, example_nt_string, overwrite = TRUE, internal = TRUE)
+
+#then load for dev with:
+# load('R/sysdata.rda')
+
+
+
 ###############################################################################
-#' By order nucleotide profile hidden markov models for coi5p.
-#' Also contains the generic nucleotide profile - 'unknown'
+#' Nucleotide profile hidden markov model for coi5p.
+#'
+#' This model is stored in the coi5p package and was trained on a representitive
+#' sample of the barcode of life database (http://www.boldsystems.org/index.php).
 #'
 #' @keywords internal
-"nt_phmms"
+"nt_PHMM"
 ###############################################################################
 
 ###############################################################################
-#' By order amino acid profile hidden markov models for coi5p.
-#' Also contains the generic AA profile - 'unknown'
+#' Amino acid profile hidden markov model for coi5p.
+#'
+#' This model is stored in the coi5p package and was trained on a representitive
+#' sample of the barcode of life database (http://www.boldsystems.org/index.php).
 #'
 #' @keywords internal
-"aa_phmms"
+"aa_PHMM"
 ###############################################################################
 
 ###############################################################################
-#' A list of coi5p DNA barcode sequences used in the examples provided
-#' within the package documentation
+#' Data frame containing the translation table recommendation.
 #'
-"ex_ccs_read_list"
-###############################################################################
-
-###############################################################################
-#' Data frame containing the translation tables numbers
-#' corresponding to different orders.
-#'
-#' @keywords internal
 "trans_df"
+###############################################################################
+
+###############################################################################
+#' Example coi5p DNA sequence string
+#'
+#' This string of barcode data is used in the package documentation's examples
+#' and within the vignette demonstrating how to use the package.
+#' The variable is:
+#' example_nt_string = 'ctctacttgatttttggtgcatgagcaggaatagttggaatagctttaagtttactaattcgcgctgaactaggtcaacccggatctcttttaggggatgatcagatttataatgtgatcgtaaccgcccatgcctttgtaataatcttttttatggttatacctgtaataattggtggctttggcaattgacttgttcctttaataattggtgcaccagatatagcattccctcgaataaataatataagtttctggcttcttcctccttcgttcttacttctcctggcctccgcaggagtagaagctggagcaggaaccggatgaactgtatatcctcctttagcaggtaatttagcacatgctggcccctctgttgatttagccatcttttcccttcatttggccggtatctcatcaattttagcctctattaattttattacaactattattaatataaaacccccaactatttctcaatatcaaacaccattatttgtttgatctattcttatcaccactgttcttctactccttgctctccctgttcttgcagccggaattacaatattattaacagaccgcaacctcaacactacattctttgaccccgcagggggaggggacccaattctctatcaacactta'
+"example_nt_string"
+###############################################################################
+
+###############################################################################
+#' Example barcode data.
+#'
+#' A nine line dataframe of coi5p barcode data with the following columns:
+#' id - the unique identifier for the sample
+#' genetic_code - the genetic code for translation of the sample (features NA for unknowns)
+#' taxa -  a taxonomic designation associated with the sample
+#' sequence - the DNA sequence associated with the sample
+#' notes - notes on the sequence structure
+#'
+"example_barcode_data"
 ###############################################################################

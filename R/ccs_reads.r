@@ -1,43 +1,52 @@
 
-#' Build ccs_reads class instance.
+#' Build a new coi5p class instance.
 #'
 #' @keywords internal
-new_ccs_reads = function(x = c(), id = character(), order= "UNK"){
-  stopifnot(is.vector(x))
-  stopifnot(is.character(id))
-  stopifnot(is.character(order))
+new_DNAseq = function(x = character(), name = character()){
+  stopifnot(is.character(x))
+  stopifnot(is.character(name))
   if(length(x) == 0){
-    stop("Missing argument. Must pass a DNA sequence, or vector of sequences.")
+    stop("Must pass a DNA sequence.")
   }
-  
-  structure(list(id = id, 
-                 sequences = x,
-                 order = tolower(order)) , class = "ccs_reads")
+  structure(list(name = name, raw = tolower(x)) , class = "DNAseq")
 }
 
-#' Validate the new ccs_reads class instance.
+#' Validate the new coi5p class instance.
 #'
 #' @keywords internal
-validate_ccs_reads = function(new_instance){
-  #add sanity checks to make sure there aren't errors in the ccs_read strucutre
-  #that was just built
+validate_DNAseq = function(new_instance){
+  # take a new instance and run validation checks on the sequence
+  # make sure the sequence has only ATGCN-
+  # make sure the sequence has length greater than zero
+  allowed = c("-", "a", "c", "g", "n","t")
+  for(c in sort(unique(strsplit(new_instance$raw, "")[[1]]))){
+    if(!c %in% allowed){
+      stop(paste("Unallowed character in DNA string:", c,
+                 "\nValid characters are: a t g c - n"))
+    }
+  }
   new_instance
 }
 
-#' Build a ccs_reads object from a DNA sequence string.
+
+#' Build a coi5p object from a DNA sequence string.
 #'
-#' @param x a vector of nucleotide strings.
-#' @param id and optional identification string.
-#' @param order the taxonomic order corresponding to the sample. 
-#' If taxonomy is not known, use the default 'unknown' option.
-#' @return an object of class code{"coi5p"}
+#' @param x a nucleotide string.
+#' Valid characters within the nucleotide string are: a,t,g,c,-,n.
+#' The nucleotide string can be input as upper case, but will be automatically converted to lower case.
+#' @param name an optional character string. Identifier for the sequence.
+#'
+#' @return an object of class \code{"coi5p"}
 #' @examples
-#' #known taxonomy:
-#' ex_data = build_ccs(ex_ccs_read_list, order = 'Diptera', id = 'custom_id')
-#' #unknown taxonomy:
-#' ex_data = build_ccs(ex_ccs_read_list,  id = 'custom_id')
-#' @name build_ccs
+#' dat = DNAseq(example_nt_string)
+#' #named DNAseq sequence
+#' dat = DNAseq(example_nt_string, name = "example_seq1")
+#' #components in output DNAseq object:
+#' dat$raw
+#' dat$name
+#' @name DNAseq
 #' @export
-build_ccs = function(x, id = character(), order = "unknown"){
-  validate_ccs_reads(new_ccs_reads(x, id = id, order = order))
+DNAseq = function(x = character(), name = character()){
+  validate_DNAseq(new_DNAseq(tolower(x), name))
 }
+

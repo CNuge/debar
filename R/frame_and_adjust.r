@@ -1,6 +1,6 @@
-
 #' build an DNAbin with ape.
-#' switches the - to n
+#'
+#' Switches the dashes in the seq - to n
 #'
 #' @keywords internal
 individual_DNAbin = function(dna_string){
@@ -250,8 +250,8 @@ adj_seq = function(frame_dat, path_out, censor_length = 3){
 #' Take a ccs_reads object and put sequences in common reading frame
 #' @param x a ccs_reads class object.
 #' @param ... additional arguments to be passed between methods.
-#' @return a class object of code{"ccs_reads"} 
-#' @seealso \code{\link{build_ccs}}
+#' @return a class object of code{"DNAseq"} 
+#' @seealso \code{\link{DNAseq}}
 #' @examples
 #' #previously called
 #' ex_data = build_ccs(ex_ccs_read_list, order = 'Diptera', id = 'SSGBC787-14')
@@ -266,36 +266,26 @@ frame = function(x, ...){
 
 #' @rdname frame
 #' @export
-frame.ccs_reads = function(x, ...){
+frame.DNAseq = function(x, ...){
   
-  if(!x$order %in% names(nt_phmms)){
-    stop(paste("This is the development version, Cam hasn't added all the models yet",
-               "so there is not a model avaliable for order:", x$order))
+  x$data$ntBin = individual_DNAbin(toupper(x$raw))
+  
+  x$data$ntPHMMout = aphid::Viterbi(nt_PHMM, x$data$ntBin, odds = FALSE)
+  
+  if(leading_ins(x$data$ntPHMMout[['path']])){
+    temp_frame = set_frame(x$raw, x$data$ntPHMMout[['path']])
+    trim_temp = temp_frame[['framed_seq']]
+    x$data$ntBins = individual_DNAbin(trim_temp)
+    x$data$ntPHMMout = aphid::Viterbi(nt_PHMM, x$data$ntBin, odds = FALSE)
+  }else{
+    trim_temp = x$raw
   }
+  x$frame_dat = set_frame(trim_temp, x$data$ntPHMMout[['path']])
+  x$data$path = x$data$ntPHMMout[['path']]
+  x$data$ntBins = NA
+  x$data$ntPHMMout = NA
+
   
-  
-  x$data$ntBins = lapply(x$sequences, function(i){
-    individual_DNAbin(i)
-  })
-  
-  x$data$ntPHMMout = lapply(x$data$ntBins, function(i){
-    aphid::Viterbi(nt_phmms[[x$order]], i, odds = FALSE)
-  })
-  
-  for(i in 1:length(x$sequences)){
-    if(leading_ins(x$data$ntPHMMout[[i]][['path']])){
-      temp_frame = set_frame(x$sequences[[i]], x$data$ntPHMMout[[i]][['path']])
-      trim_temp = temp_frame[['framed_seq']]
-      x$data$ntBins[[i]] = individual_DNAbin(trim_temp)
-      x$data$ntPHMMout[[i]] = aphid::Viterbi(nt_phmms[[x$order]], x$data$ntBins[[i]], odds = FALSE)
-    }else{
-      trim_temp = x$sequences[[i]]
-    }
-    x$frame_dat[[i]] = set_frame(trim_temp, x$data$ntPHMMout[[i]][['path']])
-    x$data$paths[[i]] = x$data$ntPHMMout[[i]][['path']]
-    x$data$ntBins[[i]] = NA
-    x$data$ntPHMMout[[i]] = NA
-  }
   x$data$ntBins = NULL
   x$data$ntPHMMout = NULL
   
@@ -328,16 +318,11 @@ adjust = function(x, ...){
 
 #' @rdname adjust
 #' @export
-adjust.ccs_reads = function(x, ..., censor_length = 3){
+adjust.DNAseq = function(x, ..., censor_length = 3){
   
-  x$adjusted_sequences = lapply(1:length(x$sequences) ,function(i){
-    adj_seq(x$frame_dat[[i]], x$data$paths[[i]] , censor_length = censor_length)
-  })
-  
-  # TODO - come up with a rule for when the whole sequence should be 
-  # tossed/masked beyond a certain point
-  # could handle the long string of 2s at this point as well maybe?
-  # built this logic into the adj_seq function.
+  x$adjusted_sequence = adj_seq(x$frame_dat, x$data$path , censor_length = censor_length)
+
   return(x)
 }
 
+#TODO - need to stop masking for triple deletes, these are valid missing codons.

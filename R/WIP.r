@@ -19,6 +19,8 @@
 # a minimal use case of only denoising one sequence at a time - no need to take the consensus 
 # or to act on multiple sequences individually.
 
-
+#changing the object so that it is just a single DNA sequence
+#using the small PHMM (10K training) that is generic for all the different data... can sub in the higher trained 
+#order specific later.
 
 
