@@ -24,3 +24,21 @@
 #order specific later.
 
 
+
+
+
+#TODO - need to stop masking for triple deletes, these are valid missing codons.
+#TODO - don't need to add the information at the start of the adjusted sequence.
+#TODO - use frame to just store the start and end positions in three bits:
+#  $front
+#  $framed
+#  $end
+# don't want to toss the excess information, (may need to change the double frame logic)
+# instead we want this put to the side so it can be patched back on the sequence after the middle
+# is denoised
+# TODO - AA check with the PHMM, project the masks back down a level corresponding to the first 0 or 2 seen.
+# TODO - rejig so that instead of making additional strings, just saving index positions on the initial raw sequence.
+# maybe will be faster if we don't touch the characters repeatedly but instead just manipulate a vector via index positions.
+# TODO - less important than making it work but will have to rewrite the documentation to account for the new data
+# structures being used here
+
