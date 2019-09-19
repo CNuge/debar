@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+inst/extdata/PACBC9120_99_sequence_pairs\.tsv
+
+inst/extdata/PACBC_99\.fastq
+
+example_output\.fasta

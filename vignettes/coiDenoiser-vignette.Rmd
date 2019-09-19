@@ -1,0 +1,149 @@
+---
+title: "coiDenoiser-vignette"
+author: "Cameron M. Nugent"
+data: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{coiDenoiser-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup}
+library(coiDenoiser)
+```
+
+## Abstract
+
+
+## Introduction
+
+
+## The coiDenoiser Package
+
+### Dependencies
+`coiDenoiser` is dependent on [the `aphid` package](https://github.com/shaunpwilkinson/aphid) for comparison of sequences against the COI-5P PHMMs. The `ape` is also a requirement because sequences are internally converted to ape "DNAbin" objects. 
+
+## Example - denoising of circular consensus reads
+
+
+### The data
+
+For demonstration of the workflow, `coiDenoiser` contains two example files. The first is a fastq file with series of single molecule, real-time (SMRT) sequencing reads generated on the Pacific BioSciences SEQUEL platform. These data are derived from 5 unique samples animal samples, from which 658bp amplicons of the mitochondrial cyctochrom c oxidase I gene were isolated and sequenced. The second file is a .tsv with taxonomic information (on the order and family levels) corresponding to each of the samples. The taxonomic information is not strictly needed for denoising with coiDenoiser, but it greatly increases model performance by allowing for error assessment using taxonomic specific PHMMs (on the order level) as opposed to relying solely on the generic PHMM for the whole tree of life.
+
+```{r}
+#example data files 
+#for dev:
+#fastq_dat_file = './inst/extdata/ccs_subset.fastq'
+#meta_dat_file = './inst/extdata/ccs_metadata.tsv'
+
+fastq_dat_file = system.file('extdata/ccs_subset.fastq', package = 'coiDenoiser')
+meta_dat_file = system.file('extdata/ccs_metadata.tsv', package = 'coiDenoiser')
+```
+
+
+### Step 1: loading and formatting data
+
+The first step in the denoising of the barcode data is loading the files into r and the merger of the datasets based on the unique sample identifiers. `coiDenoiser` contains two functions, `read_fasta` and `read_fastq`, for taking sequence data from standardized file formats and creating dataframes for subsequent denoising.
+
+```{r}
+#Build the fastq dataframe
+ccs_df = read_fastq(fastq_dat_file)
+
+#read in the taxonomic informaiton corresponding to the samples
+ex_meta_data = read.csv(meta_dat_file, sep = '\t', stringsAsFactors = FALSE)
+
+```
+
+In this example, the samples are identified through the 'process_id', both within the .tsv file and nested within the text of the fastq header lines. The isolation of the process_id from the fastq header line is demonstrated, but it should be noted the contents of the header line will vary depending on the data source and strucutre. The user may therefore be required to derive a customized solution for parsing the sample identifiers from the fastq header line.
+
+```{r, echo=FALSE}
+#function to parse the process_id from the fastq header
+header_name_process = function(x){
+	split_dat = unlist(strsplit(x, "MID="))
+	split_dat[length(split_dat)]
+}
+
+#apply the function to create a new column in the dataframe
+ccs_df$process_id = unlist(lapply(ccs_df$header_data, function(x){
+	header_name_process(x)
+	}))
+
+```
+
+Now that both the metadata file and the dataframe with circular consensus reads contain a process_id column, the taxonomic information can be associated with the sequence reads.
+```{r}
+ccs_df = merge(x = ccs_df, y = ex_meta_data, by = "process_id", all.x = TRUE)
+```
+
+
+### Step 2: Grouping the samples
+coiDenoiser utilized the multiple circular consensus reads produced for each sample to derive a denoised barcode sequence. For this reason the dataframe is split into a list of dataframes based on the process_id. Each member of the resulting list contains the sequence and taxonomic information corresponding to a single sample.
+```{r}
+list_of_dfs = split(ccs_df, ccs_df$process_id)
+```
+
+
+### Step 3: constructing the circular consensus objects
+After the data is cleaned and sorted based on the sample of origin, a ccs_reads object can be created for each sample. This data structure takes three inputs: a vector of sequences, an id for the given sample and the taxonomic order corresponding to the sample.
+
+Here `lapply` is used to build a ccs object for each sample in the list by taking the column with the sequences, the name of the list member and the string at the first position in the order column.
+
+```{r}
+ccs_list = lapply(1:length(list_of_dfs), function(i){
+	build_ccs(x =list_of_dfs[[i]][["sequence"]],
+						id = names(list_of_dfs[i]),
+						order = list_of_dfs[[i]][1, "order"])
+	})
+```
+
+### Step 4: denoing the sequences 
+
+
+```{r}
+
+for(i in 1:length(ccs_list)){
+  print(paste("On sample number:", i))
+  ccs_list[[i]] = denoise(ccs_list[[i]],
+                        	censor_length = 3,
+                        	to_file = FALSE)
+}
+
+```
+
+
+You can access the individual components of the outputs using the dollar sign notation.
+
+```{r}
+ccs_list[4]
+names(ccs_list[[4]])
+
+ccs_list[[4]]$order
+ccs_list[[4]]$consensus
+```
+
+The parts of the denoise workflow can be executed individually if the users wishes to have more control over the timing and execution of the denoising process.
+```{r}
+
+ex_data = build_ccs(list_of_dfs[[5]][['sequence']], order = 'diptera', id = 'PACBC7697-16')
+
+ex_data =  frame(ex_data)
+ex_data = adjust(ex_data)
+ex_data = consensus(ex_data)
+
+```
+
+### Step 5: outputing the denoised consenus sequences to a file.
+
+The denoise pipeline can be used to output  
+
+
+```{r}
+
+#can then write the consensus sequece to a fasta or fastq file
+#write_fasta(ex_data)
+#write_fastq(ex_data)
+
+```
+
+
