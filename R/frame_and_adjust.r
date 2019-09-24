@@ -341,7 +341,7 @@ adjust = function(x, ...){
 #' @export
 adjust.DNAseq = function(x, ..., censor_length = 3){
   
-  x$adjusted_sequence = adj_seq(x$frame_dat, x$data$path , censor_length = censor_length)
+  x$adjusted_sequence = adj_seq(x$frame_dat, x$data$path, censor_length = censor_length)
 
   return(x)
 }

@@ -48,17 +48,13 @@ aa_check = function(x, ...){
 
 #' @rdname aa_check
 #' @export
-aa_check.ccs_reads = function(x, ..., trans_table = "auto", frame_offset = 0){
+aa_check.DNAseq = function(x, ..., trans_table = 0, frame_offset = 0){
   
-  if(trans_table == "auto"){
-    trans_table = which_trans_table(x$order)
-  }
- 
   if(trans_table == 0){
-    x$aaSeq = censored_translation(x$consensus, reading_frame = (frame_offset+1))
+    x$aaSeq = censored_translation(paste(x$adjusted_sequence, collapse=""), reading_frame = (frame_offset+1))
   }else{
     #split the DNA string into a vector, all characters to lower case
-    dna_list = strsplit(gsub('-', 'n', as.character(tolower(x$consensus))),"")
+    dna_list = strsplit(gsub('-', 'n', as.character(tolower(x$adjusted_sequence))),"")
     dna_vec = dna_list[[1]]
     #translate using the designated numcode, returns a vector of AAs
     aa_vec = seqinr::translate(dna_vec, frame = frame_offset, numcode=trans_table, ambiguous= TRUE, NAstring = '-')

@@ -1,5 +1,5 @@
 
-#' Build a new coi5p class instance.
+#' Build a new DNAseq class instance.
 #'
 #' @keywords internal
 new_DNAseq = function(x = character(), name = character()){
@@ -11,7 +11,7 @@ new_DNAseq = function(x = character(), name = character()){
   structure(list(name = name, raw = tolower(x)) , class = "DNAseq")
 }
 
-#' Validate the new coi5p class instance.
+#' Validate the new DNAseq class instance.
 #'
 #' @keywords internal
 validate_DNAseq = function(new_instance){
@@ -29,7 +29,7 @@ validate_DNAseq = function(new_instance){
 }
 
 
-#' Build a coi5p object from a DNA sequence string.
+#' Build a DNAseq object from a DNA sequence string.
 #'
 #' @param x a nucleotide string.
 #' Valid characters within the nucleotide string are: a,t,g,c,-,n.
