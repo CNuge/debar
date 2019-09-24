@@ -102,21 +102,7 @@ write_fasta.DNAseq = function(x, ...,
                                  filename = "denoised.fasta", 
                                  append = TRUE){
 
-    #need to make the $outseq from the raw and the adjusted sequence
-  raw_vec = strsplit(x$raw, "")[[1]]
-  if(x$frame_dat$seq_start > 1){
-    front_raw = raw_vec[0:(x$frame_dat$seq_start-1)]
-  }else{
-    front_raw = character(0)
-  }
-  
-  if(x$frame_dat$seq_end < length(raw_vec)){
-    back_raw = raw_vec[((x$frame_dat$seq_end)+1):(length(raw_vec)+1)]
-  }else{
-    back_raw = character(0)
-  }
-  
-  dashes_rm = ((length(x$frame_dat$front)+1) +(x$data$len_first_front))
+  dashes_rm = sum(c(length(x$frame_dat$front), as.integer(x$data$len_first_front), 1), na.rm = TRUE)
   #need the adjusted seq without the front
   x$outseq = paste(c(x$data$raw_removed_front,
                      x$frame_dat$removed_lead,
@@ -170,20 +156,8 @@ write_fastq.DNAseq = function(x, ...,
                                  phred_placeholder = "#"){
 
   #need to make the $outseq from the raw and the adjusted sequence
-  raw_vec = strsplit(x$raw, "")[[1]]
-  if(x$frame_dat$seq_start > 1){
-    front_raw = raw_vec[0:(x$frame_dat$seq_start-1)]
-  }else{
-    front_raw = character(0)
-  }
-  
-  if(x$frame_dat$seq_end < length(raw_vec)){
-    back_raw = raw_vec[((x$frame_dat$seq_end)+1):(length(raw_vec)+1)]
-  }else{
-    back_raw = character(0)
-  }
-  
-  dashes_rm = ((length(x$frame_dat$front)) +(x$data$len_first_front)+1)
+
+  dashes_rm = sum(c(length(x$frame_dat$front), as.integer(x$data$len_first_front), 1), na.rm = TRUE)
   #need the adjusted seq without the front
   x$outseq = paste(c(x$data$raw_removed_front,
                      x$frame_dat$removed_lead,
