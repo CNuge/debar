@@ -67,17 +67,15 @@ read_fasta = function(x){
 }
 
 
-
-
 #' Output the denoised consensus sequence to a fasta file.
 #'
 #' 
-#' @param x a ccs_reads class object.
+#' @param x a DNAseq class object.
 #' @param ... additional arguments to be passed between methods.
 #' @param filename The name of the file to output the data to. Default is "denoised.fasta".
 #' @param append Should the ccs consensus sequence be appended to the output file?(TRUE) 
 #' Or overwrite the file?(FALSE) Default is TRUE.
-#' @return a class object of code{"ccs_reads"} 
+#' @return a class object of code{"DNAseq"} 
 #' @seealso \code{\link{build_ccs}}
 #' @seealso \code{\link{frame}}
 #' @seealso \code{\link{adjust}}
@@ -100,11 +98,28 @@ write_fasta = function(x, ...){
 
 #' @rdname write_fasta
 #' @export
-write_fasta.ccs_reads = function(x, ..., 
+write_fasta.DNAseq = function(x, ..., 
                                  filename = "denoised.fasta", 
                                  append = TRUE){
-  outstring = paste(">", x$id, "|ccs_consensus|", x$order, "\n",
-                    x$consensus, sep = '')
+
+    #need to make the $outseq from the raw and the adjusted sequence
+  raw_vec = strsplit(x$raw, "")[[1]]
+  if(x$frame_dat$seq_start > 1){
+    front_raw = raw_vec[0:(x$frame_dat$seq_start-1)]
+  }else{
+    front_raw = character(0)
+  }
+  
+  if(x$frame_dat$seq_end < length(raw_vec)){
+    back_raw = raw_vec[((x$frame_dat$seq_end)+1):(length(raw_vec)+1)]
+  }else{
+    back_raw = character(0)
+  }
+  
+  x$outseq = paste(front_raw, x$adjusted_sequence, back_raw, collapse = "")
+  
+  outstring = paste(">", x$id, "\n",
+                    x$outseq, sep = '')
   write(outstring, file = filename, append = append)
 }
 
@@ -112,13 +127,13 @@ write_fasta.ccs_reads = function(x, ...,
 #' Output the denoised sequence to a fastq format with placeholder phred scores.
 #'
 #' 
-#' @param x a ccs_reads class object.
+#' @param x a DNAseq class object.
 #' @param ... additional arguments to be passed between methods.
 #' @param filename The name of the file to output the data to. Default is "denoised.fasta".
 #' @param append Should the ccs consensus sequence be appended to the output file?(TRUE) 
 #' Or overwrite the file?(FALSE) Default is TRUE.
 #' @param phred_placeholder The character to input for the phred score line. Default is '#'
-#' @return a class object of code{"ccs_reads"} 
+#' @return a class object of code{"DNAseq"} 
 #' @seealso \code{\link{build_ccs}}
 #' @seealso \code{\link{frame}}
 #' @seealso \code{\link{adjust}}
@@ -141,14 +156,31 @@ write_fastq = function(x, ...){
 
 #' @rdname write_fastq
 #' @export
-write_fastq.ccs_reads = function(x, ..., 
+write_fastq.DNAseq = function(x, ..., 
                                  filename = "denoised.fastq", 
                                  append = TRUE, 
                                  phred_placeholder = "#"){
-  outstring = paste(">", x$id, "|ccs_consensus|", x$order, "\n",
-                    x$consensus, "\n",
+
+  #need to make the $outseq from the raw and the adjusted sequence
+  raw_vec = strsplit(x$raw, "")[[1]]
+  if(x$frame_dat$seq_start > 1){
+    front_raw = raw_vec[0:(x$frame_dat$seq_start-1)]
+  }else{
+    front_raw = character(0)
+  }
+  
+  if(x$frame_dat$seq_end < length(raw_vec)){
+    back_raw = raw_vec[((x$frame_dat$seq_end)+1):(length(raw_vec)+1)]
+  }else{
+    back_raw = character(0)
+  }
+  
+  x$outseq = paste(front_raw, x$adjusted_sequence, back_raw, collapse = "")
+    
+  outstring = paste(">", x$id, "\n",
+                    x$outseq, "\n",
                     "+\n",
-                    paste(rep(phred_placeholder, times = nchar(x$consensus)), collapse=""))
+                    paste(rep(phred_placeholder, times = nchar(x$outseq)), collapse=""))
   write(outstring, file =  filename, append = append)
 }
 

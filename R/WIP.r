@@ -52,7 +52,31 @@ to:
 # TODO - rejig so that instead of making additional strings, just saving index positions on the initial raw sequence.
 # maybe will be faster if we don't touch the characters repeatedly but instead just manipulate a vector via index positions.
 # TODO - less important than making it work but will have to rewrite the documentation to account for the new data
-# structures being used here
+# structures being used herem frame_offset The offset to the reading frame to be applied for translation. By default the offset
+#' is zero, so the first character in the framed sequence is considered the first nucelotide of the first codon.
+#' Passing frame_offset = 1 would offset the sequence by one and therefore make the second character in the
+#' framed sequence the the first nucelotide of the first codon.
+#' @return a class object of code{"ccs_reads"} 
+#' @seealso \code{\link{build_ccs}}
+#' @seealso \code{\link{frame}}
+#' @seealso \code{\link{adjust}}
+#' @examples
+#' #previously called
+#' ex_data = build_ccs(ex_ccs_read_list, order = 'Diptera', id = 'SSGBC787-14')
+#' ex_data =  frame(ex_data)
+#' ex_data = adjust(ex_data)
+#' ex_data = consensus(ex_data)
+#' #run the aa check on the adjusted sequences
+#' ex_data = aa_check(ex_data)
+#' @export
+#' @name aa_check
+aa_check = function(x, ...){
+  UseMethod("aa_check")
+} 
+
+#' @rdname aa_check
+#' @export
+
 # TODO - sujeevan said that some of the reads may be the reverse compliments? figure out how these are handled... can it be fixed?
 
 
@@ -100,6 +124,9 @@ z
 x =z
 z = aa_check(z)
 z$aaSeq
+
+#need to then take the front off of the seq (that was added by frame) and then paste the ends back on and output.
+
 
 
 
