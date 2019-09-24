@@ -114,18 +114,54 @@ y$adjusted_sequence
 
 
 err_big = "ctctacttgatttttggtgcatgagcaggaatagttggaatagctttaagtttactaattcgcgctgaactaggtcaacccatctcttttagggggatgatcagatttataatgtgatcgtaacccccatgcctttgtaataatcttttttatggttatacctgtaataattggtggctttggcaattgacttgttcctttaataattggtgcaccagatatagcattccctcgaataaataatataagtttctggcttcttcctccttcttcttacttctcctggcctccgcaggagtagaagctggagcaggaaccggatgaactgtatatcctcctttagcaggtaatttagcacatgctggcccctctgttgtttagccatcttttcccttcatttggccggtatctcatcaattttagcctctattaattttattacaactattattaatataaaacccccaactatttctcaatatcaaacaccattatttgtttgatctattcttatcaccactgttcttctatccttgctctccctgttcttgcagccggaattacaatattattaacagaccgcaacctcaacactacattctttgaccccgcagggggaggggacccaattctctatcaacactta"
-z = DNAseq(err_big)
+z = DNAseq(err_big, name = 'example_seq1' )
 z
 z = frame(z)
 z$data
 z = adjust(z, censor_length = 3)
 z$adjusted_sequence 
 z
-x =z
 z = aa_check(z)
 z$aaSeq
+z
+write_fasta(z)
+write_fastq(z)
+
 
 #need to then take the front off of the seq (that was added by frame) and then paste the ends back on and output.
+
+
+err_sides = "AAAAAAAAAAAAAAAActctacttgatttttggtgcatgagcaggaatagttggaatagctttaagtttactaatttcgcgctgaactaggtcaacccggatctcttttaggggatgatcagatttataatgtgatcgtaaccgcccatgcctttgtaataatcttttttatggttatacctgtaataattggtggctttggcaattgacttgttcctttaataattggtgcaccagatatagcattccctcgaataaataatataagtttctggcttcttcctccttcgttcttacttctcctggcctccgcaggagtagaagctggagcaggaaccggatgaactgtatatcctcctttagcaggtaatttagcacatgctggcccctctgttgatttagccatcttttcccttcatttggccggtatctcatcaattttagcctctattaattttattacaactattattaatataaaacccccaactatttctcaatatcaaacaccattatttgtttgatctattcttatcaccactgttcttctactccttgctctccctgttcttgcagccggaattacaatattattaacagaccgcaacctcaacactacattctttgaccccgcagggggaggggacccaattctctatcaacacttaTTTTTTTTTT"
+nchar(err_big)
+x = DNAseq(err_sides, name = 'example_seq2' )
+x
+x = frame(x)
+x$data
+x$data$raw_removed_front
+x$data$raw_removed_end
+x$frame_dat$removed_lead
+x$frame_dat$removed_end
+length(x$frame_dat$removed_lead)
+x$frame_dat$framed_seq
+
+patched = c(x$data$raw_removed_front,
+            x$frame_dat$removed_lead,
+            x$frame_dat$trimmed_seq[4:length(x$frame_dat$trimmed_seq)], #need to save the total number of dashes...
+            x$frame_dat$removed_end,
+            x$data$raw_removed_end)
+split_dat = strsplit(tolower(err_sides), "")[[1]]
+patched == split_dat
+
+nchar(x$frame_dat$framed_seq)
+x = adjust(x, censor_length = 3)
+x$adjusted_sequence 
+x
+x = aa_check(x)
+x$aaSeq
+x
+write_fasta(x)
+write_fastq(x)
+
 
 
 

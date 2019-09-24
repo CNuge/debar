@@ -116,10 +116,18 @@ write_fasta.DNAseq = function(x, ...,
     back_raw = character(0)
   }
   
-  x$outseq = paste(front_raw, x$adjusted_sequence, back_raw, collapse = "")
+  dashes_rm = ((length(x$frame_dat$front)+1) +(x$data$len_first_front))
+  #need the adjusted seq without the front
+  x$outseq = paste(c(x$data$raw_removed_front,
+                     x$frame_dat$removed_lead,
+                     x$adjusted_sequence[dashes_rm:length(x$adjusted_sequence)], 
+                     x$frame_dat$removed_end,
+                     x$data$raw_removed_end) ,
+                   collapse = "")
   
-  outstring = paste(">", x$id, "\n",
+  outstring = paste(">", x$name, "\n",
                     x$outseq, sep = '')
+  
   write(outstring, file = filename, append = append)
 }
 
@@ -175,12 +183,21 @@ write_fastq.DNAseq = function(x, ...,
     back_raw = character(0)
   }
   
-  x$outseq = paste(front_raw, x$adjusted_sequence, back_raw, collapse = "")
-    
-  outstring = paste(">", x$id, "\n",
+  dashes_rm = ((length(x$frame_dat$front)) +(x$data$len_first_front)+1)
+  #need the adjusted seq without the front
+  x$outseq = paste(c(x$data$raw_removed_front,
+                     x$frame_dat$removed_lead,
+                     x$adjusted_sequence[dashes_rm:length(x$adjusted_sequence)], 
+                     x$frame_dat$removed_end,
+                     x$data$raw_removed_end) ,
+                   collapse = "")
+  
+  outstring = paste(">", x$name, "\n",
                     x$outseq, "\n",
                     "+\n",
-                    paste(rep(phred_placeholder, times = nchar(x$outseq)), collapse=""))
+                    paste(rep(phred_placeholder, times = nchar(x$outseq)), collapse = ""), 
+                    "\n", sep="")
+  
   write(outstring, file =  filename, append = append)
 }
 

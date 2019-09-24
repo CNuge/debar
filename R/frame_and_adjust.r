@@ -62,20 +62,24 @@ set_frame = function(org_seq , path_out){
   org_seq_vec = strsplit(tolower(org_seq), split='')[[1]]
   
   adj_for_dels = ins_front_trim(path_out)
+  front = c()
+  removed_lead = c()
   
   #If there are a large number (>2) of deletes in the first 15bp
   #then adjust the sequence so the end of the delete run is the starting point
-  if(adj_for_dels != FALSE){
-    org_seq_vec = org_seq_vec[adj_for_dels:length(org_seq_vec)]
-    path_out = path_out[adj_for_dels:length(path_out)]
-  }
   
-  front = c()
+  
   org_seq_start = 1
   org_seq_end = length(org_seq_vec)
   
   path_start = 1
   path_end = length(path_out)
+  
+  if(adj_for_dels != FALSE){
+    org_seq_start = adj_for_dels
+    path_start = adj_for_dels
+  }
+  
   
   for( i in 1:length(path_out) ){
     #0 = D
@@ -130,9 +134,23 @@ set_frame = function(org_seq , path_out){
     }
   }
   
-    
+
+  if(org_seq_start != 1){
+    removed_lead = org_seq_vec[1:(org_seq_start-1)]
+  }else{
+    removed_lead = c()
+  }
+  
+  if(org_seq_end < length(org_seq_vec)){
+    removed_end = org_seq_vec[(org_seq_end+1):length(org_seq_vec)]
+  }else{
+    removed_end = c()
+  }
+  
   return(list(framed_seq = paste(c(front,org_seq_vec[org_seq_start:org_seq_end]),collapse= ""),
               trimmed_seq = org_seq_vec[org_seq_start:org_seq_end],
+              removed_lead = removed_lead,
+              removed_end = removed_end,
               seq_start = org_seq_start,
               seq_end = org_seq_end,
               path_start = path_start,
@@ -295,19 +313,21 @@ frame.DNAseq = function(x, ...){
   
   if(leading_ins(x$data$ntPHMMout[['path']])){
     temp_frame = set_frame(x$raw, x$data$ntPHMMout[['path']])
+    x$data$raw_removed_front = temp_frame[['removed_lead']]
+    x$data$raw_removed_end = temp_frame[['removed_end']]
+    x$data$len_first_front = length(temp_frame$front)
     trim_temp = temp_frame[['framed_seq']]
-    x$data$ntBins = individual_DNAbin(trim_temp)
+    x$data$ntBin = individual_DNAbin(trim_temp)
     x$data$ntPHMMout = aphid::Viterbi(nt_PHMM, x$data$ntBin, odds = FALSE)
   }else{
+    x$data$raw_removed_front = c()
+    x$data$raw_removed_end = c()
     trim_temp = x$raw
   }
   x$frame_dat = set_frame(trim_temp, x$data$ntPHMMout[['path']])
   x$data$path = x$data$ntPHMMout[['path']]
-  x$data$ntBins = NA
-  x$data$ntPHMMout = NA
-
-  
-  x$data$ntBins = NULL
+ 
+  x$data$ntBin = NULL
   x$data$ntPHMMout = NULL
   
   return(x)
