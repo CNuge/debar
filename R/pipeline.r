@@ -11,7 +11,7 @@
 #' @param keep_flanks Should the regions of the input sequence outside of the barcode region be readded to the denoised sequence
 #' prior to outputting to the file. Default is TRUE. 
 #' False will lead to only the denoised sequence for the 657bp barcode region being output to the file.
-#' @param outformat The format of the output file. Options are fasta (default) or fastq format.
+#' @param outformat The format of the output file. Options are fasta or fastq (default) format.
 #' @param filename The name of the file to output the data to. Default filenames are respectively: denoised.fasta or denoised.fastq.
 #' @param append Should the denoised sequence be appended to the output file?(TRUE) 
 #' Or should the sequence overwrite the output file?(FALSE) Default is TRUE.
@@ -42,7 +42,7 @@ denoise = function(x, ...,
                              censor_length = 5,
                              to_file = TRUE,
                              keep_flanks = TRUE,
-                             outformat = "fasta", 
+                             outformat = "fastq", 
                              filename = NULL, 
                              phred_placeholder = "#",
                              aa_check = FALSE, 
@@ -88,3 +88,21 @@ denoise = function(x, ...,
   x
 }
 
+
+#'Denoise the sequence data from a given file
+#'@param filename The name of the file to
+#'@param file_type
+#'@param multicore
+denoise_file = function(filename, file_type = "fastq", multicore = FALSE, ...){
+  if(file_type == "fastq"){
+    data = read_fastq(filename)
+  }else if (file_type == "fasta"){
+    sequences = read_fasta(filename)
+  }else{
+    stop("file_type must be either fasta or fastq")
+  }
+  
+  for(i in 1:length(sequences)){
+    denoise(data$sequence[[i]], name = data$header_data[[i]], ...)
+  }
+}

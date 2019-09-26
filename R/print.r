@@ -12,5 +12,4 @@ print.DNAseq = function(x, ...){
              sep ="")
   lines = c(lines, l3)
   cat(lines, sep="")
-}
-# 
+} 

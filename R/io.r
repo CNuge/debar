@@ -6,7 +6,7 @@
 #' @param keep_quality Boolean indicating if the Phred quality scores should be 
 #' retained in the output dataframe. Default is FALSE.
 #' @examples
-#' filename = system.file('extdata/ccs_subset.fastq', package = 'coiDenoiser')
+#' filename = system.file('extdata/ccs_subset.fastq', package = 'seqdenoise')
 #' data = read_fastq(filename)
 #' @export
 #' @name read_fastq
