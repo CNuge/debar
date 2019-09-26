@@ -93,6 +93,10 @@ denoise = function(x, ...,
 #'@param filename The name of the file to
 #'@param file_type
 #'@param multicore
+#'@param ... additional arguments to be passed to the denoise function.
+#'
+#'@seealso \code{\link{denoise}}
+#'  
 denoise_file = function(filename, file_type = "fastq", multicore = FALSE, ...){
   if(file_type == "fastq"){
     data = read_fastq(filename)
@@ -102,7 +106,9 @@ denoise_file = function(filename, file_type = "fastq", multicore = FALSE, ...){
     stop("file_type must be either fasta or fastq")
   }
   
-  for(i in 1:length(sequences)){
-    denoise(data$sequence[[i]], name = data$header_data[[i]], ...)
+  if(multicore == FALSE){
+    for(i in 1:length(sequences)){
+      denoise(data$sequence[[i]], name = data$header_data[[i]], ...)
+    }
   }
 }
