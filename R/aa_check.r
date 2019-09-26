@@ -1,6 +1,3 @@
-#TODO - possibly shift the aa_check application down to the level of adjusted sequences
-# and have it be applied prior to the consensus step. Probably more useful in that capacity.
-
 
 #' build an AAbin with ape.
 #'

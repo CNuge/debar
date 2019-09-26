@@ -2,7 +2,7 @@
 #' Read in raw data from a fastq file.
 #' 
 #' 
-#' @param x The name of the fastq file to read data from
+#' @param x The name of the fastq file to read data from.
 #' @param keep_quality Boolean indicating if the Phred quality scores should be 
 #' retained in the output dataframe. Default is FALSE.
 #' @examples
@@ -72,6 +72,8 @@ read_fasta = function(x){
 #' 
 #' @param x a DNAseq class object.
 #' @param ... additional arguments to be passed between methods.
+#' @param keep_flanks Default is TRUE.
+#' @param ambig_char The character to use for ambigious positions in the sequence.
 #' @param filename The name of the file to output the data to. Default is "denoised.fasta".
 #' @param append Should the ccs consensus sequence be appended to the output file?(TRUE) 
 #' Or overwrite the file?(FALSE) Default is TRUE.
@@ -98,18 +100,27 @@ write_fasta = function(x, ...){
 
 #' @rdname write_fasta
 #' @export
-write_fasta.DNAseq = function(x, ..., 
+write_fasta.DNAseq = function(x, ...,
+                                 keep_flanks = TRUE,
+                                 ambig_char = "N",              
                                  filename = "denoised.fasta", 
                                  append = TRUE){
 
-  dashes_rm = sum(c(length(x$frame_dat$front), as.integer(x$data$len_first_front), 1), na.rm = TRUE)
   #need the adjusted seq without the front
-  x$outseq = paste(c(x$data$raw_removed_front,
-                     x$frame_dat$removed_lead,
-                     x$adjusted_sequence[dashes_rm:length(x$adjusted_sequence)], 
-                     x$frame_dat$removed_end,
-                     x$data$raw_removed_end) ,
-                   collapse = "")
+  if(keep_flanks == TRUE){
+    dashes_rm = sum(c(length(x$frame_dat$front), as.integer(x$data$len_first_front), 1), na.rm = TRUE)
+    
+    x$outseq = paste(c(x$data$raw_removed_front,
+                       x$frame_dat$removed_lead,
+                       x$adjusted_sequence[dashes_rm:length(x$adjusted_sequence)], 
+                       x$frame_dat$removed_end,
+                       x$data$raw_removed_end) ,
+                       collapse = "")
+  }else{
+    x$outseq = paste(x$adjusted_sequence, collapse = "")
+  }
+  
+  x$outseq = toupper(gsub("-", ambig_char, x$outseq ))
   
   outstring = paste(">", x$name, "\n",
                     x$outseq, sep = '')
@@ -123,6 +134,8 @@ write_fasta.DNAseq = function(x, ...,
 #' 
 #' @param x a DNAseq class object.
 #' @param ... additional arguments to be passed between methods.
+#' @param keep_flanks Default is TRUE.
+#' @param ambig_char The character to use for ambigious positions in the sequence.
 #' @param filename The name of the file to output the data to. Default is "denoised.fasta".
 #' @param append Should the ccs consensus sequence be appended to the output file?(TRUE) 
 #' Or overwrite the file?(FALSE) Default is TRUE.
@@ -133,7 +146,7 @@ write_fasta.DNAseq = function(x, ...,
 #' @seealso \code{\link{adjust}}
 #' @examples
 #' #previously called
-#' ex_data = build_ccs(ex_ccs_read_list, order = 'Diptera', id = 'SSGBC787-14')
+#' ex_data = DNAseq(ex_ccs_read_list, name = 'SSGBC787-14')
 #' ex_data =  frame(ex_data)
 #' ex_data = adjust(ex_data)
 #' ex_data = consensus(ex_data)
@@ -150,7 +163,9 @@ write_fastq = function(x, ...){
 
 #' @rdname write_fastq
 #' @export
-write_fastq.DNAseq = function(x, ..., 
+write_fastq.DNAseq = function(x, ...,
+                                 keep_flanks = TRUE,
+                                 ambig_char = "N",      
                                  filename = "denoised.fastq", 
                                  append = TRUE, 
                                  phred_placeholder = "#"){
@@ -164,7 +179,7 @@ write_fastq.DNAseq = function(x, ...,
                      x$adjusted_sequence[dashes_rm:length(x$adjusted_sequence)], 
                      x$frame_dat$removed_end,
                      x$data$raw_removed_end) ,
-                   collapse = "")
+                     collapse = "")
   
   outstring = paste(">", x$name, "\n",
                     x$outseq, "\n",
