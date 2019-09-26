@@ -64,8 +64,9 @@ head(ccs_df)
 vdenoise = Vectorize(denoise)
 
 start_time = Sys.time()
-ccs_list = vdenoise(ccs_df$sequence, ccs_df$header_data ,  to_file = FALSE)
+ccs_list = vdenoise(ccs_df$sequence, ccs_df$header_data,  to_file = FALSE)
 end_time = Sys.time()
+time_dif = difftime( end_time, start_time, units = "secs")
 
 print(paste("vectorizing the application to the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
 ```
@@ -77,6 +78,7 @@ start_time = Sys.time()
 ccs_list = mclapply(1:length(ccs_df$sequence),  function(i){
   denoise(ccs_df$sequence[i], ccs_df$header_data[i],  to_file = FALSE)},  mc.cores = detectCores())	
 end_time = Sys.time()
+time_dif = difftime( end_time, start_time, units = "secs")
 print(paste("multicore applying to the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
 
 ```
@@ -86,6 +88,7 @@ print(paste("multicore applying to the dataframe of", length(ccs_df$sequence), "
 start_time = Sys.time()
 ccs_list = mapply(denoise, ccs_df$sequence, ccs_df$header_data ,  to_file = FALSE)	
 end_time = Sys.time()
+time_dif = difftime( end_time, start_time, units = "secs")
 print(paste("mapplying to the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
 
 ```
@@ -122,9 +125,9 @@ names(ccs_list[[2]])
 The parts of the denoise workflow can be executed individually if the users wishes to have more control over the timing and execution of the denoising process.
 ```{r}
 
-ex_data = DNAseq(ccs_df[[5]][['sequence']], name = 'row 5 example')
+ex_data = DNAseq(ccs_df[[5,'sequence']], name = 'row 5 example')
 
-ex_data =  frame(ex_data)
+ex_data = frame(ex_data)
 ex_data = adjust(ex_data)
 
 ```
