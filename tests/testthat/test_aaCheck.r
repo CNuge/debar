@@ -15,7 +15,9 @@ test_that("Sequences are translated and checked for amino acids correctly.", {
 		)
 
 	
-	trans_denoise	= mapply(denoise, trans_sequences, to_file = FALSE)	
+	trans_denoise	= lapply(trans_sequences, function(x){
+	  denoise(x, to_file = FALSE)	
+	})	
 	
 	
 	#trans_ccs$consensus == expected_consensus

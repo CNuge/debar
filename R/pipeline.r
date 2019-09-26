@@ -47,30 +47,30 @@ denoise = function(x, ...,
     stop("Invalid output format! Must be one of: 'fasta', 'fastq' or 'none'")
   }
   
-  x = DNAseq(x, name = name )
-  x = frame(x)
-  x = adjust(x, censor_length = censor_length)
+  dat = DNAseq(x, name = name )
+  dat = frame(dat)
+  dat = adjust(dat, censor_length = censor_length)
   if(aa_check == TRUE){
-    x = aa_check(x, trans_table = trans_table, frame_offset = frame_offset)
+    dat = aa_check(dat, trans_table = trans_table, frame_offset = frame_offset)
   }
   
   if(to_file == TRUE){
     if(outformat == "fasta"){
       if(is.null(filename)){
-        write_fasta(x, append = append)
+        write_fasta(dat, append = append)
       }else{
-        write_fasta(x, filename = filename, append = append)
+        write_fasta(dat, filename = filename, append = append)
       }
     }
     
     if(outformat == "fastq"){
       if(is.null(filename)){
-        write_fastq(x, ambig_char= ambig_char,
+        write_fastq(dat, ambig_char= ambig_char,
                        keep_flanks = keep_flanks, 
                        phred_placeholder = phred_placeholder, 
                        append = append)
       }else{
-        write_fastq(x, ambig_char = ambig_char,
+        write_fastq(dat, ambig_char = ambig_char,
                        keep_flanks = keep_flanks, 
                        filename = filename, 
                        phred_placeholder = phred_placeholder, 
