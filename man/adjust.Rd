@@ -2,15 +2,15 @@
 % Please edit documentation in R/frame_and_adjust.r
 \name{adjust}
 \alias{adjust}
-\alias{adjust.ccs_reads}
+\alias{adjust.DNAseq}
 \title{Adjust the sequences based on the nt path outputs.}
 \usage{
 adjust(x, ...)
 
-\method{adjust}{ccs_reads}(x, ..., censor_length = 3)
+\method{adjust}{DNAseq}(x, ..., censor_length = 3)
 }
 \arguments{
-\item{x}{a ccs_reads class object.}
+\item{x}{a DNAseq class object.}
 
 \item{...}{additional arguments to be passed between methods.}
 
@@ -25,7 +25,7 @@ Adjust the sequences based on the nt path outputs.
 }
 \examples{
 #' #previously called
-ex_data = build_ccs(ex_ccs_read_list, order = 'Diptera', id = 'SSGBC787-14')
+ex_data = DNAseq(example_nt_string, name = 'SSGBC787-14')
 ex_data =  frame(ex_data)
 #adjust the sequence with default censor length is 3
 ex_data = adjust(ex_data)

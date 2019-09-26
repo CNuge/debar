@@ -35,12 +35,17 @@ For demonstration of the workflow, `coiDenoiser` contains two example files. The
 #example data files 
 #for dev:
 #fastq_dat_file = './inst/extdata/ccs_subset.fastq'
-#meta_dat_file = './inst/extdata/ccs_metadata.tsv'
 
 fastq_dat_file = system.file('extdata/ccs_subset.fastq', package = 'coiDenoiser')
-meta_dat_file = system.file('extdata/ccs_metadata.tsv', package = 'coiDenoiser')
 ```
 
+
+### Step 0: quick start
+
+Just show the file-file function and say this is all you need unless you wish to get into the nitty gritty.
+```{r}
+
+```
 
 ### Step 1: loading and formatting data
 
@@ -49,87 +54,78 @@ The first step in the denoising of the barcode data is loading the files into r 
 ```{r}
 #Build the fastq dataframe
 ccs_df = read_fastq(fastq_dat_file)
-
-#read in the taxonomic informaiton corresponding to the samples
-ex_meta_data = read.csv(meta_dat_file, sep = '\t', stringsAsFactors = FALSE)
-
-```
-
-In this example, the samples are identified through the 'process_id', both within the .tsv file and nested within the text of the fastq header lines. The isolation of the process_id from the fastq header line is demonstrated, but it should be noted the contents of the header line will vary depending on the data source and strucutre. The user may therefore be required to derive a customized solution for parsing the sample identifiers from the fastq header line.
-
-```{r, echo=FALSE}
-#function to parse the process_id from the fastq header
-header_name_process = function(x){
-	split_dat = unlist(strsplit(x, "MID="))
-	split_dat[length(split_dat)]
-}
-
-#apply the function to create a new column in the dataframe
-ccs_df$process_id = unlist(lapply(ccs_df$header_data, function(x){
-	header_name_process(x)
-	}))
-
-```
-
-Now that both the metadata file and the dataframe with circular consensus reads contain a process_id column, the taxonomic information can be associated with the sequence reads.
-```{r}
-ccs_df = merge(x = ccs_df, y = ex_meta_data, by = "process_id", all.x = TRUE)
+head(ccs_df)
 ```
 
 
-### Step 2: Grouping the samples
-coiDenoiser utilized the multiple circular consensus reads produced for each sample to derive a denoised barcode sequence. For this reason the dataframe is split into a list of dataframes based on the process_id. Each member of the resulting list contains the sequence and taxonomic information corresponding to a single sample.
-```{r}
-list_of_dfs = split(ccs_df, ccs_df$process_id)
-```
-
-
-### Step 3: constructing the circular consensus objects
-After the data is cleaned and sorted based on the sample of origin, a ccs_reads object can be created for each sample. This data structure takes three inputs: a vector of sequences, an id for the given sample and the taxonomic order corresponding to the sample.
-
-Here `lapply` is used to build a ccs object for each sample in the list by taking the column with the sequences, the name of the list member and the string at the first position in the order column.
+### Step 2: denoisng the sequences 
 
 ```{r}
-ccs_list = lapply(1:length(list_of_dfs), function(i){
-	build_ccs(x =list_of_dfs[[i]][["sequence"]],
-						id = names(list_of_dfs[i]),
-						order = list_of_dfs[[i]][1, "order"])
-	})
+vdenoise = Vectorize(denoise)
+
+start_time = Sys.time()
+ccs_list = vdenoise(ccs_df$sequence, ccs_df$header_data ,  to_file = FALSE)
+end_time = Sys.time()
+
+print(paste("vectorizing the application to the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
 ```
 
-### Step 4: denoing the sequences 
+```{r}
+library("parallel")
+
+start_time = Sys.time()
+ccs_list = mclapply(1:length(ccs_df$sequence),  function(i){
+  denoise(ccs_df$sequence[i], ccs_df$header_data[i],  to_file = FALSE)},  mc.cores = detectCores())	
+end_time = Sys.time()
+print(paste("multicore applying to the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
+
+```
+
+```{r}
+
+start_time = Sys.time()
+ccs_list = mapply(denoise, ccs_df$sequence, ccs_df$header_data ,  to_file = FALSE)	
+end_time = Sys.time()
+print(paste("mapplying to the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
+
+```
 
 
 ```{r}
 
-for(i in 1:length(ccs_list)){
-  print(paste("On sample number:", i))
-  ccs_list[[i]] = denoise(ccs_list[[i]],
+ccs_list = list()
+start_time = Sys.time()
+
+for(i in 1:length(ccs_df$sequence)){
+  ccs_list[[i]] = denoise(ccs_df[[i,'sequence']],
+                          ccs_df[[i,'header_data']],
                         	censor_length = 3,
                         	to_file = FALSE)
 }
 
+
+end_time = Sys.time()
+time_dif = difftime( end_time, start_time, units = "secs")
+print(paste("looping the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
 ```
 
 
 You can access the individual components of the outputs using the dollar sign notation.
 
 ```{r}
-ccs_list[4]
-names(ccs_list[[4]])
+ccs_list[2]
+names(ccs_list[[2]])
 
-ccs_list[[4]]$order
-ccs_list[[4]]$consensus
+
 ```
 
 The parts of the denoise workflow can be executed individually if the users wishes to have more control over the timing and execution of the denoising process.
 ```{r}
 
-ex_data = build_ccs(list_of_dfs[[5]][['sequence']], order = 'diptera', id = 'PACBC7697-16')
+ex_data = DNAseq(ccs_df[[5]][['sequence']], name = 'row 5 example')
 
 ex_data =  frame(ex_data)
 ex_data = adjust(ex_data)
-ex_data = consensus(ex_data)
 
 ```
 

@@ -2,18 +2,22 @@
 % Please edit documentation in R/io.r
 \name{write_fasta}
 \alias{write_fasta}
-\alias{write_fasta.ccs_reads}
+\alias{write_fasta.DNAseq}
 \title{Output the denoised consensus sequence to a fasta file.}
 \usage{
 write_fasta(x, ...)
 
-\method{write_fasta}{ccs_reads}(x, ..., filename = "denoised.fasta",
-  append = TRUE)
+\method{write_fasta}{DNAseq}(x, ..., keep_flanks = TRUE,
+  ambig_char = "N", filename = "denoised.fasta", append = TRUE)
 }
 \arguments{
-\item{x}{a ccs_reads class object.}
+\item{x}{a DNAseq class object.}
 
 \item{...}{additional arguments to be passed between methods.}
+
+\item{keep_flanks}{Default is TRUE.}
+
+\item{ambig_char}{The character to use for ambigious positions in the sequence.}
 
 \item{filename}{The name of the file to output the data to. Default is "denoised.fasta".}
 
@@ -21,7 +25,7 @@ write_fasta(x, ...)
 Or overwrite the file?(FALSE) Default is TRUE.}
 }
 \value{
-a class object of code{"ccs_reads"}
+a class object of code{"DNAseq"}
 }
 \description{
 Output the denoised consensus sequence to a fasta file.

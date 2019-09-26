@@ -2,18 +2,23 @@
 % Please edit documentation in R/io.r
 \name{write_fastq}
 \alias{write_fastq}
-\alias{write_fastq.ccs_reads}
+\alias{write_fastq.DNAseq}
 \title{Output the denoised sequence to a fastq format with placeholder phred scores.}
 \usage{
 write_fastq(x, ...)
 
-\method{write_fastq}{ccs_reads}(x, ..., filename = "denoised.fastq",
-  append = TRUE, phred_placeholder = "#")
+\method{write_fastq}{DNAseq}(x, ..., keep_flanks = TRUE,
+  ambig_char = "N", filename = "denoised.fastq", append = TRUE,
+  phred_placeholder = "#")
 }
 \arguments{
-\item{x}{a ccs_reads class object.}
+\item{x}{a DNAseq class object.}
 
 \item{...}{additional arguments to be passed between methods.}
+
+\item{keep_flanks}{Default is TRUE.}
+
+\item{ambig_char}{The character to use for ambigious positions in the sequence.}
 
 \item{filename}{The name of the file to output the data to. Default is "denoised.fasta".}
 
@@ -23,14 +28,14 @@ Or overwrite the file?(FALSE) Default is TRUE.}
 \item{phred_placeholder}{The character to input for the phred score line. Default is '#'}
 }
 \value{
-a class object of code{"ccs_reads"}
+a class object of code{"DNAseq"}
 }
 \description{
 Output the denoised sequence to a fastq format with placeholder phred scores.
 }
 \examples{
 #previously called
-ex_data = build_ccs(ex_ccs_read_list, order = 'Diptera', id = 'SSGBC787-14')
+ex_data = DNAseq(ex_ccs_read_list, name = 'SSGBC787-14')
 ex_data =  frame(ex_data)
 ex_data = adjust(ex_data)
 ex_data = consensus(ex_data)

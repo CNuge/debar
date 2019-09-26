@@ -184,8 +184,7 @@ write_fastq.DNAseq = function(x, ...,
   outstring = paste(">", x$name, "\n",
                     x$outseq, "\n",
                     "+\n",
-                    paste(rep(phred_placeholder, times = nchar(x$outseq)), collapse = ""), 
-                    "\n", sep="")
+                    paste(rep(phred_placeholder, times = nchar(x$outseq)), collapse = ""), sep="")
   
   write(outstring, file =  filename, append = append)
 }

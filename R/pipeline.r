@@ -29,13 +29,6 @@
 #' ex_data = denoise(example_nt_string, name = 'example_sequence_1')
 #' @export
 #' @name denoise
-denoise = function(x, ...){
-  UseMethod("denoise")
-}
-
-
-#' @rdname denoise
-#' @export
 denoise = function(x, ...,
                              name = character(),
                              ambig_char = "N",
@@ -90,18 +83,19 @@ denoise = function(x, ...,
 
 
 #'Denoise the sequence data from a given file
-#'@param filename The name of the file to
-#'@param file_type
-#'@param multicore
-#'@param ... additional arguments to be passed to the denoise function.
+#'@param filename The name of the file to denoise sequences from.
+#'@param file_type The format of the file to be denoised. Options are fastq or fasta. Default is fastq.
+#'@param multicore An integer specifying the number of cores over which to multithread the denoising process. 
+#'Default is FALSE, meaning the process is not multithreaded.
+#'@param ... additional arguments to be passed to the \link{denoise} function.
 #'
 #'@seealso \code{\link{denoise}}
 #'  
-denoise_file = function(filename, file_type = "fastq", multicore = FALSE, ...){
+denoise_file = function(filename, ..., file_type = "fastq", multicore = FALSE){
   if(file_type == "fastq"){
     data = read_fastq(filename)
   }else if (file_type == "fasta"){
-    sequences = read_fasta(filename)
+    data = read_fasta(filename)
   }else{
     stop("file_type must be either fasta or fastq")
   }
@@ -110,5 +104,10 @@ denoise_file = function(filename, file_type = "fastq", multicore = FALSE, ...){
     for(i in 1:length(sequences)){
       denoise(data$sequence[[i]], name = data$header_data[[i]], ...)
     }
+  }else{
+    mclapply(1:length(data$sequence), function(i){
+      denoise(data$sequence[[i]], name = data$header_data[[i]], ...)
+    }, mc.cores = multicore)
   }
 }
+

@@ -7,7 +7,7 @@
 read_fastq(x, keep_quality = FALSE)
 }
 \arguments{
-\item{x}{The name of the fastq file to read data from}
+\item{x}{The name of the fastq file to read data from.}
 
 \item{keep_quality}{Boolean indicating if the Phred quality scores should be 
 retained in the output dataframe. Default is FALSE.}
@@ -16,6 +16,6 @@ retained in the output dataframe. Default is FALSE.}
 Read in raw data from a fastq file.
 }
 \examples{
-filename = system.file('extdata/ccs_subset.fastq', package = 'coiDenoiser')
+filename = system.file('extdata/ccs_subset.fastq', package = 'seqdenoise')
 data = read_fastq(filename)
 }

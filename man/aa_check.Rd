@@ -2,13 +2,12 @@
 % Please edit documentation in R/aa_check.r
 \name{aa_check}
 \alias{aa_check}
-\alias{aa_check.ccs_reads}
+\alias{aa_check.DNAseq}
 \title{Translate the sequence and check log likelihood as a final double check.}
 \usage{
 aa_check(x, ...)
 
-\method{aa_check}{ccs_reads}(x, ..., trans_table = "auto",
-  frame_offset = 0)
+\method{aa_check}{DNAseq}(x, ..., trans_table = 0, frame_offset = 0)
 }
 \arguments{
 \item{x}{a ccs_reads class object.}

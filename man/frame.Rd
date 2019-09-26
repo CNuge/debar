@@ -2,30 +2,30 @@
 % Please edit documentation in R/frame_and_adjust.r
 \name{frame}
 \alias{frame}
-\alias{frame.ccs_reads}
-\title{Take a ccs_reads object and put sequences in common reading frame}
+\alias{frame.DNAseq}
+\title{Take a DNAseq object and put sequences in common reading frame}
 \usage{
 frame(x, ...)
 
-\method{frame}{ccs_reads}(x, ...)
+\method{frame}{DNAseq}(x, ...)
 }
 \arguments{
-\item{x}{a ccs_reads class object.}
+\item{x}{a DNAseq class object.}
 
 \item{...}{additional arguments to be passed between methods.}
 }
 \value{
-a class object of code{"ccs_reads"}
+a class object of code{"DNAseq"}
 }
 \description{
-Take a ccs_reads object and put sequences in common reading frame
+Take a DNAseq object and put sequences in common reading frame
 }
 \examples{
 #previously called
-ex_data = build_ccs(ex_ccs_read_list, order = 'Diptera', id = 'SSGBC787-14')
+ex_data = DNAseq(ex_ccs_read_list, id = 'SSGBC787-14')
 #frame the ccs reads, will utilize the PHMM corresponding to the order specified in the object.
 ex_data =  frame(ex_data)
 }
 \seealso{
-\code{\link{build_ccs}}
+\code{\link{DNAseq}}
 }

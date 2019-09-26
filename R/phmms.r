@@ -9,7 +9,7 @@
 # new_aa = readPHMM(aa_filename)
 # aa_PHMM = new_aa
 
-#use_data(nt_PHMM, aa_PHMM, trans_df, example_nt_string, overwrite = TRUE, internal = TRUE)
+#use_data(nt_PHMM, aa_PHMM, trans_df, example_nt_string, example_nt_string_errors, overwrite = TRUE, internal = TRUE)
 
 #then load for dev with:
 # load('R/sysdata.rda')
@@ -17,7 +17,7 @@
 
 
 ###############################################################################
-#' Nucleotide profile hidden markov model for coi5p.
+#' Nucleotide profile hidden markov model for seqdenoise.
 #'
 #' This model is stored in the coi5p package and was trained on a representitive
 #' sample of the barcode of life database (http://www.boldsystems.org/index.php).
@@ -27,7 +27,7 @@
 ###############################################################################
 
 ###############################################################################
-#' Amino acid profile hidden markov model for coi5p.
+#' Amino acid profile hidden markov model for seqdenoise.
 #'
 #' This model is stored in the coi5p package and was trained on a representitive
 #' sample of the barcode of life database (http://www.boldsystems.org/index.php).
@@ -37,7 +37,7 @@
 ###############################################################################
 
 ###############################################################################
-#' Data frame containing the translation table recommendation.
+#' Data frame containing the translation table recommendations.
 #'
 "trans_df"
 ###############################################################################
@@ -52,15 +52,13 @@
 "example_nt_string"
 ###############################################################################
 
+
 ###############################################################################
-#' Example barcode data.
+#' Example coi5p DNA sequence string with insertion and deletion errors.
 #'
-#' A nine line dataframe of coi5p barcode data with the following columns:
-#' id - the unique identifier for the sample
-#' genetic_code - the genetic code for translation of the sample (features NA for unknowns)
-#' taxa -  a taxonomic designation associated with the sample
-#' sequence - the DNA sequence associated with the sample
-#' notes - notes on the sequence structure
-#'
-"example_barcode_data"
+#' This string of barcode data is used in the package documentation's examples
+#' and within the vignette demonstrating how to use the package.
+#' The variable is:
+#' example_nt_string_errors = 'ctctacttgatttttggtgcatgagcaggaatagttggaatagctttaagtttactaattcgcgctgaactaggtcaaccggatctcttttaggggatgatcagatttataatgtgatcgtaaccgcccatgcctttgtaataatcttttttatggttatacctgtaataattggtggctttggcaattgacttgttcctttaataattggtgcaccagatatagcattccctcgaataaataatataagtttctggcttcttcctccttcgttcttacttctcctggcctccgcaggagtagaagctggagcaggaaccggatgaactgtatatcctccttttagcaggtaatttagcacatgctggcccctctgttgatttagccatcttttcccttcatttggccggtatctcatcaattttagcctctattaattttattacaactattattaatataaaacccccaactatttctcaatatcaaacaccattatttgtttgatctattcttatcaccactgttcttctactccttgctctccctgttcttgcagccggaattacaatattattaacagaccgcaacctcaacactacattctttgaccccgcagggggaggggacccaattctctatcaacactta'
+"example_nt_string_errors"
 ###############################################################################
