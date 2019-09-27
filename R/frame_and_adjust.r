@@ -158,7 +158,8 @@ set_frame = function(org_seq , path_out){
               front = front))
 }
 
-
+#' Look for triple inserts in the PHMM path.
+#' @keywords internal
 triple_ins = function(x, path_start, path_end){
   inserts = c(path_start:path_end)[x[path_start:path_end] == 0]
   triples = c()

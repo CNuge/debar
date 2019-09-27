@@ -14,7 +14,8 @@ Depends:
 Imports:
   ape,
   aphid,
-  seqinr
+  seqinr,
+  parallel
 Suggests: 
     knitr,
     rmarkdown,

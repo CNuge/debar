@@ -1,4 +1,4 @@
 library(testthat)
-library(coiDenoiser)
+library(seqdenoise)
 
-test_check("coiDenoiser")
+test_check("seqdenoise")

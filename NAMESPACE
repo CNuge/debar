@@ -1,7 +1,10 @@
 exportPattern("^[[:alpha:]]+")
+
 S3method(print, DNAseq)
 S3method(frame, DNAseq)
 S3method(aa_check, DNAseq)
 S3method(adjust, DNAseq)
 S3method(write_fasta, DNAseq)
 S3method(write_fastq, DNAseq)
+S3method(denoise, default)
+S3method(denoise_file, default)

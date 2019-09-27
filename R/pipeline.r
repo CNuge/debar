@@ -35,7 +35,7 @@ denoise = function(x, ...){
 
 #' @rdname denoise
 #' @export
-denoise.character = function(x, ...,
+denoise.default = function(x, ...,
                              name = character(),
                              ambig_char = "N",
                              censor_length = 5,
@@ -84,13 +84,13 @@ denoise.character = function(x, ...,
       }
     }    
   } 
-  x
+  dat
 }
 
 
 #'Denoise the sequence data from a given file.
 #'
-#'@param filename The name of the file to denoise sequences from.
+#'@param x The name of the file to denoise sequences from.
 #'@param file_type The format of the file to be denoised. Options are fastq or fasta. Default is fastq.
 #'@param multicore An integer specifying the number of cores over which to multithread the denoising process. 
 #'Default is FALSE, meaning the process is not multithreaded.
@@ -104,21 +104,21 @@ denoise_file = function(x, ...){
 
 #' @rdname denoise_file
 #' @export
-denoise_file.default = function(filename, ..., file_type = "fastq", multicore = FALSE){
+denoise_file.default = function(x, ..., file_type = "fastq", multicore = FALSE){
   if(file_type == "fastq"){
-    data = read_fastq(filename)
+    data = read_fastq(x)
   }else if (file_type == "fasta"){
-    data = read_fasta(filename)
+    data = read_fasta(x)
   }else{
     stop("file_type must be either fasta or fastq")
   }
   
   if(multicore == FALSE){
-    for(i in 1:length(sequences)){
+    for(i in 1:length(data$sequence)){
       denoise(data$sequence[[i]], name = data$header_data[[i]], ...)
     }
   }else{
-    mclapply(1:length(data$sequence), function(i){
+    parallel::mclapply(1:length(data$sequence), function(i){
       denoise(data$sequence[[i]], name = data$header_data[[i]], ...)
     }, mc.cores = multicore)
   }
