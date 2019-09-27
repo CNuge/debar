@@ -29,7 +29,13 @@
 #' ex_data = denoise(example_nt_string, name = 'example_sequence_1')
 #' @export
 #' @name denoise
-denoise = function(x, ...,
+denoise = function(x, ...){
+  UseMethod("denoise")
+} 
+
+#' @rdname denoise
+#' @export
+denoise.character = function(x, ...,
                              name = character(),
                              ambig_char = "N",
                              censor_length = 5,
@@ -82,7 +88,8 @@ denoise = function(x, ...,
 }
 
 
-#'Denoise the sequence data from a given file
+#'Denoise the sequence data from a given file.
+#'
 #'@param filename The name of the file to denoise sequences from.
 #'@param file_type The format of the file to be denoised. Options are fastq or fasta. Default is fastq.
 #'@param multicore An integer specifying the number of cores over which to multithread the denoising process. 
@@ -91,7 +98,13 @@ denoise = function(x, ...,
 #'
 #'@seealso \code{\link{denoise}}
 #'  
-denoise_file = function(filename, ..., file_type = "fastq", multicore = FALSE){
+denoise_file = function(x, ...){
+    UseMethod("denoise_file")
+  } 
+
+#' @rdname denoise_file
+#' @export
+denoise_file.default = function(filename, ..., file_type = "fastq", multicore = FALSE){
   if(file_type == "fastq"){
     data = read_fastq(filename)
   }else if (file_type == "fasta"){

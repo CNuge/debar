@@ -2,14 +2,18 @@
 % Please edit documentation in R/pipeline.r
 \name{denoise_file}
 \alias{denoise_file}
-\title{Denoise the sequence data from a given file}
+\alias{denoise_file.default}
+\title{Denoise the sequence data from a given file.}
 \usage{
-denoise_file(filename, ..., file_type = "fastq", multicore = FALSE)
+denoise_file(x, ...)
+
+\method{denoise_file}{default}(filename, ..., file_type = "fastq",
+  multicore = FALSE)
 }
 \arguments{
-\item{filename}{The name of the file to denoise sequences from.}
-
 \item{...}{additional arguments to be passed to the \link{denoise} function.}
+
+\item{filename}{The name of the file to denoise sequences from.}
 
 \item{file_type}{The format of the file to be denoised. Options are fastq or fasta. Default is fastq.}
 
@@ -17,7 +21,7 @@ denoise_file(filename, ..., file_type = "fastq", multicore = FALSE)
 Default is FALSE, meaning the process is not multithreaded.}
 }
 \description{
-Denoise the sequence data from a given file
+Denoise the sequence data from a given file.
 }
 \seealso{
 \code{\link{denoise}}
