@@ -26,15 +26,14 @@ first_stop = function(aa_str){
 #' Passing frame_offset = 1 would offset the sequence by one and therefore make the second character in the
 #' framed sequence the the first nucelotide of the first codon.
 #' @return a class object of code{"ccs_reads"} 
-#' @seealso \code{\link{build_ccs}}
+#' @seealso \code{\link{DNAseq}}
 #' @seealso \code{\link{frame}}
 #' @seealso \code{\link{adjust}}
 #' @examples
 #' #previously called
-#' ex_data = build_ccs(ex_ccs_read_list, order = 'Diptera', id = 'SSGBC787-14')
+#' ex_data = DNAseq(example_nt_string, name = 'ex1')
 #' ex_data =  frame(ex_data)
 #' ex_data = adjust(ex_data)
-#' ex_data = consensus(ex_data)
 #' #run the aa check on the adjusted sequences
 #' ex_data = aa_check(ex_data)
 #' @export

@@ -78,12 +78,12 @@ read_fasta = function(x){
 #' @param append Should the ccs consensus sequence be appended to the output file?(TRUE) 
 #' Or overwrite the file?(FALSE) Default is TRUE.
 #' @return a class object of code{"DNAseq"} 
-#' @seealso \code{\link{build_ccs}}
+#' @seealso \code{\link{DNAseq}}
 #' @seealso \code{\link{frame}}
 #' @seealso \code{\link{adjust}}
 #' @examples
 #' #previously called
-#' ex_data = build_ccs(ex_ccs_read_list, order = 'Diptera', id = 'SSGBC787-14')
+#' ex_data = DNAseq(example_nt_string, name = 'ex1')
 #' ex_data =  frame(ex_data)
 #' ex_data = adjust(ex_data)
 #' ex_data = consensus(ex_data)
@@ -141,12 +141,12 @@ write_fasta.DNAseq = function(x, ...,
 #' Or overwrite the file?(FALSE) Default is TRUE.
 #' @param phred_placeholder The character to input for the phred score line. Default is '#'
 #' @return a class object of code{"DNAseq"} 
-#' @seealso \code{\link{build_ccs}}
+#' @seealso \code{\link{DNAseq}}
 #' @seealso \code{\link{frame}}
 #' @seealso \code{\link{adjust}}
 #' @examples
 #' #previously called
-#' ex_data = DNAseq(ex_ccs_read_list, name = 'SSGBC787-14')
+#' ex_data = DNAseq(example_nt_string, name = 'ex1')
 #' ex_data =  frame(ex_data)
 #' ex_data = adjust(ex_data)
 #' ex_data = consensus(ex_data)

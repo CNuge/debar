@@ -342,7 +342,7 @@ frame.DNAseq = function(x, ...){
 #' @param censor_length the number of base pairs in either direction of a PHMM correction
 #' to convert to placeholder characters. Default is 3.
 #' @return a class object of code{"ccs_reads"} 
-#' @seealso \code{\link{build_ccs}}
+#' @seealso \code{\link{DNAseq}}
 #' @seealso \code{\link{frame}}
 #' @examples
 #' #' #previously called

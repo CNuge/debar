@@ -35,7 +35,7 @@ Output the denoised sequence to a fastq format with placeholder phred scores.
 }
 \examples{
 #previously called
-ex_data = DNAseq(ex_ccs_read_list, name = 'SSGBC787-14')
+ex_data = DNAseq(example_nt_string, name = 'ex1')
 ex_data =  frame(ex_data)
 ex_data = adjust(ex_data)
 ex_data = consensus(ex_data)

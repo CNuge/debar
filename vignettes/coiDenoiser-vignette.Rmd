@@ -72,14 +72,14 @@ head(ccs_df)
 ```
 
 ```{r}
-library("parallel")
-
-start_time = Sys.time()
-ccs_list = mclapply(1:length(ccs_df$sequence),  function(i){
-  denoise(ccs_df$sequence[i], ccs_df$header_data[i],  to_file = FALSE)},  mc.cores = detectCores())	
-end_time = Sys.time()
-time_dif = difftime( end_time, start_time, units = "secs")
-print(paste("multicore applying to the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
+# library("parallel")
+# 
+# start_time = Sys.time()
+# ccs_list = mclapply(1:length(ccs_df$sequence),  function(i){
+#   denoise(ccs_df$sequence[i], ccs_df$header_data[i],  to_file = FALSE)},  mc.cores = detectCores())	
+# end_time = Sys.time()
+# time_dif = difftime( end_time, start_time, units = "secs")
+# print(paste("multicore applying to the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
 
 ```
 
@@ -98,20 +98,20 @@ print(paste("multicore applying to the dataframe of", length(ccs_df$sequence), "
 
 ```{r}
 
-# ccs_list = list()
-# start_time = Sys.time()
-# 
-# for(i in 1:length(ccs_df$sequence)){
-#   ccs_list[[i]] = denoise(ccs_df[[i,'sequence']],
-#                           ccs_df[[i,'header_data']],
-#                         	censor_length = 3,
-#                         	to_file = FALSE)
-# }
-# 
-# 
-# end_time = Sys.time()
-# time_dif = difftime( end_time, start_time, units = "secs")
-# print(paste("looping the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
+ccs_list = list()
+start_time = Sys.time()
+
+for(i in 1:length(ccs_df$sequence)){
+  ccs_list[[i]] = denoise(ccs_df[[i,'sequence']],
+                          ccs_df[[i,'header_data']],
+                        	censor_length = 3,
+                        	to_file = FALSE)
+}
+
+
+end_time = Sys.time()
+time_dif = difftime( end_time, start_time, units = "secs")
+print(paste("looping the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
 
 ```
 

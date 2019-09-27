@@ -32,7 +32,7 @@ Output the denoised consensus sequence to a fasta file.
 }
 \examples{
 #previously called
-ex_data = build_ccs(ex_ccs_read_list, order = 'Diptera', id = 'SSGBC787-14')
+ex_data = DNAseq(example_nt_string, name = 'ex1')
 ex_data =  frame(ex_data)
 ex_data = adjust(ex_data)
 ex_data = consensus(ex_data)

@@ -23,6 +23,11 @@ Default is FALSE, meaning the process is not multithreaded.}
 \description{
 Denoise the sequence data from a given file.
 }
+\examples{
+fastq_dat_file = system.file('extdata/ccs_subset.fastq', package = 'coiDenoiser')
+denoise_file(fastq_dat_file, to_file = FALSE)
+
+}
 \seealso{
 \code{\link{denoise}}
 }
