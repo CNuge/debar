@@ -33,7 +33,7 @@ ex_data = adjust(ex_data)
 ex_data = adjust(ex_data, censor_length = 5)
 }
 \seealso{
-\code{\link{build_ccs}}
+\code{\link{DNAseq}}
 
 \code{\link{frame}}
 }

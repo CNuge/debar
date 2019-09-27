@@ -22,7 +22,7 @@ Take a DNAseq object and put sequences in common reading frame
 }
 \examples{
 #previously called
-ex_data = DNAseq(ex_ccs_read_list, id = 'SSGBC787-14')
+ex_data = DNAseq(ex_ccs_read_list, name = 'ex1')
 #frame the ccs reads, will utilize the PHMM corresponding to the order specified in the object.
 ex_data =  frame(ex_data)
 }

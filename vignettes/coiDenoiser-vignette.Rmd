@@ -57,41 +57,45 @@ ccs_df = read_fastq(fastq_dat_file)
 head(ccs_df)
 ```
 
+```{r}
+?denoise
+```
+
 
 ### Step 2: denoisng the sequences 
 
 ```{r}
-# vdenoise = Vectorize(denoise)
-# 
-# start_time = Sys.time()
-# ccs_list = vdenoise(ccs_df$sequence, ccs_df$header_data,  to_file = FALSE)
-# end_time = Sys.time()
-# time_dif = difftime( end_time, start_time, units = "secs")
-# 
-# print(paste("vectorizing the application to the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
+vdenoise = Vectorize(denoise)
+
+start_time = Sys.time()
+ccs_list = vdenoise(ccs_df$sequence, ccs_df$header_data,  to_file = FALSE)
+end_time = Sys.time()
+time_dif = difftime( end_time, start_time, units = "secs")
+
+print(paste("vectorizing the application to the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
 ```
 
 ```{r}
-# library("parallel")
-# 
-# start_time = Sys.time()
-# ccs_list = mclapply(1:length(ccs_df$sequence),  function(i){
-#   denoise(ccs_df$sequence[i], ccs_df$header_data[i],  to_file = FALSE)},  mc.cores = detectCores())	
-# end_time = Sys.time()
-# time_dif = difftime( end_time, start_time, units = "secs")
-# print(paste("multicore applying to the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
+library("parallel")
+
+start_time = Sys.time()
+ccs_list = mclapply(1:length(ccs_df$sequence),  function(i){
+  denoise(ccs_df$sequence[i], ccs_df$header_data[i],  to_file = FALSE)},  mc.cores = detectCores())
+end_time = Sys.time()
+time_dif = difftime( end_time, start_time, units = "secs")
+print(paste("multicore applying to the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
 
 ```
 
 ```{r}
 
-# start_time = Sys.time()
-# ccs_list = lapply(1:length(ccs_df$sequence), function(i){
-#   denoise(ccs_df$sequence[i], ccs_df$header_data[i],  to_file = FALSE)
-#   })	
-# end_time = Sys.time()
-# time_dif = difftime( end_time, start_time, units = "secs")
-# print(paste("mapplying to the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
+start_time = Sys.time()
+ccs_list = lapply(1:length(ccs_df$sequence), function(i){
+  denoise(ccs_df$sequence[i], ccs_df$header_data[i],  to_file = FALSE)
+  })
+end_time = Sys.time()
+time_dif = difftime( end_time, start_time, units = "secs")
+print(paste("mapplying to the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
 
 ```
 

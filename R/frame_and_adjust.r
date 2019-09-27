@@ -294,7 +294,7 @@ adj_seq = function(frame_dat, path_out, censor_length = 3){
 #' @seealso \code{\link{DNAseq}}
 #' @examples
 #' #previously called
-#' ex_data = DNAseq(ex_ccs_read_list, id = 'SSGBC787-14')
+#' ex_data = DNAseq(ex_ccs_read_list, name = 'ex1')
 #' #frame the ccs reads, will utilize the PHMM corresponding to the order specified in the object.
 #' ex_data =  frame(ex_data)
 #' @export

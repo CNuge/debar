@@ -42,7 +42,7 @@ write_fasta(ex_data)
 write_fasta(ex_data, filename = 'example_out.fasta', append = FALSE)
 }
 \seealso{
-\code{\link{build_ccs}}
+\code{\link{DNAseq}}
 
 \code{\link{frame}}
 

@@ -45,7 +45,7 @@ write_fastq(ex_data)
 write_fastq(ex_data, filename = 'example_out.fastq', append = FALSE)
 }
 \seealso{
-\code{\link{build_ccs}}
+\code{\link{DNAseq}}
 
 \code{\link{frame}}
 

@@ -30,14 +30,14 @@ Translate the sequence and check log likelihood as a final double check.
 }
 \examples{
 #previously called
-ex_data = DNAseq(ex_ccs_read_list, name = 'ex1')
+ex_data = DNAseq(example_nt_string, name = 'ex1')
 ex_data =  frame(ex_data)
 ex_data = adjust(ex_data)
 #run the aa check on the adjusted sequences
 ex_data = aa_check(ex_data)
 }
 \seealso{
-\code{\link{build_ccs}}
+\code{\link{DNAseq}}
 
 \code{\link{frame}}
 
