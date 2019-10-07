@@ -109,22 +109,6 @@ write_fasta.DNAseq = function(x, ...,
                                  filename = "denoised.fasta", 
                                  append = TRUE){
 
-  #need the adjusted seq without the front
-  if(keep_flanks == TRUE){
-    dashes_rm = sum(c(length(x$frame_dat$front), as.integer(x$data$len_first_front), 1), na.rm = TRUE)
-    
-    x$outseq = paste(c(x$data$raw_removed_front,
-                       x$frame_dat$removed_lead,
-                       x$adjusted_sequence[dashes_rm:length(x$adjusted_sequence)], 
-                       x$frame_dat$removed_end,
-                       x$data$raw_removed_end) ,
-                       collapse = "")
-  }else{
-    x$outseq = paste(x$adjusted_sequence, collapse = "")
-  }
-  
-  x$outseq = toupper(gsub("-", ambig_char, x$outseq ))
-  
   outstring = paste(">", x$name, "\n",
                     x$outseq, sep = '')
   
@@ -173,17 +157,6 @@ write_fastq.DNAseq = function(x, ...,
                                  append = TRUE, 
                                  phred_placeholder = "#"){
 
-  #need to make the $outseq from the raw and the adjusted sequence
-
-  dashes_rm = sum(c(length(x$frame_dat$front), as.integer(x$data$len_first_front), 1), na.rm = TRUE)
-  #need the adjusted seq without the front
-  x$outseq = paste(c(x$data$raw_removed_front,
-                     x$frame_dat$removed_lead,
-                     x$adjusted_sequence[dashes_rm:length(x$adjusted_sequence)], 
-                     x$frame_dat$removed_end,
-                     x$data$raw_removed_end) ,
-                     collapse = "")
-  
   outstring = paste(">", x$name, "\n",
                     x$outseq, "\n",
                     "+\n",

@@ -110,6 +110,8 @@ test_seqdenoise = DNAseq(t1, name = "test1")
 test_seqdenoise = frame(test_seqdenoise)
 test_seqdenoise$data$path
 test_seqdenoise$data$raw_removed_front
+test_seqdenoise = adjust(test_seqdenoise)
+test_seqdenoise$adjustment_count
 #test_seqdenoise = seqdenoise::frame(test_seqdenoise)
 #test_seqdenoise$data$path
 ```
