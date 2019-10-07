@@ -81,7 +81,7 @@ set_frame = function(org_seq , path_out){
   }
   
   
-  for( i in 1:length(path_out) ){
+  for( i in path_start:length(path_out) ){
     #0 = D
     if( path_out[i] == 0 ){
       #there was a bp missing in the original seq
@@ -123,9 +123,9 @@ set_frame = function(org_seq , path_out){
       #in either of these instances we want to trim the last bp, as its
       #dangling in a sea of inserts or deletes and likely a random profile match
       #if (path_out[i-1] == 2 & path_out[i-2] == 2){
-      if (2 %in% path_out[(i-3):(i-1)]){
+      if (2 %in% path_out[(i-10):(i-1)]){
         org_seq_end = org_seq_end - 1
-      }else if (0 %in% path_out[(i-3):(i-1)]){
+      }else if (0 %in% path_out[(i-10):(i-1)]){
         org_seq_end = org_seq_end - 1
       }else{
         path_end = i
@@ -348,6 +348,7 @@ frame.DNAseq = function(x, ...){
 #' @param ... additional arguments to be passed between methods.
 #' @param censor_length the number of base pairs in either direction of a PHMM correction
 #' to convert to placeholder characters. Default is 3.
+#' @param ambig_char
 #' @return a class object of code{"ccs_reads"} 
 #' @seealso \code{\link{DNAseq}}
 #' @seealso \code{\link{frame}}

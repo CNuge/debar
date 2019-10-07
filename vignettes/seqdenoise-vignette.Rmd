@@ -56,6 +56,23 @@ dim(data)
 ```
 
 ```{r}
+  dat1 = DNAseq(data$sequence[71], name = 'testseq1' )
+  
+  dat1 = frame(dat1)
+  
+  names(dat1)
+  
+  dat1 = adjust(dat1, censor_length = 5)
+
+  write_fastq(dat1)
+  
+```
+
+```{r}
+x = denoise(data$sequence[71], filename = "out.fastq")
+```
+
+```{r}
 print(data$sequence[71])
 test = denoise(data$sequence[71])
 ```
@@ -76,12 +93,86 @@ length(outputs)
 ```{r}
 outputs[[2]]
 ```
+
+```{r}
+denoise_file(fastq_gz_real_file, filename = "out.fastq" )
+```
+
+
+## Tests using select outputs from the real data analysis
+
+```{r}
+
+t1 = "gctcctaaaattgaagaaactcctgctaaatgtaaagaaaaaattgctaaatctactgaagcaccaccatgagcaataatagaagataaaggtggataaacagttcatccagtaccagccccattttctactatacttctagccattaatagagtcaatgaaggcggtaataatcagaaactcatattatttattcgaggaaatgctatatccggagctcctaatattaatggaactaatcaatttccaaatcctccaattataattggtattactataaaaaaaattattacgaaagcatgggcagtgacaattacattataaatttgatcatcaccaattaatgctcctggatgtcctaattcagctcgaattaagattcttagagaagttcctactattccagctcatgctccaaatataaagtacaaagttccaatatctttatgattggttgactgtgacctgagtcagctacatgttcgactgcatagacagtgcgctgtctatgcagtcgaacatgtagctgactcaggtcacggtcaacaaatcataaagatattggaactttgtactttatatttggagcatgagctggaatagtaggaacttctctaagaatcttaattcgagctgaattaggacatccaggagcattaattggtgatgatcaaatttataatgtaattgtcactgcccatgctttcgtaataatttttttatagtaataccaattataattggaggatttggaaattgattagttccattaatattaggagctccagatatagcatttcctcgaataaataatatgagtctctgattattaccgccttcattgactctattaatggctagaagtatagtagaaaatggggctggtactggatgaactgtttatccacctttatcttctattattgctcatggtggtgcttcagtagatttagcaattttttctttacatttagcaggagtttcttcaattttaggagc"
+
+
+test_seqdenoise = DNAseq(t1, name = "test1")
+test_seqdenoise = frame(test_seqdenoise)
+test_seqdenoise$data$path
+test_seqdenoise$data$raw_removed_front
+#test_seqdenoise = seqdenoise::frame(test_seqdenoise)
+#test_seqdenoise$data$path
+```
+
+```{r}
+
+
+```
+
+
+ Coil produces a path with ~433 matches and a single insert. suggests the logic issue is in the seqdenoise frame
+```{r}
+#library(coil)
+t1 = "gctcctaaaattgaagaaactcctgctaaatgtaaagaaaaaattgctaaatctactgaagcaccaccatgagcaataatagaagataaaggtggataaacagttcatccagtaccagccccattttctactatacttctagccattaatagagtcaatgaaggcggtaataatcagaaactcatattatttattcgaggaaatgctatatccggagctcctaatattaatggaactaatcaatttccaaatcctccaattataattggtattactataaaaaaaattattacgaaagcatgggcagtgacaattacattataaatttgatcatcaccaattaatgctcctggatgtcctaattcagctcgaattaagattcttagagaagttcctactattccagctcatgctccaaatataaagtacaaagttccaatatctttatgattggttgactgtgacctgagtcagctacatgttcgactgcatagacagtgcgctgtctatgcagtcgaacatgtagctgactcaggtcacggtcaacaaatcataaagatattggaactttgtactttatatttggagcatgagctggaatagtaggaacttctctaagaatcttaattcgagctgaattaggacatccaggagcattaattggtgatgatcaaatttataatgtaattgtcactgcccatgctttcgtaataatttttttatagtaataccaattataattggaggatttggaaattgattagttccattaatattaggagctccagatatagcatttcctcgaataaataatatgagtctctgattattaccgccttcattgactctattaatggctagaagtatagtagaaaatggggctggtactggatgaactgtttatccacctttatcttctattattgctcatggtggtgcttcagtagatttagcaattttttctttacatttagcaggagtttcttcaattttaggagc"
+
+coil_test = coi5p_pipe(t1)
+coil_test$data$ntPath
+coil_test$raw
+coil_test$framed
+coil_test
+
+```
+
+```{r}
+
+coil_test_parts = coi5p(t1)
+coil_test_parts = frame(coil_test_parts)
+
+coil_test_parts$framed
+coil_test_parts$data$ntPath
+```
+
+
+```{r}
+t3 = 'AGGTCAACAAATCATAAAGATATTGGAACATTATATTTTTTATTTGGAATTTGAGCAGGAATAATTGGAACATCATTAAGATTATTAATTCGAATAGAATTAGGAAATCCTGGATCCTTAATTGGAGATGACCAAATTTATAATAACTATTGTAAACAGCCCATGCATTTATTATAATTTTTTTTATAGTAATACCTATTATAATTGGAGGATTTGGAAATTGATTAATTCCTTTAATATTAGGTGCACCAGATATAGCATTCCCCCGAATAAATAATATAAGATTTTGATTATTACCCCCTTCCATTTTTCTTTTAATTTCAAGAAGAATCGTAGAAAAATGGAGCAGGAACAGGATGAACTGTTTACCCCCCCTTATCTTCTAACACCGCTCATAGAGGAAGATCCGTAGATTTAGCCATTTTTTCTCTTCATTTAGCTGGAATTTCCTCAATTCTAGGAGCAGTAAATTTTATTTCTACAGTAATTAATATACGAGCTAAAAAAATAATATTTGACCAAATACCCCTATTTATTTGAGCTGTAGCTATTACTGCATTATTATTATTATTATCATTACCAGTTTTAGCAGGAGCTATTACTATATTATTAACAGATCGAAATTTAAATACATCTTTTTTTGACCCAGCTGGAGGAGGAGACCCAATTTTATACCAACATTTATTTTGATTTTTTGGACACCCTGAAGTTTA'
+```
+
+```{r}
+coil_test3  = coi5p_pipe(t3)
+coil_test3$data$ntPath
+coil_test3$raw
+coil_test3$framed
+coil_test3
+```
+
+```{r}
+output_was = 'aggtcaacaaatcataaagatattggaacattatattttttatttggaatttgagcaggaataattggaacatcattaagattattaattcgaatagaattaggaaatcctggatccttaattggagatgaccaaatttataattttgattttttggacaccctgaagttta'
+t3
+```
+Below is behaving well despite initial doubt. The path encounters a large run of 0000s in the middle of the sequence and therefore terminates. Only possible improvement would be to add lots of Ns and pick up on the second run of 1s
+```{r}
+test_seqdenoise3 = DNAseq(t3, name = "test3")
+test_seqdenoise3 = frame(test_seqdenoise3)
+test_seqdenoise3$data$path
+test_seqdenoise3$data$raw_removed_front
+test_seqdenoise3$frame_dat
+
+test_seqdenoise3 = adjust(test_seqdenoise3)
+test_seqdenoise3$adjusted_sequence
+```
 ### Step 0: quick start
 
 Just show the file-file function and say this is all you need unless you wish to get into the nitty gritty.
-```{r}
-
-```
 
 ### Step 1: loading and formatting data
 
@@ -89,7 +180,7 @@ The first step in the denoising of the barcode data is loading the files into r 
 
 ```{r}
 #Build the fastq dataframe
-ccs_df = read_fastq(fastq_dat_file)
+ccs_df = read_fastq(fastq_gz_real_file)
 head(ccs_df)
 ```
 

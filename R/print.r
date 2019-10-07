@@ -13,7 +13,7 @@ print.DNAseq = function(x, ...){
              sep ="")
   lines = c(lines, l3)
   
-  if()
+  #if()
   
   cat(lines, sep="")
 } 
