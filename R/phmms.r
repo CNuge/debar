@@ -16,6 +16,8 @@
 
 
 
+
+
 ###############################################################################
 #' Nucleotide profile hidden markov model for seqdenoise.
 #'

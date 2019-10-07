@@ -8,8 +8,12 @@ print.DNAseq = function(x, ...){
     l2 = paste("\nSample ID: ", x$id, "\n", sep = "")  
     lines = c(lines, l2)
   }
-  l3 = paste("Sequence\n", x$sequence, "\n",
+  l3 = paste("Raw Sequence\n", 
+             substr(x$raw,1, 25), "..." , substr(x$raw, (nchar(x$raw)-24), nchar(x$raw)), "\n",
              sep ="")
   lines = c(lines, l3)
+  
+  if()
+  
   cat(lines, sep="")
 } 

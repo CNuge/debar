@@ -1,10 +1,10 @@
 ---
-title: "coiDenoiser-vignette"
+title: "seqdenoise-vignette"
 author: "Cameron M. Nugent"
 data: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{coiDenoiser-vignette}
+  %\VignetteIndexEntry{seqdenoise-vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -36,10 +36,46 @@ For demonstration of the workflow, `coiDenoiser` contains two example files. The
 #for dev:
 #fastq_dat_file = './inst/extdata/ccs_subset.fastq'
 
-fastq_dat_file = system.file('extdata/ccs_subset.fastq', package = 'coiDenoiser')
+fastq_dat_file = system.file('extdata/ccs_subset.fastq', package = 'seqdenoise')
+
+fastq_real_file = system.file('extdata/sequel_smrt_subset.fastq', package = 'seqdenoise')
+
+fastq_gz_real_file = system.file('extdata/sequel_smrt_subset.fastq.gz', package = 'seqdenoise')
+
+```
+
+```{r}
+
+data = read_fastq(fastq_gz_real_file)
+head(data)
+
+```
+
+```{r}
+dim(data)
+```
+
+```{r}
+print(data$sequence[71])
+test = denoise(data$sequence[71])
+```
+
+```{r}
+outputs = list()
+for(i in 1:length(data$sequence)){
+  print(i)
+  #print(data$sequence[i])
+  out = denoise(data$sequence[i])
+  outputs[[i]] = out
+}
+
+length(outputs)
 ```
 
 
+```{r}
+outputs[[2]]
+```
 ### Step 0: quick start
 
 Just show the file-file function and say this is all you need unless you wish to get into the nitty gritty.

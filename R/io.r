@@ -12,12 +12,15 @@
 #' @name read_fastq
 read_fastq = function(x, keep_quality = FALSE){
   
-  records = data.frame(header_data = character(),
-                       sequence = character(), 
-                       stringsAsFactors = FALSE)
-  
-  if (keep_quality == TRUE){
-    records$quality = character()
+  if(keep_quality == TRUE){
+    records = data.frame(header_data = character(),
+                         sequence = character(), 
+                         quality = character(),
+                         stringsAsFactors = FALSE)
+  }else{
+    records = data.frame(header_data = character(),
+                         sequence = character(), 
+                         stringsAsFactors = FALSE)
   }
   
   n = 4
@@ -30,9 +33,9 @@ read_fastq = function(x, keep_quality = FALSE){
     if(length(lines) == n){
       if(keep_quality == TRUE){
         records = rbind(records, data.frame(header_data = lines[1], 
-                                            sequence = lines[2]), 
+                                            sequence = lines[2], 
                                             quality = lines[4], 
-                                            stringsAsFactors = FALSE)
+                                            stringsAsFactors = FALSE))
       }else{
         records = rbind(records, data.frame(header_data = lines[1], 
                                             sequence = lines[2], 

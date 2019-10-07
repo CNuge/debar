@@ -163,14 +163,19 @@ set_frame = function(org_seq , path_out){
 triple_ins = function(x, path_start, path_end){
   inserts = c(path_start:path_end)[x[path_start:path_end] == 0]
   triples = c()
-  for(i in 1:(length(inserts)-2)){
-    potential = inserts[i]:(inserts[i]+2) 
-    observed = inserts[i:(i+2)]
-    if(isTRUE(all.equal(potential, observed))){
-      triples = c(triples, observed)
+  if(length(inserts) > 2){
+    for(i in 1:(length(inserts)-2)){
+      potential = inserts[i]:(inserts[i]+2) 
+      observed = inserts[i:(i+2)]
+      if(isTRUE(all.equal(potential, observed))){
+        triples = c(triples, observed)
+      }
     }
+    return(triples)
+  }else{
+    return(c())
   }
-  return(triples)
+  
 }
 
 #' Adjust the DNA sequence based on the ntPHMM path
@@ -283,8 +288,10 @@ adj_seq = function(frame_dat, path_out, censor_length = 3){
       new_seq[censor_2s_masks] = "-"		
     }
   }
+
+  adj_count = length(c(censor_0s,censor_2s))
   
-  return(c(frame_dat$front, new_seq))
+  return(list(c(frame_dat$front, new_seq), adj_count))
 }
 
 #' Take a DNAseq object and put sequences in common reading frame
@@ -362,7 +369,9 @@ adjust = function(x, ...){
 #' @export
 adjust.DNAseq = function(x, ..., censor_length = 3){
   
-  x$adjusted_sequence = adj_seq(x$frame_dat, x$data$path, censor_length = censor_length)
+  adj_out = adj_seq(x$frame_dat, x$data$path, censor_length = censor_length)
 
+  x$adjusted_sequence = adj_out[[1]]
+  x$adjustment_count = adj_out[[2]]
   return(x)
 }
