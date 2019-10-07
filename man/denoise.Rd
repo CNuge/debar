@@ -8,10 +8,10 @@
 denoise(x, ...)
 
 \method{denoise}{default}(x, ..., name = character(), ambig_char = "N",
-  censor_length = 5, to_file = TRUE, keep_flanks = TRUE,
-  outformat = "fastq", filename = NULL, phred_placeholder = "#",
-  aa_check = FALSE, trans_table = 0, frame_offset = 0,
-  append = TRUE)
+  censor_length = 5, max_adjustments = 3, to_file = TRUE,
+  keep_flanks = TRUE, outformat = "fastq", filename = NULL,
+  phred_placeholder = "#", aa_check = FALSE, trans_table = 0,
+  frame_offset = 0, append = TRUE)
 }
 \arguments{
 \item{x}{a DNA sequence string.}

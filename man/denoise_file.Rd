@@ -7,13 +7,15 @@
 \usage{
 denoise_file(x, ...)
 
-\method{denoise_file}{default}(x, ..., file_type = "fastq",
-  multicore = FALSE)
+\method{denoise_file}{default}(x, ..., filename = "output.fastq",
+  file_type = "fastq", multicore = FALSE)
 }
 \arguments{
 \item{x}{The name of the file to denoise sequences from.}
 
 \item{...}{additional arguments to be passed to the \link{denoise} function.}
+
+\item{filename}{The name of the fle to output sequences to.}
 
 \item{file_type}{The format of the file to be denoised. Options are fastq or fasta. Default is fastq.}
 

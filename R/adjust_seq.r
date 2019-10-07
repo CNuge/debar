@@ -63,6 +63,9 @@ adj_seq = function(frame_dat, path_out, censor_length = 3){
       
       #NOTE: this is to truncate the sequence if a large string of
       #gap characters is encountered, this prevents incorrect additions
+      #The information is not discarded, but rather added to an
+      #additional part of the output vector, so that it can be recovered if
+      #the edges of the sequences are not being removed
       if(paste(path_out[i:(i+4)], collapse='') == "00000"){
         break        
       }
@@ -101,8 +104,14 @@ adj_seq = function(frame_dat, path_out, censor_length = 3){
 
   }
   
-  #if the end of the original seq end was not reached, add the remained to the 
-  
+  #TODO - this is still leading to the loss of ~230 characters in example t2...
+  #the frame and adjust reads patch together properly so the issue is here.
+  if(org_seq_pos < length(org_seq_vec)){
+    trimmed_end = org_seq_vec[org_seq_pos:length(org_seq_vec)]
+  }else{
+    trimmed_end = c()
+  }
+    
   if(censor_length != 0){
 
     #censor_0s
@@ -132,43 +141,8 @@ adj_seq = function(frame_dat, path_out, censor_length = 3){
 
   adj_count = length(c(censor_0s,censor_2s))
   
-  return(list(c(frame_dat$front, new_seq), adj_count))
+  return(list(c(frame_dat$front, new_seq), adj_count, trimmed_end))
 }
-
-
-
-#' Get the final denoised output sequence for a read.
-#'
-#' 
-#' @param x a DNAseq class object.
-#' @param ... additional arguments to be passed between methods.
-#' @param keep_flanks Default is TRUE.
-#' @param ambig_char The character to use for ambigious positions in the sequence.
-outseq = function(x, ...){
-  UseMethod("outseq")
-}
-
-#' @rdname outseq
-#' @export
-outseq.DNAseq = function(x, keep_flanks = TRUE, ambig_char = "N"){
-  if(keep_flanks == TRUE){
-    dashes_rm = sum(c(length(x$frame_dat$front), as.integer(x$data$len_first_front), 1), na.rm = TRUE)
-    
-    x$outseq = paste(c(x$data$raw_removed_front,
-                       x$frame_dat$removed_lead,
-                       x$adjusted_sequence[dashes_rm:length(x$adjusted_sequence)], 
-                       x$frame_dat$removed_end,
-                       x$data$raw_removed_end) ,
-                     collapse = "")
-  }else{
-    x$outseq = paste(x$adjusted_sequence, collapse = "")
-  }
-  
-  x$outseq = toupper(gsub("-", ambig_char, x$outseq )) 
-  
-  return(x)
-}
-
 
 
 #' Adjust the sequences based on the nt path outputs.
@@ -177,7 +151,6 @@ outseq.DNAseq = function(x, keep_flanks = TRUE, ambig_char = "N"){
 #' @param ... additional arguments to be passed between methods.
 #' @param censor_length the number of base pairs in either direction of a PHMM correction
 #' to convert to placeholder characters. Default is 3.
-#' @param ambig_char
 #' @return a class object of code{"ccs_reads"} 
 #' @seealso \code{\link{DNAseq}}
 #' @seealso \code{\link{frame}}
@@ -197,11 +170,53 @@ adjust = function(x, ...){
 
 #' @rdname adjust
 #' @export
-adjust.DNAseq = function(x, ..., censor_length = 3){
+adjust.DNAseq = function(x, ..., censor_length = 5){
   
   adj_out = adj_seq(x$frame_dat, x$data$path, censor_length = censor_length)
 
   x$adjusted_sequence = adj_out[[1]]
   x$adjustment_count = adj_out[[2]]
+  x$data$adjusted_trimmed = adj_out[[3]]
+  return(x)
+}
+
+
+
+#' Get the final denoised output sequence for a read.
+#'
+#' 
+#' @param x a DNAseq class object.
+#' @param ... additional arguments to be passed between methods.
+#' @param keep_flanks Default is TRUE.
+#' @param ambig_char The character to use for ambigious positions in the sequence.
+#' @param max_adjustments How many adjustments can be made to a read? If adjust exceeded this number
+#' the entire read will be masked. Default is 3 corrections permitted.
+#'
+outseq = function(x, ...){
+  UseMethod("outseq")
+}
+
+#' @rdname outseq
+#' @export
+outseq.DNAseq = function(x, keep_flanks = TRUE, ambig_char = "N"){
+  
+  if(keep_flanks == TRUE){
+    dashes_rm = sum(c(length(x$frame_dat$front), as.integer(x$data$len_first_front), 1), na.rm = TRUE)
+    
+    #here the good part of the read is pasted back together with the flanking information
+    #that was omitted.
+    x$outseq = paste(c(x$data$raw_removed_front, #part removed in front of first frame() call
+                       x$frame_dat$removed_lead, #part removed in second frame() call
+                       x$adjusted_sequence[dashes_rm:length(x$adjusted_sequence)], #the 'sweet spot' that is denoised
+                       x$data$adjusted_trimmed, # part removed in adj_seq
+                       x$frame_dat$removed_end, #part removed in second frame() call
+                       x$data$raw_removed_end), # part removed from the end of first frame() call
+                     collapse = "")
+  }else{
+    x$outseq = paste(x$adjusted_sequence, collapse = "")
+  }
+  
+  x$outseq = toupper(gsub("-", ambig_char, x$outseq )) 
+ 
   return(x)
 }

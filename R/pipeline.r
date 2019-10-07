@@ -59,6 +59,7 @@ denoise.default = function(x, ...,
   if(aa_check == TRUE){
     dat = aa_check(dat, trans_table = trans_table, frame_offset = frame_offset)
   }
+  dat = outseq(dat, keep_flanks = keep_flanks, ambig_char = ambig_char)
   
   if(to_file == TRUE){
     if(outformat == "fasta"){
@@ -72,12 +73,10 @@ denoise.default = function(x, ...,
     if(outformat == "fastq"){
       if(is.null(filename)){
         write_fastq(dat, ambig_char= ambig_char,
-                       keep_flanks = keep_flanks, 
                        phred_placeholder = phred_placeholder, 
                        append = append)
       }else{
         write_fastq(dat, ambig_char = ambig_char,
-                       keep_flanks = keep_flanks, 
                        filename = filename, 
                        phred_placeholder = phred_placeholder, 
                        append = append)
