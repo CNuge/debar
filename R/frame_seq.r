@@ -215,7 +215,7 @@ frame.DNAseq = function(x, ...){
   
   if(dir_check == TRUE){
     dir_out = dir_check(x$raw)
-    #parse the outputs and keep the better one
+    #parse the outputs from the optimal direction.
     x$data$ntBin = 
     x$data$ntPHMMout = 
   }else{
@@ -223,6 +223,7 @@ frame.DNAseq = function(x, ...){
     x$data$ntPHMMout = aphid::Viterbi(nt_PHMM, x$data$ntBin, odds = FALSE)
   }
   
+  #TODO - finish this check of standards.
   #if the score of the PHMMout
   if(x$data$ntPHMMout < min_logL){
     #add a signal for the denoise function to skip additional steps
@@ -230,6 +231,7 @@ frame.DNAseq = function(x, ...){
 
   }
   
+  #check for leading inserts, if present remove them and reframe the sequence for higher accuracy.
   if(leading_ins(x$data$ntPHMMout[['path']])){
     temp_frame = set_frame(x$raw, x$data$ntPHMMout[['path']])
     x$data$raw_removed_front = temp_frame[['removed_lead']]
@@ -243,9 +245,12 @@ frame.DNAseq = function(x, ...){
     x$data$raw_removed_end = c()
     trim_temp = x$raw
   }
+  #set the reading frame for the final sequence, produces data to
+  #constrain the operation of the adjust seqence function
   x$frame_dat = set_frame(trim_temp, x$data$ntPHMMout[['path']])
   x$data$path = x$data$ntPHMMout[['path']]
  
+  #remove the aphid and ape strucutres to minimuze memory footprint.
   x$data$ntBin = NULL
   x$data$ntPHMMout = NULL
   
