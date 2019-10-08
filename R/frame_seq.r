@@ -170,18 +170,30 @@ rev_comp = function(x){
 
 #' Take an input sequence and align both the forward and reverse compliments to the PHMM
 #' 
-#' The fuction returns the sequence, DNAbin and Path the optimal orientation.
+#' The fuction returns the sequence, DNAbin and Path and score of the optimal orientation.
 #' Optimal orientation is determined by the direction with the longer string of consecutive 
 #' ones in the path
 #' @param x a DNAseq class object.
 #' 
 dir_check = function(x){
+  #run this for fwd
+  fwd_ntBin = individual_DNAbin(toupper(x))
+  fwd_ntPHMMout = aphid::Viterbi(nt_PHMM, fwd_ntBin, odds = FALSE)
+  
+  rev_x = rev_comp(x)
+  rev_ntBin = individual_DNAbin(toupper(rev_x))
+  rev_ntPHMMout = aphid::Viterbi(nt_PHMM, rev_ntBin, odds = FALSE)
+  
+  #compare the PHMM scores and return the one with the higher logL
+  
   
 }
 
 #' Take a DNAseq object and put sequences in common reading frame
 #' @param x a DNAseq class object.
 #' @param dir_check Should both the forward and reverse compliments be considered?
+#' @param min_logL The minimum log likelihood value for a sequence to be denoised.
+#' 
 #' @param ... additional arguments to be passed between methods.
 #' @return a class object of code{"DNAseq"} 
 #' @seealso \code{\link{DNAseq}}
@@ -203,9 +215,19 @@ frame.DNAseq = function(x, ...){
   
   if(dir_check == TRUE){
     dir_out = dir_check(x$raw)
+    #parse the outputs and keep the better one
+    x$data$ntBin = 
+    x$data$ntPHMMout = 
   }else{
     x$data$ntBin = individual_DNAbin(toupper(x$raw))
     x$data$ntPHMMout = aphid::Viterbi(nt_PHMM, x$data$ntBin, odds = FALSE)
+  }
+  
+  #if the score of the PHMMout
+  if(x$data$ntPHMMout < min_logL){
+    #add a signal for the denoise function to skip additional steps
+    #break and don't waste time with the rest.
+
   }
   
   if(leading_ins(x$data$ntPHMMout[['path']])){

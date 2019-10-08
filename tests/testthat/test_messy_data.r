@@ -10,7 +10,7 @@ test_that("Messy SEQUEL sequences are processed as anticipated", {
   t1 = "gctcctaaaattgaagaaactcctgctaaatgtaaagaaaaaattgctaaatctactgaagcaccaccatgagcaataatagaagataaaggtggataaacagttcatccagtaccagccccattttctactatacttctagccattaatagagtcaatgaaggcggtaataatcagaaactcatattatttattcgaggaaatgctatatccggagctcctaatattaatggaactaatcaatttccaaatcctccaattataattggtattactataaaaaaaattattacgaaagcatgggcagtgacaattacattataaatttgatcatcaccaattaatgctcctggatgtcctaattcagctcgaattaagattcttagagaagttcctactattccagctcatgctccaaatataaagtacaaagttccaatatctttatgattggttgactgtgacctgagtcagctacatgttcgactgcatagacagtgcgctgtctatgcagtcgaacatgtagctgactcaggtcacggtcaacaaatcataaagatattggaactttgtactttatatttggagcatgagctggaatagtaggaacttctctaagaatcttaattcgagctgaattaggacatccaggagcattaattggtgatgatcaaatttataatgtaattgtcactgcccatgctttcgtaataatttttttatagtaataccaattataattggaggatttggaaattgattagttccattaatattaggagctccagatatagcatttcctcgaataaataatatgagtctctgattattaccgccttcattgactctattaatggctagaagtatagtagaaaatggggctggtactggatgaactgtttatccacctttatcttctattattgctcatggtggtgcttcagtagatttagcaattttttctttacatttagcaggagtttcttcaattttaggagc"
   t1a = rev_comp(t1)
   
-  test_seqdenoise = DNAseq(t1, name = "test1")
+  test_seqdenoise = DNAseq(t1a, name = "test1")
   test_seqdenoise = frame(test_seqdenoise)
   test_seqdenoise$data$path
   test_seqdenoise = frame(test_seqdenoise)
@@ -83,9 +83,11 @@ test_that("Messy SEQUEL sequences are processed as anticipated", {
   ############################################################################
   
   #This one introduces an error into the output with a bunch of NAs
+  #reverse compliment again the correct orientation
   t4 = 'GGTAGCTGTCAGAGTAGCTCGTGGATCACTTGTGCAAGCATCACATCGTAGTAAACTTCAGGGTGTCCAAAAAATCAAAATAAATGTTGATATAAAATAGGGTCTCCCCCACCAGCTGGGTCAAAAAATGAGGTATTTAAATTTCGATCAGTTAATAATATAGTAATTGTTCCAGCTAAAACTGGTAAAGATAATAATAAAAGAAATGCAGTATACCATCTGCTCAAACAAATAATGGTATTTGATCAAATGATAAATTATTTAAACGTATATTAATAATTGTAGAAATAAAATTAATAGCTCCTAAAATAGATGAAATCCCAGCTAAATGAAGAGAAAAAATAGCTAAATCAACAGATCTTCCTCCATGAGCAATATTAGAAGAAAGAGGAGGATAAACTGTTCATCCAGTTCCTGCTCCATTTTCTACAATTCTACTTGAAATTAATAAAGTTAATGATGGGGGTAGAAGTCAAAAACTTATATTATTTATTCGGGGGAAGCTATATCTGGGGCTCCTAATATTAATGGTACTAATCAATTACCAAAT'
+  t4a = rev_comp(t4)
   
-  test_seqdenoise4 = DNAseq(t4, name = "test4")
+  test_seqdenoise4 = DNAseq(t4a, name = "test4")
   test_seqdenoise4 = frame(test_seqdenoise4)
   # test_seqdenoise4$data$path
   # test_seqdenoise4$data$raw_removed_front
@@ -111,7 +113,7 @@ test_that("Messy SEQUEL sequences are processed as anticipated", {
   #This one looks like its making legit corrections, double check and make sure the path and the output are reflective of one another
   t5 = 'ATTTGACTAGTTCCTTTAAAATTAGGAGCCCCAGATATAGCATTTCCTCGGATAAATAATATAAGTTTTTGAATATTAGCCCCCTTCATTAACTTTACTTTTATCAAGCTCTATTGTAGAAAATGGAGCAGGAAACAGGTTGAACTGTTTACCCTCCTTTATCTTCTGGGATTGCCCATGCAGGAGCTTCTGTTGATTTAGCTATTTTTTCTCTTCACTTAGCTGAAATTTCCTCAATTTTAGGAGCAGTAAATTTTATTACAACTGTAATTAATATACGGTCTAGAGGAATTACTTTAGATCGAATACCTTTATTTGTTTGATCAGTAGTAATTACTGCAATTTTATTACTTCTCTCTTTAGCCAGTACTAGCTGGAGCTATTACTATAGCTACTTACAGACCGAAATTTAAATACCTCTTTTTTTGACCCAGCAGGGGGAGGGGACCCAATTCTTTATCAACACTTATTTTGATTTTTTGGACATCCTGAAGTTTACTACGATGTGATGCTTGCACAAGTGATCCACGTCTCTCGTCTGTGCCTACC'
 
-  test_seqdenoise5 = DNAseq(t5, name = "test4")
+  test_seqdenoise5 = DNAseq(t5, name = "test5")
   test_seqdenoise5 = frame(test_seqdenoise5)
   #path has 3 inserts scattered throughout a string of ones, plus a triple delete. lots of missing front and added end.
   #see if moving the back to the front reveals a circle?
