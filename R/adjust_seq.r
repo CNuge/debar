@@ -105,7 +105,8 @@ adj_seq = function(frame_dat, path_out, censor_length = 3){
   }
   
   #TODO - this is still leading to the loss of ~230 characters in example t2...
-  #the frame and adjust reads patch together properly so the issue is here.
+  #the frame and adjust reads patch together properly so the issue is here. where to look
+  #to get the proper end to the sequence?
   if(org_seq_pos < length(org_seq_vec)){
     trimmed_end = org_seq_vec[org_seq_pos:length(org_seq_vec)]
   }else{
