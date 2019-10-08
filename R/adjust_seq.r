@@ -95,6 +95,12 @@ adj_seq = function(frame_dat, path_out, censor_length = 3){
       #2 = I
     }else if(path_out[i] == 2){
       if(match_seen == TRUE){
+        #if there is a large run of 2s then cease the adjustment loop, sequence if
+        #off the rails and should not be adjusted further
+        if(paste(path_out[i:(i+4)], collapse='') == "22222"){
+          break        
+        }
+      
         #there was a bp insertion, skip this bp in the original seq
         org_seq_pos = org_seq_pos + 1
         
@@ -104,9 +110,6 @@ adj_seq = function(frame_dat, path_out, censor_length = 3){
 
   }
   
-  #TODO - this is still leading to the loss of ~230 characters in example t2...
-  #the frame and adjust reads patch together properly so the issue is here. where to look
-  #to get the proper end to the sequence?
   if(org_seq_pos < length(org_seq_vec)){
     trimmed_end = org_seq_vec[org_seq_pos:length(org_seq_vec)]
   }else{
@@ -145,6 +148,7 @@ adj_seq = function(frame_dat, path_out, censor_length = 3){
   return(list(c(frame_dat$front, new_seq), adj_count, trimmed_end))
 }
 
+#c(new_seq, trimmed_end) == org_seq_vec
 
 #' Adjust the sequences based on the nt path outputs.
 #'

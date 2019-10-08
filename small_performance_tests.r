@@ -4,13 +4,14 @@ fastq_dat_file = system.file('extdata/ccs_subset.fastq', package = 'seqdenoise')
 
 fastq_dat_file_messy = system.file('extdata/previous_pacbio_example.fastq', package = 'seqdenoise')
 
-
 fastq_real_file = system.file('extdata/sequel_smrt_subset.fastq', package = 'seqdenoise')
 
 fastq_gz_real_file = system.file('extdata/sequel_smrt_subset.fastq.gz', package = 'seqdenoise')
 
+fastq_real_file2 = system.file('extdata/sequel_smrt_subset2.fastq', package = 'seqdenoise')
 
-denoise_file(fastq_gz_real_file, keep_flanks = FALSE, filename = "with_edges_seqdenoise_out.fastq")
+
+denoise_file(fastq_gz_real_file, keep_flanks = TRUE, filename = "with_edges_seqdenoise_out.fastq")
 
 denoise_file(fastq_gz_real_file, keep_flanks = FALSE, filename = "noedges_seqdenoise_out.fastq")
 
@@ -18,6 +19,8 @@ denoise_file(fastq_gz_real_file, keep_flanks = FALSE, filename = "noedges_seqden
 denoise_file(fastq_dat_file, filename = "prev_example_seqdenoise.fastq")
 
 denoise_file(fastq_dat_file_messy, filename = "prev_example_seqdenoise2.fastq")
+
+denoise_file(fastq_real_file2, filename = "with_edges_seqdenoise_out_example2.fastq")
 
 
 ################
