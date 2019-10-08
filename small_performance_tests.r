@@ -1,14 +1,21 @@
 library(seqdenoise)
 
 fastq_dat_file = system.file('extdata/ccs_subset.fastq', package = 'seqdenoise')
-
+#original sequence data example from Hebert et al. 2018 data
 fastq_dat_file_messy = system.file('extdata/previous_pacbio_example.fastq', package = 'seqdenoise')
-
+#
+#new ccs data, from 158 SMRT
 fastq_real_file = system.file('extdata/sequel_smrt_subset.fastq', package = 'seqdenoise')
-
+#new ccs data, from 158 SMRT
+#in gz format
 fastq_gz_real_file = system.file('extdata/sequel_smrt_subset.fastq.gz', package = 'seqdenoise')
 
+#new ccs data, from 229 SMRT
 fastq_real_file2 = system.file('extdata/sequel_smrt_subset2.fastq', package = 'seqdenoise')
+
+#for exploriation purposes, iontorrent example
+#mbrave: CBGMB-00029
+fastq_ions5 = system.file('extdata/iontorrent_s5_example.fastq', package = 'seqdenoise')
 
 
 denoise_file(fastq_gz_real_file, keep_flanks = TRUE, filename = "with_edges_seqdenoise_out.fastq")
@@ -21,6 +28,14 @@ denoise_file(fastq_dat_file_messy, filename = "prev_example_seqdenoise2.fastq")
 
 denoise_file(fastq_real_file2, filename = "with_edges_seqdenoise_out_example2.fastq")
 
+denoise_file(fastq_ions5, filename = "iontorrent_example_3.fastq")
+
+denoise_file(fastq_ions5,  keep_flanks = FALSE, filename = "iontorrent_example_3_noedges.fastq")
+
+denoise_file(fastq_ions5,  keep_flanks = FALSE, filename = "iontorrent_example_3_noedges_with_maksed.fastq")
+denoise_file(fastq_ions5, keep_flanks = FALSE, write_masked = FALSE, filename = "iontorrent_example_3_noedges_nomasked.fastq")
+
+denoise_file(fastq_ions5, multicore=4, keep_flanks = FALSE, write_masked = FALSE, filename = "iontorrent_example_3_noedges_nomasked_multicore.fastq")
 
 ################
 # explore the new outputs

@@ -10,8 +10,8 @@ denoise(x, ...)
 \method{denoise}{default}(x, ..., name = character(), ambig_char = "N",
   censor_length = 5, adjust_limit = 5, to_file = TRUE,
   keep_flanks = TRUE, outformat = "fastq", filename = NULL,
-  phred_placeholder = "#", aa_check = FALSE, trans_table = 0,
-  frame_offset = 0, append = TRUE)
+  phred_placeholder = "#", write_masked = TRUE, aa_check = FALSE,
+  trans_table = 0, frame_offset = 0, append = TRUE)
 }
 \arguments{
 \item{x}{a DNA sequence string.}
@@ -39,6 +39,9 @@ False will lead to only the denoised sequence for the 657bp barcode region being
 \item{filename}{The name of the file to output the data to. Default filenames are respectively: denoised.fasta or denoised.fastq.}
 
 \item{phred_placeholder}{The character to input for the phred score line. Default is '#'. Used with write_fastq only.}
+
+\item{write_masked}{Boolean indicating whether a completely masked sequence (due to exceeding the adjust_limit) should
+be written to a file or no. Default is true.}
 
 \item{aa_check}{Boolean indicating whether the amino acid sequence should be generated and assessed for stop codons. Default = FALSE.}
 

@@ -236,6 +236,9 @@ outseq.DNAseq = function(x, keep_flanks = TRUE, ambig_char = "N", adjust_limit =
  
   if(x$adjustment_count > adjust_limit){
     x$outseq = paste(rep(ambig_char, nchar(x$outseq)), collapse = "")
+    x$masked = TRUE
+  }else{
+    x$masked = FALSE
   }
   
   return(x)
