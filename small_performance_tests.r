@@ -37,6 +37,10 @@ denoise_file(fastq_ions5, keep_flanks = FALSE, write_masked = FALSE, filename = 
 
 denoise_file(fastq_ions5, multicore=4, keep_flanks = FALSE, write_masked = FALSE, filename = "iontorrent_example_3_noedges_nomasked_multicore.fastq")
 
+
+#to compress the output:
+#system("gzip #THEOUTPUT NAME")
+
 ################
 # explore the new outputs
 

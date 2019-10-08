@@ -161,8 +161,27 @@ set_frame = function(org_seq , path_out){
 
 
 
+#' Return the reverse compliment for a DNA sequence
+#' @keywords internal
+rev_comp = function(x){
+  return(seqinr::c2s(rev(seqinr::comp(seqinr::s2c(x)))))
+}
+
+
+#' Take an input sequence and align both the forward and reverse compliments to the PHMM
+#' 
+#' The fuction returns the sequence, DNAbin and Path the optimal orientation.
+#' Optimal orientation is determined by the direction with the longer string of consecutive 
+#' ones in the path
+#' @param x a DNAseq class object.
+#' 
+dir_check = function(x){
+  
+}
+
 #' Take a DNAseq object and put sequences in common reading frame
 #' @param x a DNAseq class object.
+#' @param dir_check Should both the forward and reverse compliments be considered?
 #' @param ... additional arguments to be passed between methods.
 #' @return a class object of code{"DNAseq"} 
 #' @seealso \code{\link{DNAseq}}
@@ -182,9 +201,12 @@ frame = function(x, ...){
 #' @export
 frame.DNAseq = function(x, ...){
   
-  x$data$ntBin = individual_DNAbin(toupper(x$raw))
-  
-  x$data$ntPHMMout = aphid::Viterbi(nt_PHMM, x$data$ntBin, odds = FALSE)
+  if(dir_check == TRUE){
+    dir_out = dir_check(x$raw)
+  }else{
+    x$data$ntBin = individual_DNAbin(toupper(x$raw))
+    x$data$ntPHMMout = aphid::Viterbi(nt_PHMM, x$data$ntBin, odds = FALSE)
+  }
   
   if(leading_ins(x$data$ntPHMMout[['path']])){
     temp_frame = set_frame(x$raw, x$data$ntPHMMout[['path']])

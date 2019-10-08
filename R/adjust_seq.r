@@ -1,9 +1,4 @@
 
-#' Return the reverse compliment for a DNA sequence
-#' @keywords internal
-rev_comp = function(x){
-  return(seqinr::c2s(rev(seqinr::comp(seqinr::s2c(x)))))
-}
 
 
 #' Look for triple inserts in the PHMM path.
@@ -203,6 +198,8 @@ adjust.DNAseq = function(x, ..., censor_length = 5){
 #' @param ambig_char The character to use for ambigious positions in the sequence.
 #' @param adjust_limit the maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
 #' then the entire read is masked with ambigious characters. Default is 5.
+#' @param framed_output Boolean indicating if the output shouldhave leading dashes to establish a common
+#' reading frame in the output sequences. Default is TRUE. Param only applied if keep_flanks = FALSE.
 #'
 outseq = function(x, ...){
   UseMethod("outseq")
