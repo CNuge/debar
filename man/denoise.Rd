@@ -8,7 +8,7 @@
 denoise(x, ...)
 
 \method{denoise}{default}(x, ..., name = character(), ambig_char = "N",
-  censor_length = 5, max_adjustments = 3, to_file = TRUE,
+  censor_length = 5, adjust_limit = 5, to_file = TRUE,
   keep_flanks = TRUE, outformat = "fastq", filename = NULL,
   phred_placeholder = "#", aa_check = FALSE, trans_table = 0,
   frame_offset = 0, append = TRUE)
@@ -24,6 +24,9 @@ denoise(x, ...)
 
 \item{censor_length}{the number of base pairs in either direction of a PHMM correction
 to convert to placeholder characters. Default is 5.}
+
+\item{adjust_limit}{the maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
+then the entire read is masked with ambigious characters. Default is 3.}
 
 \item{to_file}{Boolean indicating whether the sequence should be written to a file. Default is TRUE.}
 

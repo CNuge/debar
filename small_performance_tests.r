@@ -15,7 +15,6 @@ denoise_file(fastq_gz_real_file, keep_flanks = TRUE, filename = "with_edges_seqd
 
 denoise_file(fastq_gz_real_file, keep_flanks = FALSE, filename = "noedges_seqdenoise_out.fastq")
 
-
 denoise_file(fastq_dat_file, filename = "prev_example_seqdenoise.fastq")
 
 denoise_file(fastq_dat_file_messy, filename = "prev_example_seqdenoise2.fastq")

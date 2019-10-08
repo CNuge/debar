@@ -8,7 +8,7 @@
 outseq(x, ...)
 
 \method{outseq}{DNAseq}(x, keep_flanks = TRUE, ambig_char = "N",
-  max_adjustments = 3)
+  adjust_limit = 5)
 }
 \arguments{
 \item{x}{a DNAseq class object.}
@@ -19,8 +19,8 @@ outseq(x, ...)
 
 \item{ambig_char}{The character to use for ambigious positions in the sequence.}
 
-\item{max_adjustments}{How many adjustments can be made to a read? If adjust exceeded this number
-the entire read will be masked. Default is 3 corrections permitted.}
+\item{adjust_limit}{the maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
+then the entire read is masked with ambigious characters. Default is 5.}
 }
 \description{
 Get the final denoised output sequence for a read.

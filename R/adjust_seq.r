@@ -1,4 +1,11 @@
 
+#' Return the reverse compliment for a DNA sequence
+#' @keywords internal
+rev_comp = function(x){
+  return(seqinr::c2s(rev(seqinr::comp(seqinr::s2c(x)))))
+}
+
+
 #' Look for triple inserts in the PHMM path.
 #' @keywords internal
 triple_ins = function(x, path_start, path_end){
@@ -194,8 +201,8 @@ adjust.DNAseq = function(x, ..., censor_length = 5){
 #' @param ... additional arguments to be passed between methods.
 #' @param keep_flanks Default is TRUE.
 #' @param ambig_char The character to use for ambigious positions in the sequence.
-#' @param adjust_limitthe maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
-#' then the entire read is masked with ambigious characters. Default is 3.
+#' @param adjust_limit the maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
+#' then the entire read is masked with ambigious characters. Default is 5.
 #'
 outseq = function(x, ...){
   UseMethod("outseq")
@@ -203,10 +210,14 @@ outseq = function(x, ...){
 
 #' @rdname outseq
 #' @export
-outseq.DNAseq = function(x, keep_flanks = TRUE, ambig_char = "N", adjust_limit = 3){
+outseq.DNAseq = function(x, keep_flanks = TRUE, ambig_char = "N", adjust_limit = 5){
   
   if(keep_flanks == TRUE){
+    
     dashes_rm = sum(c(length(x$frame_dat$front), as.integer(x$data$len_first_front), 1), na.rm = TRUE)
+    if(dashes_rm > length(x$adjusted_sequence)){
+      x$adjusted_sequence=NULL
+    }
     
     #here the good part of the read is pasted back together with the flanking information
     #that was omitted.
