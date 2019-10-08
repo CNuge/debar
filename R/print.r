@@ -8,12 +8,23 @@ print.DNAseq = function(x, ...){
     l2 = paste("\nSample ID: ", x$id, "\n", sep = "")  
     lines = c(lines, l2)
   }
-  l3 = paste("Raw Sequence\n", 
+  l3 = paste("Raw Sequence:\n", 
              substr(x$raw,1, 25), "..." , substr(x$raw, (nchar(x$raw)-24), nchar(x$raw)), "\n",
              sep ="")
   lines = c(lines, l3)
   
-  #if()
+  if(!is.null(x$adjustment_count)){
+    l4 = paste("Corrections applied: ", x$adjustment_count , "\n",sep = "")
+    lines = c(lines, l4)
+    
+  }
+  
+  if(!is.null(x$outseq)){
+    l5 = paste("Output Sequence:\n",
+               substr(x$outseq,1, 25), "..." , substr(x$outseq, (nchar(x$outseq)-24), nchar(x$outseq)), "\n",
+               sep ="")
+    lines = c(lines, l5)
+  }
   
   cat(lines, sep="")
 } 

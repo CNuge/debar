@@ -6,6 +6,8 @@
 #' @param name an optional character string. Identifier for the sequence.
 #' @param censor_length the number of base pairs in either direction of a PHMM correction
 #' to convert to placeholder characters. Default is 5.
+#' @param adjust_limit the maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
+#' then the entire read is masked with ambigious characters. Default is 3.
 #' @param to_file Boolean indicating whether the sequence should be written to a file. Default is TRUE.
 #' @param ambig_char The character to use for ambigious positions in the sequence that is output to the file. Default is N.
 #' @param keep_flanks Should the regions of the input sequence outside of the barcode region be readded to the denoised sequence
@@ -39,6 +41,7 @@ denoise.default = function(x, ...,
                              name = character(),
                              ambig_char = "N",
                              censor_length = 5,
+                             adjust_limit = 3,
                              to_file = TRUE,
                              keep_flanks = TRUE,
                              outformat = "fastq", 
@@ -59,7 +62,7 @@ denoise.default = function(x, ...,
   if(aa_check == TRUE){
     dat = aa_check(dat, trans_table = trans_table, frame_offset = frame_offset)
   }
-  dat = outseq(dat, keep_flanks = keep_flanks, ambig_char = ambig_char)
+  dat = outseq(dat, keep_flanks = keep_flanks, ambig_char = ambig_char, adjust_limit = adjust_limit)
   
   if(to_file == TRUE){
     if(outformat == "fasta"){

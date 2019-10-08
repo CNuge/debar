@@ -194,8 +194,8 @@ adjust.DNAseq = function(x, ..., censor_length = 5){
 #' @param ... additional arguments to be passed between methods.
 #' @param keep_flanks Default is TRUE.
 #' @param ambig_char The character to use for ambigious positions in the sequence.
-#' @param max_adjustments How many adjustments can be made to a read? If adjust exceeded this number
-#' the entire read will be masked. Default is 3 corrections permitted.
+#' @param adjust_limitthe maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
+#' then the entire read is masked with ambigious characters. Default is 3.
 #'
 outseq = function(x, ...){
   UseMethod("outseq")
@@ -203,7 +203,7 @@ outseq = function(x, ...){
 
 #' @rdname outseq
 #' @export
-outseq.DNAseq = function(x, keep_flanks = TRUE, ambig_char = "N"){
+outseq.DNAseq = function(x, keep_flanks = TRUE, ambig_char = "N", adjust_limit = 3){
   
   if(keep_flanks == TRUE){
     dashes_rm = sum(c(length(x$frame_dat$front), as.integer(x$data$len_first_front), 1), na.rm = TRUE)
@@ -223,5 +223,9 @@ outseq.DNAseq = function(x, keep_flanks = TRUE, ambig_char = "N"){
   
   x$outseq = toupper(gsub("-", ambig_char, x$outseq )) 
  
+  if(x$adjustment_count > adjust_limit){
+    x$outseq = paste(rep(ambig_char, nchar(x$outseq)), collapse = "")
+  }
+  
   return(x)
 }

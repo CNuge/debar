@@ -1,5 +1,25 @@
 test_that("A messy sequence has the barcode isolated, left alone if edges kept", {
   
+  ############################################################################
+  # Real read test 1
+  ############################################################################
+  
+  t1 = "gctcctaaaattgaagaaactcctgctaaatgtaaagaaaaaattgctaaatctactgaagcaccaccatgagcaataatagaagataaaggtggataaacagttcatccagtaccagccccattttctactatacttctagccattaatagagtcaatgaaggcggtaataatcagaaactcatattatttattcgaggaaatgctatatccggagctcctaatattaatggaactaatcaatttccaaatcctccaattataattggtattactataaaaaaaattattacgaaagcatgggcagtgacaattacattataaatttgatcatcaccaattaatgctcctggatgtcctaattcagctcgaattaagattcttagagaagttcctactattccagctcatgctccaaatataaagtacaaagttccaatatctttatgattggttgactgtgacctgagtcagctacatgttcgactgcatagacagtgcgctgtctatgcagtcgaacatgtagctgactcaggtcacggtcaacaaatcataaagatattggaactttgtactttatatttggagcatgagctggaatagtaggaacttctctaagaatcttaattcgagctgaattaggacatccaggagcattaattggtgatgatcaaatttataatgtaattgtcactgcccatgctttcgtaataatttttttatagtaataccaattataattggaggatttggaaattgattagttccattaatattaggagctccagatatagcatttcctcgaataaataatatgagtctctgattattaccgccttcattgactctattaatggctagaagtatagtagaaaatggggctggtactggatgaactgtttatccacctttatcttctattattgctcatggtggtgcttcagtagatttagcaattttttctttacatttagcaggagtttcttcaattttaggagc"
+  
+  
+  test_seqdenoise = DNAseq(t1, name = "test1")
+  test_seqdenoise = frame(test_seqdenoise)
+  test_seqdenoise$data$path
+  test_seqdenoise$data$raw_removed_front
+  z = adjust(test_seqdenoise)
+  test_seqdenoise$adjustment_count
+  #test_seqdenoise = seqdenoise::frame(test_seqdenoise)
+  #test_seqdenoise$data$path
+  
+  ############################################################################
+  # Real read test 2
+  ############################################################################
+  
   #issue here, the 296 characters outside of the denoised area are dropped
   #i.e. after the run of 2s happens, all of the following data is omitted in the subsequent output.
   #need adjust seq to keep these parts on the edges, find the logic that ceases the iteration if 
@@ -20,5 +40,91 @@ test_that("A messy sequence has the barcode isolated, left alone if edges kept",
   #test_seqdenoise2_trimmed$outseq == sweet_spot
   expect_equal(test_seqdenoise2_trimmed$outseq, sweet_spot)
   
-    
+ 
+  ############################################################################
+  # Real read test 3
+  ############################################################################
+  # This one encounters a large run of ones and a large run of 0s about halfway through the barcode reg 
+  
+  
+  t3 = 'AGGTCAACAAATCATAAAGATATTGGAACATTATATTTTTTATTTGGAATTTGAGCAGGAATAATTGGAACATCATTAAGATTATTAATTCGAATAGAATTAGGAAATCCTGGATCCTTAATTGGAGATGACCAAATTTATAATAACTATTGTAAACAGCCCATGCATTTATTATAATTTTTTTTATAGTAATACCTATTATAATTGGAGGATTTGGAAATTGATTAATTCCTTTAATATTAGGTGCACCAGATATAGCATTCCCCCGAATAAATAATATAAGATTTTGATTATTACCCCCTTCCATTTTTCTTTTAATTTCAAGAAGAATCGTAGAAAAATGGAGCAGGAACAGGATGAACTGTTTACCCCCCCTTATCTTCTAACACCGCTCATAGAGGAAGATCCGTAGATTTAGCCATTTTTTCTCTTCATTTAGCTGGAATTTCCTCAATTCTAGGAGCAGTAAATTTTATTTCTACAGTAATTAATATACGAGCTAAAAAAATAATATTTGACCAAATACCCCTATTTATTTGAGCTGTAGCTATTACTGCATTATTATTATTATTATCATTACCAGTTTTAGCAGGAGCTATTACTATATTATTAACAGATCGAAATTTAAATACATCTTTTTTTGACCCAGCTGGAGGAGGAGACCCAATTTTATACCAACATTTATTTTGATTTTTTGGACACCCTGAAGTTTA'
+
+  
+  #Below is behaving well despite initial doubt. The path encounters a large run of 0000s in the middle of the sequence and therefore terminates. Only possible improvement would be to add lots of Ns and pick up on the second run of 1s
+  
+  test_seqdenoise3 = DNAseq(t3, name = "test3")
+  test_seqdenoise3 = frame(test_seqdenoise3)
+  test_seqdenoise3$data$path
+  test_seqdenoise3$data$raw_removed_front
+  test_seqdenoise3$frame_dat
+  
+  test_seqdenoise3 = adjust(test_seqdenoise3)
+  test_seqdenoise3$adjusted_sequence
+  test_seqdenoise3 = outseq(test_seqdenoise3)
+  
+  trimmed_and_framed3 = "NCATTATATTTTTTATTTGGAATTTGAGCAGGAATAATTGGAACATCATTAAGATTATTAATTCGAATAGAATTAGGAAATCCTGGATCCTTAATTGGAGATGACCAAATTTATAA"
+  test_seqdenoise3_trimmed =  outseq(test_seqdenoise3, keep_flanks = FALSE)
+  
+  #test_seqdenoise3_trimmed$outseq == trimmed_and_framed3
+  expect_equal(test_seqdenoise3_trimmed$outseq, trimmed_and_framed3)
+  
+  ############################################################################
+  # Real read test 4
+  ############################################################################
+  
+  #This one introduces an error into the output with a bunch of NAs
+  t4 = 'GGTAGCTGTCAGAGTAGCTCGTGGATCACTTGTGCAAGCATCACATCGTAGTAAACTTCAGGGTGTCCAAAAAATCAAAATAAATGTTGATATAAAATAGGGTCTCCCCCACCAGCTGGGTCAAAAAATGAGGTATTTAAATTTCGATCAGTTAATAATATAGTAATTGTTCCAGCTAAAACTGGTAAAGATAATAATAAAAGAAATGCAGTATACCATCTGCTCAAACAAATAATGGTATTTGATCAAATGATAAATTATTTAAACGTATATTAATAATTGTAGAAATAAAATTAATAGCTCCTAAAATAGATGAAATCCCAGCTAAATGAAGAGAAAAAATAGCTAAATCAACAGATCTTCCTCCATGAGCAATATTAGAAGAAAGAGGAGGATAAACTGTTCATCCAGTTCCTGCTCCATTTTCTACAATTCTACTTGAAATTAATAAAGTTAATGATGGGGGTAGAAGTCAAAAACTTATATTATTTATTCGGGGGAAGCTATATCTGGGGCTCCTAATATTAATGGTACTAATCAATTACCAAAT'
+  
+  
+  test_seqdenoise4 = DNAseq(t4, name = "test4")
+  test_seqdenoise4 = frame(test_seqdenoise4)
+  test_seqdenoise4$data$path
+  test_seqdenoise4$data$raw_removed_front
+  test_seqdenoise4$frame_dat
+  
+  test_seqdenoise4 = adjust(test_seqdenoise4)
+  test_seqdenoise4$adjusted_sequence
+  test_seqdenoise4 = outseq(test_seqdenoise4)
+  
+  trimmed_and_framed4 = 
+  test_seqdenoise4_trimmed =  outseq(test_seqdenoise4, keep_flanks = FALSE)
+ 
+   #test_seqdenoise4_trimmed$outseq == trimmed_and_framed4
+  expect_equal(test_seqdenoise4_trimmed$outseq, trimmed_and_framed4)
+  
+  
+  
+  
+  
+  
+  ############################################################################
+  # Real read test 5
+  ############################################################################
+  
+  #This one looks like its making legit corrections, double check and make sure the path and the output are reflective of one another
+  t5 = 'ATTTGACTAGTTCCTTTAAAATTAGGAGCCCCAGATATAGCATTTCCTCGGATAAATAATATAAGTTTTTGAATATTAGCCCCCTTCATTAACTTTACTTTTATCAAGCTCTATTGTAGAAAATGGAGCAGGAAACAGGTTGAACTGTTTACCCTCCTTTATCTTCTGGGATTGCCCATGCAGGAGCTTCTGTTGATTTAGCTATTTTTTCTCTTCACTTAGCTGAAATTTCCTCAATTTTAGGAGCAGTAAATTTTATTACAACTGTAATTAATATACGGTCTAGAGGAATTACTTTAGATCGAATACCTTTATTTGTTTGATCAGTAGTAATTACTGCAATTTTATTACTTCTCTCTTTAGCCAGTACTAGCTGGAGCTATTACTATAGCTACTTACAGACCGAAATTTAAATACCTCTTTTTTTGACCCAGCAGGGGGAGGGGACCCAATTCTTTATCAACACTTATTTTGATTTTTTGGACATCCTGAAGTTTACTACGATGTGATGCTTGCACAAGTGATCCACGTCTCTCGTCTGTGCCTACC'
+ 
+  
+  
+  
+  
+  ############################################################################
+  # Real read test 6
+  ############################################################################
+  
+  #this should behave well
+  t6 = "GTAGAGCACAGTCACATGTCGCAGTCGAACATGTAGCTGACTCAGGTCACGTTCAACCAATCATAAAGATATTGGTAGTGAGAAATCAGAGGAATTCGGAGCTCTGACGGCAAAAATGAAAAAAGTGCCTATTGCGAATAGTTCTGTATCTGCACGCCAATCCAACTCGACAAAACTTGTCACCCCAAATCGCGTTAGAGAAAAGTTAATATGTGGAAACTGCAGTAAGGTGTTTGAAACTGTAGCTCTGTACGATATTCACCTTCAAGAACACCCAGTGGAATGTAGGCTATGTGGAACAAGTTTTTATAAAAGAAGAAATTATCAAGATCACGAGAAACGTCACTCGCAAAATGACGTTATCTGTACAGTTTGCGATAAAAGGTTTTTAAATGCAAACCTTCTAAAAAAACACGCTAAAACACATGATTTTGCAAACATGATTTGAAAACTTAAGTTTAATTATTGCGAATTAGTAATACAAATAAAAATTCAAATCAGCCTTGTGCATAAAAGACTGAATAAATGATTTTCCACTGCATTTTGTGAAACTGTTATTTATTCCCTTTTTCTTACATTTTTATCAAATTTAATGAGAATAATAAATTGCAATTAATTACAGATAAATATAAAAATATTCATAATATAAATCAAAGTAAAATATCAAAAATCAAAAGAGAAATAAAAAAAATATCAGAAATGATAATTTATCTTTGAACGCTGTGTTTGCATACACAATTCTGCCAGTTTCGTGTGCAAAGTCTTCAAAACTTCGGCGTGACGAATTTCTAATTCCATCTTTTCTTTCTTCTTCTAACGTTGCCATTCTAATCGCACTTGCGCTAATCTGAAAATAAAAATAAAAGTTTTATGATTTTTTGGTCATCCAGAAGTTTACTACGATGTGATGCTTGCACAAGTGATCCATGTGCTCTCTACACAGCTACC"
+
+  
+  
+  
+  ############################################################################
+  # Real read test 7
+  ############################################################################
+  
+  #This one has decent phred scores but appears to be getting completely censored.
+  #^ is this one of the rev compliment reads?
+  t7 = 'GTGCGTGTGACTTGGATCACTTGTGCAAGCATCACATCGTAGTAAACTTCTGGGTGTCCAAAAAATCAAAATAAATGTTGATATAAAATTGGATCACCTCCTCCTGAAGGATCAAAAAATGAAGTATTTAAATTTCGATCAAATAATAATATTGTAATAGCTCCTGCTAATACAGGTAATGACAATAATAATAAAATAGCCGTTAATAATAATGATCAACAAAATAATCTTACTTTTTCTATTTTATATATTCTCATATTTAAAATAGTAGTAATAAAATTAATTGATGCTATAATTGAAGATATACCAGCAATATGCAATGAAAAGATTGATAAATCTACCGATGCTCCAGAATGAGATAAATTTATAGACAATGGTGGATATACAGTTCATCCTGTTCCAGAACCTATTCCAATAAATATTCTTGATATTAATAATATAATTCTTGGAGGTAATAATCAAAATCTTATATTATTTATTCGAGGAAATGCTATATCAGGAACCGATAATATTATAGGAACTAAAAAATTTCCAAAACCCCCTATTATTACTGGTATCACAAAAAAAAAAAATTATTACAAAAGCATGAATAGTTACAATAGCATTATAAATTTGATCATTTCCTAAAAATGAACCAGGATTTCCTAATTCTAAACGAATTATTATTCTTAATGATAATCCTATTATTCCTGCTCAAAATCCAAAAATAAAATATAAAATTCCAATATCTTTATGATTGGTTGAATGTGACCTGAGTCAGCTACATGTTCGACTGCTGCGTGAGAGAGAGACCTACCGTACATGTGCAGTCGAACATGTAGCTGACTCAGGTCACGTTCAACAAATCATAAAGTATAATGTTCCAATATCTTTATGATTTGTTGAACGTGACCTGAGTCAGCTACATGTTCGACTGCACATGTACATCAGCTCCTACC'
+
+  
 })
