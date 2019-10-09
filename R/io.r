@@ -4,13 +4,13 @@
 #' 
 #' @param x The name of the fastq file to read data from.
 #' @param keep_quality Boolean indicating if the Phred quality scores should be 
-#' retained in the output dataframe. Default is FALSE.
+#' retained in the output dataframe. Default is TRUE
 #' @examples
 #' filename = system.file('extdata/ccs_subset.fastq', package = 'seqdenoise')
 #' data = read_fastq(filename)
 #' @export
 #' @name read_fastq
-read_fastq = function(x, keep_quality = FALSE){
+read_fastq = function(x, keep_quality = TRUE){
   
   if(keep_quality == TRUE){
     records = data.frame(header_data = character(),
@@ -126,7 +126,8 @@ write_fasta.DNAseq = function(x, ...,
 #' @param filename The name of the file to output the data to. Default is "denoised.fasta".
 #' @param append Should the ccs consensus sequence be appended to the output file?(TRUE) 
 #' Or overwrite the file?(FALSE) Default is TRUE.
-#' @param phred_placeholder The character to input for the phred score line. Default is '#'
+#' @param keep_phred Shoudl the original PHRED scores be kept in the output? Default is TRUE.
+#' @param phred_placeholder The character to input for the phred score line. Default is '#'.
 #' @return a class object of code{"DNAseq"} 
 #' @seealso \code{\link{DNAseq}}
 #' @seealso \code{\link{frame}}
@@ -151,16 +152,26 @@ write_fastq = function(x, ...){
 #' @rdname write_fastq
 #' @export
 write_fastq.DNAseq = function(x, ...,
-                                 keep_flanks = TRUE,
                                  ambig_char = "N",      
                                  filename = "denoised.fastq", 
                                  append = TRUE, 
+                                 keep_phred = TRUE,
                                  phred_placeholder = "#"){
 
-  outstring = paste(x$name, "\n",
-                    x$outseq, "\n",
-                    "+\n",
-                    paste(rep(phred_placeholder, times = nchar(x$outseq)), collapse = ""), sep="")
+  #TODO - need to make sure the phred scores are modified and carried through
+  #then when the outseq is generated, also turn the phred numbers back into
+  #the corresponding characters
+  if(keep_phred == TRUE){
+    outstring = paste(x$name, "\n",
+                      x$outseq, "\n",
+                      "+\n",
+                      x$outphred, sep="")
+  }else{
+    outstring = paste(x$name, "\n",
+                      x$outseq, "\n",
+                      "+\n",
+                      paste(rep(phred_placeholder, times = nchar(x$outseq)), collapse = ""), sep="")
+  }
   
   write(outstring, file =  filename, append = append)
 }

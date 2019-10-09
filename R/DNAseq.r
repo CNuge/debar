@@ -2,13 +2,14 @@
 #' Build a new DNAseq class instance.
 #'
 #' @keywords internal
-new_DNAseq = function(x = character(), name = character()){
+new_DNAseq = function(x = character(), name = character(), phred = NULL){
   stopifnot(is.character(x))
   stopifnot(is.character(name))
+  stopifnot(is.character(phred))
   if(length(x) == 0){
     stop("Must pass a DNA sequence.")
   }
-  structure(list(name = name, raw = tolower(x)) , class = "DNAseq")
+  structure(list(name = name, raw = tolower(x), phred = phred) , class = "DNAseq")
 }
 
 #' Validate the new DNAseq class instance.
@@ -35,6 +36,9 @@ validate_DNAseq = function(new_instance){
 #' Valid characters within the nucleotide string are: a,t,g,c,-,n.
 #' The nucleotide string can be input as upper case, but will be automatically converted to lower case.
 #' @param name an optional character string. Identifier for the sequence.
+#' @param phred an optional character string. The phred score string corresponding to the nucleotide string.
+#' If passed then the input phred scores will be modified along with the nucleotides and carried through
+#' to the sequence output. Default = NULL.
 #'
 #' @return an object of class \code{"coi5p"}
 #' @examples
@@ -46,7 +50,7 @@ validate_DNAseq = function(new_instance){
 #' dat$name
 #' @name DNAseq
 #' @export
-DNAseq = function(x = character(), name = character()){
-  validate_DNAseq(new_DNAseq(tolower(x), name))
+DNAseq = function(x = character(), name = character(), phred = NULL){
+  validate_DNAseq(new_DNAseq(tolower(x), name, phred))
 }
 

@@ -4,6 +4,9 @@
 #' @param x a DNA sequence string.
 #' @param ... additional arguments to be passed between methods.
 #' @param name an optional character string. Identifier for the sequence.
+#' @param phred an optional character string. The phred score string corresponding to the nucleotide string.
+#' If passed then the input phred scores will be modified along with the nucleotides and carried through
+#' to the sequence output. Default = NULL.
 #' @param censor_length the number of base pairs in either direction of a PHMM correction
 #' to convert to placeholder characters. Default is 5.
 #' @param adjust_limit the maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
@@ -41,11 +44,13 @@ denoise = function(x, ...){
 #' @export
 denoise.default = function(x, ...,
                              name = character(),
+                             phred = NULL, 
                              ambig_char = "N",
                              censor_length = 5,
                              adjust_limit = 5,
                              to_file = TRUE,
                              keep_flanks = TRUE,
+                             keep_phred = TRUE,
                              outformat = "fastq", 
                              filename = NULL, 
                              phred_placeholder = "#",
@@ -58,8 +63,13 @@ denoise.default = function(x, ...,
   if(outformat != "fastq" && outformat != "fasta" && outformat != "none"){
     stop("Invalid output format! Must be one of: 'fasta', 'fastq' or 'none'")
   }
+
+ #TODO - here run a quick check on the phred scores, only proceed if certain quality values
+ # are met, otherwise skip the remaining steps.
+ # add a force_low_phred boolean so that the remaining steps can be run if required
   
-  dat = DNAseq(x, name = name )
+  
+  dat = DNAseq(x, name = name , phred = phred)
   dat = frame(dat)
   dat = adjust(dat, censor_length = censor_length)
   if(aa_check == TRUE){
@@ -128,13 +138,18 @@ denoise_file.default = function(x, ..., filename = 'output.fastq',  file_type = 
     stop("file_type must be either fasta or fastq")
   }
   
+
+  #TODO - have the denoise function return some log information
+  #update the labelled list accordingly and have the log written to a file at the end as well.  
+  log_data = list()
+  
   if(multicore == FALSE){
     for(i in 1:length(data$sequence)){
-      denoise(data$sequence[[i]], filename = filename, name = data$header_data[[i]], ...)
+      denoise(data$sequence[[i]], filename = filename, name = data$header_data[[i]], phred = data$quality[[i]], ...)
     }
   }else{
     parallel::mclapply(1:length(data$sequence), function(i){
-      denoise(data$sequence[[i]], filename = filename, name = data$header_data[[i]], ...)
+      denoise(data$sequence[[i]], filename = filename, name = data$header_data[[i]], phred = data$quality[[i]], ...)
     }, mc.cores = multicore)
   }
 }

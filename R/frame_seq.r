@@ -58,7 +58,9 @@ ins_front_trim = function(path_out, search_scope = 15){
 #' whereas matching on the back is more lenient as insertions and deletions
 #' can be tolerated here without large implications for the rest of the sequence
 #' @keywords internal
-set_frame = function(org_seq , path_out){
+set_frame = function(org_seq, path_out){
+  #TODO - move this line outside of set_frame into the wrapping frame.
+  #have the phred labels applied as well. then pass org_seq_vec to this function
   org_seq_vec = strsplit(tolower(org_seq), split='')[[1]]
   
   adj_for_dels = ins_front_trim(path_out)
