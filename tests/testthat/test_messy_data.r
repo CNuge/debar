@@ -230,5 +230,5 @@ test_that("Messy SEQUEL sequences are processed as anticipated", {
 
   #test_seqdenoise7a_trimmed$outseq == trimmed_and_framed4
   expect_equal(test_seqdenoise7a_trimmed$outseq, trimmed_and_framed7)
-
-})
+  
+  })

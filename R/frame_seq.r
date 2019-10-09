@@ -68,7 +68,6 @@ set_frame = function(org_seq , path_out){
   #If there are a large number (>2) of deletes in the first 15bp
   #then adjust the sequence so the end of the delete run is the starting point
   
-  
   org_seq_start = 1
   org_seq_end = length(org_seq_vec)
   
@@ -79,7 +78,6 @@ set_frame = function(org_seq , path_out){
     org_seq_start = adj_for_dels
     path_start = adj_for_dels
   }
-  
   
   for( i in path_start:length(path_out) ){
     #0 = D
@@ -160,6 +158,12 @@ set_frame = function(org_seq , path_out){
 
 
 
+#' Return a labelled list 
+#' @keywords internal
+phred2numeric = function(phred_string){
+  outvec = gtools::asc(unlist(strsplit(phred_string, "")))
+  return(outvec - 33)
+}
 
 #' Return the reverse compliment for a DNA sequence
 #' @keywords internal
