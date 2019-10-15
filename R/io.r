@@ -119,7 +119,6 @@ write_fasta.DNAseq = function(x, ...,
 #' 
 #' @param x a DNAseq class object.
 #' @param ... additional arguments to be passed between methods.
-#' @param keep_flanks Default is TRUE.
 #' @param filename The name of the file to output the data to. Default is "denoised.fasta".
 #' @param append Should the ccs consensus sequence be appended to the output file?(TRUE) 
 #' Or overwrite the file?(FALSE) Default is TRUE.
@@ -175,3 +174,51 @@ write_fastq.DNAseq = function(x, ...,
   write(outstring, file =  filename, append = append)
 }
 
+#' A wrapper function to deploy the fastq and fata output functions.
+#' 
+#' @param filename The name of the file to output the data to. Default is "denoised.fasta".
+#' @param append Should the ccs consensus sequence be appended to the output file?(TRUE) 
+#' Or overwrite the file?(FALSE) Default is TRUE.
+#' @param keep_phred Should the original PHRED scores be kept in the output? Default is TRUE.
+#' @param phred_placeholder The character to input for the phred score line. Default is '#'.
+#' @return a class object of code{"DNAseq"}
+#'
+#'
+write_wrapper = function(x, ...){
+  UseMethod("write_wrapper")
+}
+
+#' @rdname write_fastq
+#' @export
+write_wrapper.DNAseq = function(x, ...,
+                              filename = "denoised.fastq", 
+                              outformat = "fastq",
+                              append = TRUE, 
+                              keep_phred = TRUE,
+                              phred_placeholder = "#"){
+  if(outformat != "fastq" && outformat != "fasta" && outformat != "none"){
+    stop("Invalid output format! Must be one of: 'fasta', 'fastq' or 'none'")
+  }
+  
+  if(outformat == "fasta"){
+    if(is.null(filename)){
+      write_fasta(x, append = append, ...)
+    }else{
+      write_fasta(x, filename = filename, append = append, ...)
+    }
+  }
+  
+  if(outformat == "fastq"){
+    if(is.null(filename)){
+      write_fastq(x, ambig_char= ambig_char,
+                  phred_placeholder = phred_placeholder, 
+                  append = append, ...)
+    }else{
+      write_fastq(x, ambig_char = ambig_char,
+                  filename = filename, 
+                  phred_placeholder = phred_placeholder, 
+                  append = append, ...)
+    }
+  }
+  x
+}

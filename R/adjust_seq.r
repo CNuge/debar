@@ -229,7 +229,7 @@ outseq.DNAseq = function(x, keep_flanks = TRUE, ambig_char = "N", adjust_limit =
                        x$data$adjusted_trimmed, # part removed in adj_seq
                        x$frame_dat$removed_end, #part removed in second frame() call
                        x$data$raw_removed_end), # part removed from the end of first frame() call
-                     collapse = "")
+                       collapse = "")
     
     if(!is.null(names(x$adjusted_sequence))){
       x$outphred = paste(c(names(x$data$raw_removed_front), #part removed in front of first frame() call
