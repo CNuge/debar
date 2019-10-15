@@ -162,6 +162,7 @@ adj_seq = function(frame_dat, path_out, censor_length = 3, added_phred = "*"){
 #' @param ... additional arguments to be passed between methods.
 #' @param censor_length the number of base pairs in either direction of a PHMM correction
 #' to convert to placeholder characters. Default is 3.
+#' @param added_phred The phred character to use for characters inserted into the original sequence.
 #' @return a class object of code{"ccs_reads"} 
 #' @seealso \code{\link{DNAseq}}
 #' @seealso \code{\link{frame}}
@@ -181,9 +182,9 @@ adjust = function(x, ...){
 
 #' @rdname adjust
 #' @export
-adjust.DNAseq = function(x, ..., censor_length = 5){
+adjust.DNAseq = function(x, ..., censor_length = 5,  added_phred = "*"){
   
-  adj_out = adj_seq(x$frame_dat, x$data$path, censor_length = censor_length)
+  adj_out = adj_seq(x$frame_dat, x$data$path, censor_length = censor_length, added_phred = added_phred)
 
   x$adjusted_sequence = adj_out[[1]]
   x$adjustment_count = adj_out[[2]]
@@ -249,10 +250,9 @@ outseq.DNAseq = function(x, keep_flanks = TRUE, ambig_char = "N", adjust_limit =
   x$outseq = toupper(gsub("-", ambig_char, x$outseq )) 
  
   if(x$adjustment_count > adjust_limit){
-    x$outseq = paste(rep(ambig_char, nchar(x$outseq)), collapse = "")
-    x$masked = TRUE
+    x$reject = TRUE
   }else{
-    x$masked = FALSE
+    x$reject = FALSE
   }
   
   return(x)

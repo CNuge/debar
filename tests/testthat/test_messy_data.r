@@ -10,18 +10,11 @@ test_that("Messy SEQUEL sequences are processed as anticipated", {
   t1 = "gctcctaaaattgaagaaactcctgctaaatgtaaagaaaaaattgctaaatctactgaagcaccaccatgagcaataatagaagataaaggtggataaacagttcatccagtaccagccccattttctactatacttctagccattaatagagtcaatgaaggcggtaataatcagaaactcatattatttattcgaggaaatgctatatccggagctcctaatattaatggaactaatcaatttccaaatcctccaattataattggtattactataaaaaaaattattacgaaagcatgggcagtgacaattacattataaatttgatcatcaccaattaatgctcctggatgtcctaattcagctcgaattaagattcttagagaagttcctactattccagctcatgctccaaatataaagtacaaagttccaatatctttatgattggttgactgtgacctgagtcagctacatgttcgactgcatagacagtgcgctgtctatgcagtcgaacatgtagctgactcaggtcacggtcaacaaatcataaagatattggaactttgtactttatatttggagcatgagctggaatagtaggaacttctctaagaatcttaattcgagctgaattaggacatccaggagcattaattggtgatgatcaaatttataatgtaattgtcactgcccatgctttcgtaataatttttttatagtaataccaattataattggaggatttggaaattgattagttccattaatattaggagctccagatatagcatttcctcgaataaataatatgagtctctgattattaccgccttcattgactctattaatggctagaagtatagtagaaaatggggctggtactggatgaactgtttatccacctttatcttctattattgctcatggtggtgcttcagtagatttagcaattttttctttacatttagcaggagtttcttcaattttaggagc"
   t1a = rev_comp(t1)
   
-  test_seqdenoise = DNAseq(t1a, name = "test1")
+  test_seqdenoise = DNAseq(t1, name = "test1")
   test_seqdenoise = frame(test_seqdenoise)
-  test_seqdenoise$data$path
-  test_seqdenoise = frame(test_seqdenoise)
-  test_seqdenoise = adjust(test_seqdenoise)
-  test_seqdenoise = outseq(test_seqdenoise)
-  
-  #
-  test1_corrected = "GCTCCTAAAATTGAAGAAACTCCTGCTAAATGTAAAGAAAAAATTGCTAAATCTACTGAAGCACCACCATGAGCAATAATAGAAGATAAAGGTGGATAAACAGTTCATCCAGTACCAGCCCCATTTTCTACTATACTTCTAGCCATTAATAGAGTCAATGAAGGCGGTAATAATCAGAAACTCATATTATTTATTCGAGGAAATGCTATATCCGGAGCTCCTAATATTAATGGAACTAATCAATTTCCAAATCCTCCAATTATAATTGGTATTACTATAAAAAAAATTATTACGAAAGCATGGGCAGTGACAATTACATTATAAATTTGATCATCACCAATTAATGCTCCTGGATGTCCTAATTCAGCTCGAATTAAGATTCTTAGAGAAGTTCCTACTATTCCAGCTCATGCTCCAAATATAAAGTACAAAGTTCCAATATCTTTATGATTGGTTGACTGTGACCTGAGTCAGCTACATGTTCGACTGCATAGACAGTGCGCTGTCTATGCAGTCGAACATGTAGCTGACTCAGGTCACGGTCAACAAATCATAAAGATATTGGAACTTTGTACTTTATATTTGGAGCATGAGCTGGAATAGTAGGAACTTCTCTAAGAATCTTAATTCGAGCTGAATTAGGACATCCAGGAGCATTAATTGGTGATGATCAAATTTATAATGTAATTGTCACTGCCCATGCTTTCGTAATAATTTNNNNNNNNNNNATACCAATTATAATTGGAGGATTTGGAAATTGATTAGTTCCATTAATATTAGGAGCTCCAGATATAGCATTTCCTCGAATAAATAATATGAGTCTCTGATTATTACCGCCTTCATTGACTCTATTAATGGCTAGAAGTATAGTAGAAAATGGGGCTGGTACTGGATGAACTGTTTATCCACCTTTATCTTCTATTATTGCTCATGGTGGTGCTTCAGTAGATTTAGCAATTTTTTCTTTACATTTAGCAGGAGTTTCTTCAATTTTAGGAGC"
-
-  #test_seqdenoise$outseq == test1_corrected
-  expect_equal(test_seqdenoise$outseq, t1)
+  #test_seqdenoise$data$ntPHMMout[['path']]
+  #test_seqdenoise$reject == TRUE
+  expect_equal(test_seqdenoise$reject, TRUE)
   
   
   ############################################################################
