@@ -189,7 +189,7 @@ set_frame = function(org_seq_vec, path_out){
     removed_end = c()
   }
   
-  if(!is.null(front) && !is.null(names(trimmed_seq))){
+  if(!is.null(front) && !is.null(names(org_seq_vec))){
     names(front) = rep("~", length(front))
   }
   
