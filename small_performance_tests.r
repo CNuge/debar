@@ -1,5 +1,7 @@
 library(seqdenoise)
 
+#TODO - dont forcwe the phred scores to lowercase! figure out where this is happening and remove the tolower call
+
 fastq_dat_file = system.file('extdata/ccs_subset.fastq', package = 'seqdenoise')
 #original sequence data example from Hebert et al. 2018 data
 fastq_dat_file_messy = system.file('extdata/previous_pacbio_example.fastq', package = 'seqdenoise')
