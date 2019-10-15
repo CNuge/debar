@@ -5,7 +5,6 @@
 new_DNAseq = function(x = character(), name = character(), phred = NULL){
   stopifnot(is.character(x))
   stopifnot(is.character(name))
-  stopifnot(is.character(phred))
   if(length(x) == 0){
     stop("Must pass a DNA sequence.")
   }

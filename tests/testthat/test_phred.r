@@ -28,5 +28,18 @@ test_that("fastq phred scores can be processed and maintained correctly", {
   names(test_building)[length(test_building)] = "*"
   names(test_building)=NULL
   
+  
+  ##############################################################3
+  # specific examples
+  #
+  t1_seq = 'GGTAGGTCTTCTCTCACGCAGCAGTCGAACATGTAGCTGACTCAGGTCACGTTCAACAAATCATAAAGATATTGGTACATTATATTTTCTTTTTGGAATTTGAGCAGGAATAGTAGGAACATCACTAAGATTATTAATTCGTATAGAATTAAGAACAATTAGAAATTTAATTGGAAATGATCAAATTTATAATGTAATTGTAACTGCTCATGCTTTTATTATAATTTTCTTCATAGTAATACCAATTTTAATTGGAGGATTTGGAAATTGATTAATTCCAATTATACTAGGAGCCCCAGATATAGCTTTTCCTCGAATAAATAATATAAGATTTTGAATATTACCCCCATCTTTATCTTTATTATTAATTAGAAGAATAGTAGAAACTGGAACAGGAACAGGATGAACAGTTTACCCACCCTTATCATCAGTAATTGCTCATACAGGTTCATCTGTAGATTTCTCTATTTTTTCATTACATATTGCAGGTATTTCATCTATTTTAGGAGCTATTAATTTTATTTCAACAATAATAAATATAAAAATTAAATT'
+  t1_phred = '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~v~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~X~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
       
+  test_seqdenoise2 = DNAseq(t1_seq, name = "test1", phred = t1_phred)
+  test_seqdenoise2 = frame(test_seqdenoise2)
+  test_seqdenoise2 = adjust(test_seqdenoise2)
+  test_seqdenoise2 = outseq(test_seqdenoise2)
+  
+  
+  
 })

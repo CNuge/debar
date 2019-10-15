@@ -43,10 +43,10 @@ dir_check = function(x){
   fwd_score = fwd_ntPHMMout[['score']]
   rev_score = rev_ntPHMMout[['score']]
   
-  if(rev_score >= fwd_score){
-    outlist = list(ntBin = fwd_ntBin, ntPHMMout = fwd_ntPHMMout)    
-  }else{
+  if(rev_score > fwd_score){
     outlist = list(ntBin = rev_ntBin, ntPHMMout = rev_ntPHMMout)
+  }else{
+    outlist = list(ntBin = fwd_ntBin, ntPHMMout = fwd_ntPHMMout)    
   }
   return(outlist)
 }
@@ -189,7 +189,7 @@ set_frame = function(org_seq_vec, path_out){
     removed_end = c()
   }
   
-  if(!is.null(front)){
+  if(!is.null(front) && !is.null(names(trimmed_seq))){
     names(front) = rep("~", length(front))
   }
   
@@ -227,8 +227,8 @@ frame = function(x, ...){
 
 
 
-x = DNAseq(test_data$sequence[[243]], name = "test1", phred = test_data$quality[[243]])
-x$phred
+#x = DNAseq(test_data$sequence[[243]], name = "test1", phred = test_data$quality[[243]])
+#x$phred
 
 #' @rdname frame
 #' @export
@@ -244,17 +244,22 @@ frame.DNAseq = function(x, ..., dir_check = TRUE, min_match = 100){
     x$data$ntPHMMout = aphid::Viterbi(nt_PHMM, x$data$ntBin, odds = FALSE)
   }
   
-  #take the optimal direction's output string and check to make sure there is a continious match to the PHMM
-  #of at least the designated min_match length.
-  if(!grepl(paste(rep("1", min_match), collapse = ""), paste( x$data$ntPHMMout[['path']], collapse = "")) ){
-    x$reject = TRUE
-    return(x)
-  }
-  
+  #take the optimal direction's output string and reject if:
+  #a. There is a large string of 2s (indicative of a chimera) 
+  #OR
+  #b. There is not a continious match to the PHMMof at least the designated min_match length.
+  if(grepl(paste(rep("2", 400), collapse = ""), paste( x$data$ntPHMMout[['path']], collapse = "")) ||
+     !grepl(paste(rep("1", min_match), collapse = ""), paste( x$data$ntPHMMout[['path']], collapse = "")) ){
+      x$reject = TRUE
+      return(x)
+    }
+    
   #turn the raw string into a vector, add phred labels as well.
   org_seq_vec = strsplit(tolower(x$raw), split='')[[1]]
   #add the labels
-  names(org_seq_vec) = strsplit(tolower(x$phred), split='')[[1]]
+  if(!is.null(x$phred)){
+    names(org_seq_vec) = strsplit(tolower(x$phred), split='')[[1]]
+  }
   
   #check for leading inserts, if present remove them and reframe the sequence for higher accuracy.
   if(leading_ins(x$data$ntPHMMout[['path']])){
