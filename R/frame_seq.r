@@ -7,6 +7,51 @@ individual_DNAbin = function(dna_string){
   return(ape::as.DNAbin(strsplit(gsub('-', 'n', as.character(tolower(dna_string))),"")))
 }
 
+
+#' Return a labelled list 
+#' @keywords internal
+phred2numeric = function(phred_string){
+  outvec = gtools::asc(unlist(strsplit(phred_string, "")))
+  return(outvec - 33)
+}
+
+
+#' Return the reverse compliment for a DNA sequence
+#' @keywords internal
+rev_comp = function(x){
+  return(seqinr::c2s(rev(seqinr::comp(seqinr::s2c(x)))))
+}
+
+
+#' Take an input sequence and align both the forward and reverse compliments to the PHMM
+#' 
+#' The fuction returns the sequence, DNAbin and Path and score of the optimal orientation.
+#' Optimal orientation is determined by the direction with the longer string of consecutive 
+#' ones in the path
+#' @param x a DNAseq class object.
+#' 
+dir_check = function(x){
+  #run this for fwd
+  fwd_ntBin = individual_DNAbin(toupper(x))
+  fwd_ntPHMMout = aphid::Viterbi(nt_PHMM, fwd_ntBin, odds = FALSE)
+  
+  rev_x = rev_comp(x)
+  rev_ntBin = individual_DNAbin(toupper(rev_x))
+  rev_ntPHMMout = aphid::Viterbi(nt_PHMM, rev_ntBin, odds = FALSE)
+  
+  #compare the PHMM scores and return the one with the higher logL
+  fwd_score = fwd_ntPHMMout[['score']]
+  rev_score = rev_ntPHMMout[['score']]
+  
+  if(rev_score >= fwd_score){
+    outlist = list(ntBin = fwd_ntBin, ntPHMMout = fwd_ntPHMMout)    
+  }else{
+    outlist = list(ntBin = rev_ntBin, ntPHMMout = rev_ntPHMMout)
+  }
+  return(outlist)
+}
+
+
 #' Check for a large number of leading inserted bases,
 #' if this is the case, TRUE is returned and the PHMM
 #' should be run a second time on the truncated data.
@@ -31,6 +76,7 @@ leading_ins = function(seq_path){
     }
   }
 }
+
 
 #' check sequence for an early large string of deletions, if it exists then
 #' return the starting index by which to slice the path and the string
@@ -58,10 +104,7 @@ ins_front_trim = function(path_out, search_scope = 15){
 #' whereas matching on the back is more lenient as insertions and deletions
 #' can be tolerated here without large implications for the rest of the sequence
 #' @keywords internal
-set_frame = function(org_seq, path_out){
-  #TODO - move this line outside of set_frame into the wrapping frame.
-  #have the phred labels applied as well. then pass org_seq_vec to this function
-  org_seq_vec = strsplit(tolower(org_seq), split='')[[1]]
+set_frame = function(org_seq_vec, path_out){
   
   adj_for_dels = ins_front_trim(path_out)
   front = c()
@@ -133,7 +176,6 @@ set_frame = function(org_seq, path_out){
       }
     }
   }
-  
 
   if(org_seq_start != 1){
     removed_lead = org_seq_vec[1:(org_seq_start-1)]
@@ -147,7 +189,12 @@ set_frame = function(org_seq, path_out){
     removed_end = c()
   }
   
+  if(!is.null(front)){
+    names(front) = rep("~", length(front))
+  }
+  
   return(list(framed_seq = paste(c(front,org_seq_vec[org_seq_start:org_seq_end]),collapse= ""),
+              framed_vec = c(front,org_seq_vec[org_seq_start:org_seq_end]),
               trimmed_seq = org_seq_vec[org_seq_start:org_seq_end],
               removed_lead = removed_lead,
               removed_end = removed_end,
@@ -159,47 +206,11 @@ set_frame = function(org_seq, path_out){
 }
 
 
-
-#' Return a labelled list 
-#' @keywords internal
-phred2numeric = function(phred_string){
-  outvec = gtools::asc(unlist(strsplit(phred_string, "")))
-  return(outvec - 33)
-}
-
-#' Return the reverse compliment for a DNA sequence
-#' @keywords internal
-rev_comp = function(x){
-  return(seqinr::c2s(rev(seqinr::comp(seqinr::s2c(x)))))
-}
-
-
-#' Take an input sequence and align both the forward and reverse compliments to the PHMM
-#' 
-#' The fuction returns the sequence, DNAbin and Path and score of the optimal orientation.
-#' Optimal orientation is determined by the direction with the longer string of consecutive 
-#' ones in the path
-#' @param x a DNAseq class object.
-#' 
-dir_check = function(x){
-  #run this for fwd
-  fwd_ntBin = individual_DNAbin(toupper(x))
-  fwd_ntPHMMout = aphid::Viterbi(nt_PHMM, fwd_ntBin, odds = FALSE)
-  
-  rev_x = rev_comp(x)
-  rev_ntBin = individual_DNAbin(toupper(rev_x))
-  rev_ntPHMMout = aphid::Viterbi(nt_PHMM, rev_ntBin, odds = FALSE)
-  
-  #compare the PHMM scores and return the one with the higher logL
-  
-  
-}
-
 #' Take a DNAseq object and put sequences in common reading frame
 #' @param x a DNAseq class object.
 #' @param dir_check Should both the forward and reverse compliments be considered?
-#' @param min_logL The minimum log likelihood value for a sequence to be denoised.
-#' 
+#' @param min_match The minimum number of sequential matches to the PHMM for a sequence to be denoised.
+#' Otherwise flag the sequence as a reject.
 #' @param ... additional arguments to be passed between methods.
 #' @return a class object of code{"DNAseq"} 
 #' @seealso \code{\link{DNAseq}}
@@ -215,48 +226,60 @@ frame = function(x, ...){
 } 
 
 
+
+x = DNAseq(test_data$sequence[[243]], name = "test1", phred = test_data$quality[[243]])
+x$phred
+
 #' @rdname frame
 #' @export
-frame.DNAseq = function(x, ...){
+frame.DNAseq = function(x, ..., dir_check = TRUE, min_match = 100){
   
   if(dir_check == TRUE){
     dir_out = dir_check(x$raw)
     #parse the outputs from the optimal direction.
-    x$data$ntBin = 
-    x$data$ntPHMMout = 
+    x$data$ntBin = dir_out$ntBin
+    x$data$ntPHMMout = dir_out$ntPHMMout
   }else{
     x$data$ntBin = individual_DNAbin(toupper(x$raw))
     x$data$ntPHMMout = aphid::Viterbi(nt_PHMM, x$data$ntBin, odds = FALSE)
   }
   
-  #TODO - finish this check of standards.
-  #if the score of the PHMMout
-  if(x$data$ntPHMMout < min_logL){
-    #add a signal for the denoise function to skip additional steps
-    #break and don't waste time with the rest.
-
+  #take the optimal direction's output string and check to make sure there is a continious match to the PHMM
+  #of at least the designated min_match length.
+  if(!grepl(paste(rep("1", min_match), collapse = ""), paste( x$data$ntPHMMout[['path']], collapse = "")) ){
+    x$reject = TRUE
+    return(x)
   }
+  
+  #turn the raw string into a vector, add phred labels as well.
+  org_seq_vec = strsplit(tolower(x$raw), split='')[[1]]
+  #add the labels
+  names(org_seq_vec) = strsplit(tolower(x$phred), split='')[[1]]
   
   #check for leading inserts, if present remove them and reframe the sequence for higher accuracy.
   if(leading_ins(x$data$ntPHMMout[['path']])){
-    temp_frame = set_frame(x$raw, x$data$ntPHMMout[['path']])
-    x$data$raw_removed_front = temp_frame[['removed_lead']]
-    x$data$raw_removed_end = temp_frame[['removed_end']]
+    temp_frame = set_frame(org_seq_vec, x$data$ntPHMMout[['path']]) #run initial framing of the full sequence
+    x$data$raw_removed_front = temp_frame[['removed_lead']] # keep any tirmmed edges of the raw sequence separate
+    x$data$raw_removed_end = temp_frame[['removed_end']]    #
     x$data$len_first_front = length(temp_frame$front)
     trim_temp = temp_frame[['framed_seq']]
-    x$data$ntBin = individual_DNAbin(trim_temp)
+    x$data$ntBin = individual_DNAbin(trim_temp) #rerun the trimmed sequence through the PHMM, to more accurately establish frame
     x$data$ntPHMMout = aphid::Viterbi(nt_PHMM, x$data$ntBin, odds = FALSE)
+    
+    #set the reading frame for the final sequence, produces data to
+    #constrain the operation of the adjust seqence function
+    x$frame_dat = set_frame(temp_frame$framed_vec, x$data$ntPHMMout[['path']])
+    x$data$path = x$data$ntPHMMout[['path']]
   }else{
     x$data$raw_removed_front = c()
     x$data$raw_removed_end = c()
-    trim_temp = x$raw
+    #set the reading frame for the final sequence, produces data to
+    #constrain the operation of the adjust seqence function
+    x$frame_dat = set_frame(org_seq_vec, x$data$ntPHMMout[['path']])
+    x$data$path = x$data$ntPHMMout[['path']]
   }
-  #set the reading frame for the final sequence, produces data to
-  #constrain the operation of the adjust seqence function
-  x$frame_dat = set_frame(trim_temp, x$data$ntPHMMout[['path']])
-  x$data$path = x$data$ntPHMMout[['path']]
- 
-  #remove the aphid and ape strucutres to minimuze memory footprint.
+
+  #remove the aphid and ape strucutres to minimize the memory footprint.
   x$data$ntBin = NULL
   x$data$ntPHMMout = NULL
   

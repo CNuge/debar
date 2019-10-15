@@ -138,9 +138,8 @@ denoise_file.default = function(x, ..., filename = 'output.fastq',  file_type = 
     stop("file_type must be either fasta or fastq")
   }
   
-
   #TODO - have the denoise function return some log information
-  #update the labelled list accordingly and have the log written to a file at the end as well.  
+  #update the labelled list accordingly and have the log written to a file at the end as well.
   log_data = list()
   
   if(multicore == FALSE){
