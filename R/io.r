@@ -162,6 +162,9 @@ write_fastq.DNAseq = function(x, ...,
   #then when the outseq is generated, also turn the phred numbers back into
   #the corresponding characters
   if(keep_phred == TRUE){
+    if(is.null(x$phred)){
+      stop("Cannot keep the phred scores for a DNAseq with no phred inputs")
+    }
     outstring = paste(x$name, "\n",
                       x$outseq, "\n",
                       "+\n",

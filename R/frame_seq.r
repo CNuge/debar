@@ -252,7 +252,9 @@ frame.DNAseq = function(x, ..., dir_check = TRUE, min_match = 100){
      !grepl(paste(rep("1", min_match), collapse = ""), paste( x$data$ntPHMMout[['path']], collapse = "")) ){
       x$reject = TRUE
       return(x)
-    }
+  }else{
+      x$reject = FALSE
+  }
     
   #turn the raw string into a vector, add phred labels as well.
   org_seq_vec = strsplit(tolower(x$raw), split='')[[1]]

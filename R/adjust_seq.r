@@ -114,7 +114,6 @@ adj_seq = function(frame_dat, path_out, censor_length = 3, added_phred = "*"){
         censor_2s = c(censor_2s, new_pos)
       }
     }
-
   }
   
   if(org_seq_pos < length(org_seq_vec)){
@@ -167,7 +166,7 @@ adj_seq = function(frame_dat, path_out, censor_length = 3, added_phred = "*"){
 #' @seealso \code{\link{DNAseq}}
 #' @seealso \code{\link{frame}}
 #' @examples
-#' #' #previously called
+#' #previously called
 #' ex_data = DNAseq(example_nt_string, name = 'SSGBC787-14')
 #' ex_data =  frame(ex_data)
 #' #adjust the sequence with default censor length is 3
@@ -218,7 +217,7 @@ outseq.DNAseq = function(x, keep_flanks = TRUE, ambig_char = "N", adjust_limit =
     
     dashes_rm = sum(c(length(x$frame_dat$front), as.integer(x$data$len_first_front), 1), na.rm = TRUE)
     if(dashes_rm > length(x$adjusted_sequence)){
-      x$adjusted_sequence=NULL
+      x$adjusted_sequence = NULL
     }
     
     #here the good part of the read is pasted back together with the flanking information
@@ -230,8 +229,21 @@ outseq.DNAseq = function(x, keep_flanks = TRUE, ambig_char = "N", adjust_limit =
                        x$frame_dat$removed_end, #part removed in second frame() call
                        x$data$raw_removed_end), # part removed from the end of first frame() call
                      collapse = "")
+    
+    if(!is.null(names(x$adjusted_sequence))){
+      x$outphred = paste(c(names(x$data$raw_removed_front), #part removed in front of first frame() call
+                         names(x$frame_dat$removed_lead), #part removed in second frame() call
+                         names(x$adjusted_sequence[dashes_rm:length(x$adjusted_sequence)]), #the 'sweet spot' that is denoised
+                         names(x$data$adjusted_trimmed), # part removed in adj_seq
+                         names(x$frame_dat$removed_end), #part removed in second frame() call
+                         names(x$data$raw_removed_end)), # part removed from the end of first frame() call
+                         collapse = "")
+    }
   }else{
     x$outseq = paste(x$adjusted_sequence, collapse = "")
+    if(!is.null(names(x$adjusted_sequence))){
+      x$outphred = names(x$adjusted_sequence)
+    }
   }
   
   x$outseq = toupper(gsub("-", ambig_char, x$outseq )) 
