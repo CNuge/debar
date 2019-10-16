@@ -171,7 +171,6 @@ meta_check = function(x, log_data = list(), log_file = FALSE, keep_rejects = FAL
 #'@param filename The name of the file to output sequences to.
 #'@param file_type The format of the file to be denoised. Options are fastq or fasta. Default is fastq.
 #'@param log_file Boolean indicating if a log file should be produced. Default is FALSE.
-#'@param append_log, Boolean indicating if a log data should be appended to an existing log file. Default is TRUE.
 #'@param keep_rejects Boolean indicating if the bad reads should be written to a separate file (with the name
 #'"rejects_" + filename). Defaut is false
 #'@param multicore An integer specifying the number of cores over which to multithread the denoising process. 
@@ -192,7 +191,7 @@ denoise_file = function(x, ...){
 #' @rdname denoise_file
 #' @export
 denoise_file.default = function(x, ..., filename = 'output.fastq',  file_type = "fastq", 
-                                  log_file = FALSE, keep_rejects = FALSE, multicore = FALSE, append_log = TRUE){
+                                  log_file = FALSE, keep_rejects = FALSE, multicore = FALSE){
   #set up additional output paramaters if needed
   if(keep_rejects == TRUE){
     reject_filename = paste0("rejects_",filename)
@@ -259,7 +258,7 @@ denoise_file.default = function(x, ..., filename = 'output.fastq',  file_type = 
     log_data[['end_time']] = Sys.time()
     log_data[['time_elapsed']] = difftime(log_data[['end_time']] , log_data[['start_time']] , units = "mins")
     log_data = data.frame(log_data)
-    write.csv(log_data, log_filename, row.names = FALSE, append = append_log)
+    write.csv(log_data, log_filename, row.names = FALSE)
   }
 }
 

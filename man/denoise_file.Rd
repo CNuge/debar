@@ -9,7 +9,7 @@ denoise_file(x, ...)
 
 \method{denoise_file}{default}(x, ..., filename = "output.fastq",
   file_type = "fastq", log_file = FALSE, keep_rejects = FALSE,
-  multicore = FALSE, append_log = TRUE)
+  multicore = FALSE)
 }
 \arguments{
 \item{x}{The name of the file to denoise sequences from.}
@@ -27,8 +27,6 @@ denoise_file(x, ...)
 
 \item{multicore}{An integer specifying the number of cores over which to multithread the denoising process. 
 Default is FALSE, meaning the process is not multithreaded.}
-
-\item{append_log, }{Boolean indicating if a log data should be appended to an existing log file. Default is TRUE.}
 }
 \description{
 Denoise sequence data from a given file.
