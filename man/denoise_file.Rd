@@ -3,13 +3,13 @@
 \name{denoise_file}
 \alias{denoise_file}
 \alias{denoise_file.default}
-\title{Denoise the sequence data from a given file.}
+\title{Denoise sequence data from a given file.}
 \usage{
 denoise_file(x, ...)
 
 \method{denoise_file}{default}(x, ..., filename = "output.fastq",
   file_type = "fastq", log_file = FALSE, keep_rejects = FALSE,
-  multicore = FALSE)
+  multicore = FALSE, append_log = TRUE)
 }
 \arguments{
 \item{x}{The name of the file to denoise sequences from.}
@@ -31,7 +31,7 @@ Default is FALSE, meaning the process is not multithreaded.}
 \item{append_log, }{Boolean indicating if a log data should be appended to an existing log file. Default is TRUE.}
 }
 \description{
-Denoise the sequence data from a given file.
+Denoise sequence data from a given file.
 }
 \examples{
 fastq_dat_file = system.file('extdata/ccs_subset.fastq', package = 'coiDenoiser')

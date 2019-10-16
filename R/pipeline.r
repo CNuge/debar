@@ -9,7 +9,7 @@
 #' If passed then the input phred scores will be modified along with the nucleotides and carried through
 #' to the sequence output. Default = NULL.
 #' @param phred_test Default = TRUE.
-#' @param min_avg_qv
+#' @param min_avg_qv The minimum average phred score for a read to be retained.
 #' @param max_perc_low The maximum percentage of nucleotides in the string with QV values lower than 20. Default is 25%
 #' @param max_perc_ultra_low The maximum percentage of nucleotides in the string with QV values lower than 10. Default is 5%
 #' @param dir_check Should both the forward and reverse compliments be considered?
@@ -17,7 +17,6 @@
 #' Otherwise flag the sequence as a reject.
 #' @param censor_length the number of base pairs in either direction of a PHMM correction
 #' to convert to placeholder characters. Default is 5.
-#' @param added_phred
 #' @param added_phred The phred character to use for characters inserted into the original sequence.
 #' @param adjust_limit the maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
 #' then the entire read is rejected. Default is 3.
@@ -140,11 +139,11 @@ denoise.default = function(x, ...,
 #' Run the log file and reject processing code after running the denoise pipeline.
 #'
 #' @keywords internal
-meta_check = function(temp, log_data = list(), keep_rejects = FALSE, log_file = FALSE, ...){
+meta_check = function(x, log_data = list(), log_file = FALSE, keep_rejects = FALSE, reject_filename = "rejects.fastq", ...){
   #write read to the reject file if keep_rejects option enabled
-  if(keep_rejects == TRUE && temp$reject == TRUE){
-    temp$outseq = temp$raw
-    temp$outphred = temp$phred
+  if(keep_rejects == TRUE && x$reject == TRUE){
+    x$outseq = x$raw
+    x$outphred = x$phred
     write_wrapper(temp, ...)
   }
   #add to the summary stats if the log file option is enabled
@@ -154,18 +153,19 @@ meta_check = function(temp, log_data = list(), keep_rejects = FALSE, log_file = 
       log_data[['reject_count']] = log_data[['reject_count']] + 1
     }else{
       log_data[['good_count']] = log_data[['good_count']] + 1
-    }
-    if(x$adjustment_count>0){
-      log_data[['good_denoised']] = log_data[['good_denoised']] + 1
-    }else{
-      log_data[['good_unaltered']] = log_data[['good_unaltered']] + 1 
+      
+      if(x$adjustment_count>0){
+        log_data[['good_denoised']] = log_data[['good_denoised']] + 1
+      }else{
+        log_data[['good_unaltered']] = log_data[['good_unaltered']] + 1 
+      }
     }
   }
   log_data
 }
 
 
-#'Denoise the sequence data from a given file.
+#'Denoise sequence data from a given file.
 #'
 #'@param x The name of the file to denoise sequences from.
 #'@param filename The name of the file to output sequences to.
@@ -192,7 +192,7 @@ denoise_file = function(x, ...){
 #' @rdname denoise_file
 #' @export
 denoise_file.default = function(x, ..., filename = 'output.fastq',  file_type = "fastq", 
-                                  log_file = FALSE, keep_rejects = FALSE, multicore = FALSE){
+                                  log_file = FALSE, keep_rejects = FALSE, multicore = FALSE, append_log = TRUE){
   #set up additional output paramaters if needed
   if(keep_rejects == TRUE){
     reject_filename = paste0("rejects_",filename)
@@ -201,7 +201,7 @@ denoise_file.default = function(x, ..., filename = 'output.fastq',  file_type = 
     log_data = list(input_file = x, total_reads = 0, good_count = 0, reject_count = 0, good_denoised = 0, good_unaltered = 0,  
                     start_time = Sys.time(), end_time = NA, time_elapsed = NA)
     
-    log_filename = paste0("log_",filename)  
+    log_filename = paste(c("log_", strsplit(filename,"\\.")[[1]], ".out"), collapse = "")  
   }else{
     log_data = list()
   }
@@ -218,14 +218,20 @@ denoise_file.default = function(x, ..., filename = 'output.fastq',  file_type = 
   if(multicore == FALSE){
     for(i in 1:length(data$sequence)){
       temp = denoise(data$sequence[[i]], filename = filename, name = data$header_data[[i]], phred = data$quality[[i]], ...)
-      log_data = meta_check(temp, ...)
+      log_data = meta_check(x = temp, log_data = log_data, 
+                                  keep_rejects = keep_rejects, 
+                                  log_file = log_file,
+                                  reject_filename = reject_filename, ...)
     }
   }else{
     parallel::mclapply(1:length(data$sequence), function(i, ...){
       temp = denoise(data$sequence[[i]], filename = filename, name = data$header_data[[i]], phred = data$quality[[i]], ...)
       #TODO - if the reassignment from within the mclapply leads to errors
       #then remove the log_data assignment here. still need the bad reads saved
-      log_data = meta_check(temp, log_data)
+      log_data = meta_check(x = temp, log_data = log_data, 
+                                  keep_rejects = keep_rejects, 
+                                  log_file = log_file,
+                                  reject_filename = reject_filename,  ...)
       NULL
       }, mc.cores = multicore)
   }
@@ -233,8 +239,8 @@ denoise_file.default = function(x, ..., filename = 'output.fastq',  file_type = 
   if(log_file == TRUE){
     log_data[['end_time']] = Sys.time()
     log_data[['time_elapsed']] = difftime(log_data[['end_time']] , log_data[['start_time']] , units = "mins")
-    log_data= data.frame(log_data)
-    write.csv(log_data, log_filename, row.names = FALSE, row.names=FALSE, append = append_log)
+    log_data = data.frame(log_data)
+    write.csv(log_data, log_filename, row.names = FALSE, append = append_log)
   }
 }
 

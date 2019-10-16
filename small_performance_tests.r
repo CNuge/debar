@@ -18,10 +18,10 @@ fastq_gz_real_file = system.file('extdata/sequel_smrt_subset.fastq.gz', package 
 
 denoise_file(fastq_gz_real_file, keep_flanks = TRUE, filename = "with_edges_seqdenoise_out.fastq")
 denoise_file(fastq_gz_real_file, keep_flanks = FALSE, phred_test = FALSE, filename = "noedges_nophredtest-with_edges_seqdenoise_out.fastq")
-denoise_file(fastq_gz_real_file, multicore = 4, keep_flanks = TRUE, filename = "multicore-with_edges_seqdenoise_out.fastq")
+denoise_file(fastq_gz_real_file, multicore = 8, keep_flanks = TRUE, filename = "multicore-with_edges_seqdenoise_out.fastq")
 
 denoise_file(fastq_gz_real_file, log_file = TRUE, keep_flanks = TRUE, filename = "log_info-with_edges_seqdenoise_out.fastq")
-denoise_file(fastq_gz_real_file, multicore = 4, log_file = TRUE, keep_flanks = TRUE, filename = "multicore-log_info-with_edges_seqdenoise_out.fastq")
+denoise_file(fastq_gz_real_file, multicore = 8, log_file = TRUE, keep_flanks = TRUE, filename = "multicore-log_info-with_edges_seqdenoise_out.fastq")
 
 
 ###############################################################
