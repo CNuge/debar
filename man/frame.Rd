@@ -7,12 +7,17 @@
 \usage{
 frame(x, ...)
 
-\method{frame}{DNAseq}(x, ...)
+\method{frame}{DNAseq}(x, ..., dir_check = TRUE, min_match = 100)
 }
 \arguments{
 \item{x}{a DNAseq class object.}
 
 \item{...}{additional arguments to be passed between methods.}
+
+\item{dir_check}{Should both the forward and reverse compliments be considered?}
+
+\item{min_match}{The minimum number of sequential matches to the PHMM for a sequence to be denoised.
+Otherwise flag the sequence as a reject.}
 }
 \value{
 a class object of code{"DNAseq"}

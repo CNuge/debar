@@ -12,7 +12,7 @@ priority because it is necessary to ensure the sequence is in frame.
 whereas matching on the back is more lenient as insertions and deletions
 can be tolerated here without large implications for the rest of the sequence}
 \usage{
-set_frame(org_seq, path_out)
+set_frame(org_seq_vec, path_out)
 }
 \description{
 Take an input sequence and get it into the reading frame.

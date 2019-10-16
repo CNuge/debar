@@ -60,7 +60,7 @@ denoise = function(x, ...){
 denoise.default = function(x, ...,
                              name = character(),
                              phred = NULL, 
-                             phred_check = TRUE,
+                             phred_test = TRUE,
                              min_avg_qv = 20,
                              max_perc_low = 0.25,
                              max_perc_ultra_low = 0.05,
@@ -202,6 +202,8 @@ denoise_file.default = function(x, ..., filename = 'output.fastq',  file_type = 
                     start_time = Sys.time(), end_time = NA, time_elapsed = NA)
     
     log_filename = paste0("log_",filename)  
+  }else{
+    log_data = list()
   }
   
   #read in the data
@@ -219,11 +221,13 @@ denoise_file.default = function(x, ..., filename = 'output.fastq',  file_type = 
       log_data = meta_check(temp, ...)
     }
   }else{
-    parallel::mclapply(1:length(data$sequence), function(i){
+    parallel::mclapply(1:length(data$sequence), function(i, ...){
       temp = denoise(data$sequence[[i]], filename = filename, name = data$header_data[[i]], phred = data$quality[[i]], ...)
       #TODO - if the reassignment from within the mclapply leads to errors
       #then remove the log_data assignment here. still need the bad reads saved
-      log_data = meta_check(temp, log_data, ...)}, mc.cores = multicore)
+      log_data = meta_check(temp, log_data)
+      NULL
+      }, mc.cores = multicore)
   }
   
   if(log_file == TRUE){

@@ -8,7 +8,7 @@
 write_fasta(x, ...)
 
 \method{write_fasta}{DNAseq}(x, ..., keep_flanks = TRUE,
-  ambig_char = "N", filename = "denoised.fasta", append = TRUE)
+  filename = "denoised.fasta", append = TRUE)
 }
 \arguments{
 \item{x}{a DNAseq class object.}
@@ -16,8 +16,6 @@ write_fasta(x, ...)
 \item{...}{additional arguments to be passed between methods.}
 
 \item{keep_flanks}{Default is TRUE.}
-
-\item{ambig_char}{The character to use for ambigious positions in the sequence.}
 
 \item{filename}{The name of the file to output the data to. Default is "denoised.fasta".}
 

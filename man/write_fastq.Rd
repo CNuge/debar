@@ -3,12 +3,16 @@
 \name{write_fastq}
 \alias{write_fastq}
 \alias{write_fastq.DNAseq}
+\alias{write_wrapper.DNAseq}
 \title{Output the denoised sequence to a fastq format with placeholder phred scores.}
 \usage{
 write_fastq(x, ...)
 
-\method{write_fastq}{DNAseq}(x, ..., keep_flanks = TRUE,
-  ambig_char = "N", filename = "denoised.fastq", append = TRUE,
+\method{write_fastq}{DNAseq}(x, ..., filename = "denoised.fastq",
+  append = TRUE, keep_phred = TRUE, phred_placeholder = "#")
+
+\method{write_wrapper}{DNAseq}(x, ..., filename = "denoised.fastq",
+  outformat = "fastq", append = TRUE, keep_phred = TRUE,
   phred_placeholder = "#")
 }
 \arguments{
@@ -16,16 +20,14 @@ write_fastq(x, ...)
 
 \item{...}{additional arguments to be passed between methods.}
 
-\item{keep_flanks}{Default is TRUE.}
-
-\item{ambig_char}{The character to use for ambigious positions in the sequence.}
-
 \item{filename}{The name of the file to output the data to. Default is "denoised.fasta".}
 
 \item{append}{Should the ccs consensus sequence be appended to the output file?(TRUE) 
 Or overwrite the file?(FALSE) Default is TRUE.}
 
-\item{phred_placeholder}{The character to input for the phred score line. Default is '#'}
+\item{keep_phred}{Should the original PHRED scores be kept in the output? Default is TRUE.}
+
+\item{phred_placeholder}{The character to input for the phred score line. Default is '#'.}
 }
 \value{
 a class object of code{"DNAseq"}

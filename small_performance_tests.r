@@ -1,15 +1,34 @@
 library(seqdenoise)
 
+###############################################################
+# Test 1
 
 fastq_dat_file = system.file('extdata/ccs_subset.fastq', package = 'seqdenoise')
-#original sequence data example from Hebert et al. 2018 data
-fastq_dat_file_messy = system.file('extdata/previous_pacbio_example.fastq', package = 'seqdenoise')
-#
+
+denoise_file(fastq_dat_file, filename = "prev_example_seqdenoise.fastq")
+denoise_file(fastq_dat_file, phred_test = FALSE, filename = "prev_example_seqdenoise_nophred.fastq")
+
+###############################################################
+# Test 2
 #new ccs data, from 158 SMRT
 fastq_real_file = system.file('extdata/sequel_smrt_subset.fastq', package = 'seqdenoise')
 #new ccs data, from 158 SMRT
 #in gz format
 fastq_gz_real_file = system.file('extdata/sequel_smrt_subset.fastq.gz', package = 'seqdenoise')
+
+denoise_file(fastq_gz_real_file, keep_flanks = TRUE, filename = "with_edges_seqdenoise_out.fastq")
+denoise_file(fastq_gz_real_file, keep_flanks = FALSE, phred_test = FALSE, filename = "noedges_nophredtest-with_edges_seqdenoise_out.fastq")
+denoise_file(fastq_gz_real_file, multicore = 4, keep_flanks = TRUE, filename = "multicore-with_edges_seqdenoise_out.fastq")
+
+denoise_file(fastq_gz_real_file, log_file = TRUE, keep_flanks = TRUE, filename = "log_info-with_edges_seqdenoise_out.fastq")
+denoise_file(fastq_gz_real_file, multicore = 4, log_file = TRUE, keep_flanks = TRUE, filename = "multicore-log_info-with_edges_seqdenoise_out.fastq")
+
+
+###############################################################
+
+#original sequence data example from Hebert et al. 2018 data
+fastq_dat_file_messy = system.file('extdata/previous_pacbio_example.fastq', package = 'seqdenoise')
+#
 
 #new ccs data, from 229 SMRT
 fastq_real_file2 = system.file('extdata/sequel_smrt_subset2.fastq', package = 'seqdenoise')
@@ -19,11 +38,8 @@ fastq_real_file2 = system.file('extdata/sequel_smrt_subset2.fastq', package = 's
 fastq_ions5 = system.file('extdata/iontorrent_s5_example.fastq', package = 'seqdenoise')
 
 
-denoise_file(fastq_gz_real_file, keep_flanks = TRUE, filename = "with_edges_seqdenoise_out.fastq")
 
-denoise_file(fastq_gz_real_file, keep_flanks = FALSE, filename = "noedges_seqdenoise_out.fastq")
 
-denoise_file(fastq_dat_file, filename = "prev_example_seqdenoise.fastq")
 
 denoise_file(fastq_dat_file_messy, filename = "prev_example_seqdenoise2.fastq")
 

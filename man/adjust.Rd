@@ -7,7 +7,7 @@
 \usage{
 adjust(x, ...)
 
-\method{adjust}{DNAseq}(x, ..., censor_length = 5)
+\method{adjust}{DNAseq}(x, ..., censor_length = 5, added_phred = "*")
 }
 \arguments{
 \item{x}{a DNAseq class object.}
@@ -16,6 +16,8 @@ adjust(x, ...)
 
 \item{censor_length}{the number of base pairs in either direction of a PHMM correction
 to convert to placeholder characters. Default is 3.}
+
+\item{added_phred}{The phred character to use for characters inserted into the original sequence.}
 }
 \value{
 a class object of code{"ccs_reads"}
@@ -24,7 +26,7 @@ a class object of code{"ccs_reads"}
 Adjust the sequences based on the nt path outputs.
 }
 \examples{
-#' #previously called
+#previously called
 ex_data = DNAseq(example_nt_string, name = 'SSGBC787-14')
 ex_data =  frame(ex_data)
 #adjust the sequence with default censor length is 3

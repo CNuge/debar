@@ -8,19 +8,27 @@
 denoise_file(x, ...)
 
 \method{denoise_file}{default}(x, ..., filename = "output.fastq",
-  file_type = "fastq", multicore = FALSE)
+  file_type = "fastq", log_file = FALSE, keep_rejects = FALSE,
+  multicore = FALSE)
 }
 \arguments{
 \item{x}{The name of the file to denoise sequences from.}
 
 \item{...}{additional arguments to be passed to the \link{denoise} function.}
 
-\item{filename}{The name of the fle to output sequences to.}
+\item{filename}{The name of the file to output sequences to.}
 
 \item{file_type}{The format of the file to be denoised. Options are fastq or fasta. Default is fastq.}
 
+\item{log_file}{Boolean indicating if a log file should be produced. Default is FALSE.}
+
+\item{keep_rejects}{Boolean indicating if the bad reads should be written to a separate file (with the name
+"rejects_" + filename). Defaut is false}
+
 \item{multicore}{An integer specifying the number of cores over which to multithread the denoising process. 
 Default is FALSE, meaning the process is not multithreaded.}
+
+\item{append_log, }{Boolean indicating if a log data should be appended to an existing log file. Default is TRUE.}
 }
 \description{
 Denoise the sequence data from a given file.

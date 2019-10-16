@@ -4,7 +4,7 @@
 \alias{DNAseq}
 \title{Build a DNAseq object from a DNA sequence string.}
 \usage{
-DNAseq(x = character(), name = character())
+DNAseq(x = character(), name = character(), phred = NULL)
 }
 \arguments{
 \item{x}{a nucleotide string.
@@ -12,6 +12,10 @@ Valid characters within the nucleotide string are: a,t,g,c,-,n.
 The nucleotide string can be input as upper case, but will be automatically converted to lower case.}
 
 \item{name}{an optional character string. Identifier for the sequence.}
+
+\item{phred}{an optional character string. The phred score string corresponding to the nucleotide string.
+If passed then the input phred scores will be modified along with the nucleotides and carried through
+to the sequence output. Default = NULL.}
 }
 \value{
 an object of class \code{"coi5p"}

@@ -7,11 +7,15 @@
 \usage{
 denoise(x, ...)
 
-\method{denoise}{default}(x, ..., name = character(), ambig_char = "N",
-  censor_length = 5, adjust_limit = 5, to_file = TRUE,
-  keep_flanks = TRUE, outformat = "fastq", filename = NULL,
-  phred_placeholder = "#", write_masked = TRUE, aa_check = FALSE,
-  trans_table = 0, frame_offset = 0, append = TRUE)
+\method{denoise}{default}(x, ..., name = character(), phred = NULL,
+  phred_test = TRUE, min_avg_qv = 20, max_perc_low = 0.25,
+  max_perc_ultra_low = 0.05, dir_check = TRUE, min_match = 100,
+  censor_length = 5, added_phred = "*", adjust_limit = 5,
+  ambig_char = "N", to_file = TRUE, keep_flanks = TRUE,
+  keep_phred = TRUE, outformat = "fastq", terminate_rejects = TRUE,
+  filename = NULL, phred_placeholder = "#", write_masked = TRUE,
+  aa_check = FALSE, trans_table = 0, frame_offset = 0,
+  append = TRUE)
 }
 \arguments{
 \item{x}{a DNA sequence string.}
@@ -20,13 +24,30 @@ denoise(x, ...)
 
 \item{name}{an optional character string. Identifier for the sequence.}
 
-\item{ambig_char}{The character to use for ambigious positions in the sequence that is output to the file. Default is N.}
+\item{phred}{an optional character string. The phred score string corresponding to the nucleotide string.
+If passed then the input phred scores will be modified along with the nucleotides and carried through
+to the sequence output. Default = NULL.}
+
+\item{phred_test}{Default = TRUE.}
+
+\item{max_perc_low}{The maximum percentage of nucleotides in the string with QV values lower than 20. Default is 25%}
+
+\item{max_perc_ultra_low}{The maximum percentage of nucleotides in the string with QV values lower than 10. Default is 5%}
+
+\item{dir_check}{Should both the forward and reverse compliments be considered?}
+
+\item{min_match}{The minimum number of sequential matches to the PHMM for a sequence to be denoised.
+Otherwise flag the sequence as a reject.}
 
 \item{censor_length}{the number of base pairs in either direction of a PHMM correction
 to convert to placeholder characters. Default is 5.}
 
+\item{added_phred}{The phred character to use for characters inserted into the original sequence.}
+
 \item{adjust_limit}{the maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
-then the entire read is masked with ambigious characters. Default is 3.}
+then the entire read is rejected. Default is 3.}
+
+\item{ambig_char}{The character to use for ambigious positions in the sequence that is output to the file. Default is N.}
 
 \item{to_file}{Boolean indicating whether the sequence should be written to a file. Default is TRUE.}
 
@@ -36,12 +57,13 @@ False will lead to only the denoised sequence for the 657bp barcode region being
 
 \item{outformat}{The format of the output file. Options are fasta or fastq (default) format.}
 
+\item{terminate_rejects}{Boolean indicating if analysis of sequences that fail to meet phred quality score or path 
+match thresholds should be terminated early (prior to sequence adjustment and writing to file). Default it true.}
+
 \item{filename}{The name of the file to output the data to. Default filenames are respectively: denoised.fasta or denoised.fastq.}
 
-\item{phred_placeholder}{The character to input for the phred score line. Default is '#'. Used with write_fastq only.}
-
-\item{write_masked}{Boolean indicating whether a completely masked sequence (due to exceeding the adjust_limit) should
-be written to a file or no. Default is true.}
+\item{phred_placeholder}{The character to input for the phred score line. Default is '#'. 
+Used with write_fastq and keep_phred == FALSE only.}
 
 \item{aa_check}{Boolean indicating whether the amino acid sequence should be generated and assessed for stop codons. Default = FALSE.}
 
@@ -55,6 +77,12 @@ framed sequence the the first nucelotide of the first codon. Used only when aa_c
 
 \item{append}{Should the denoised sequence be appended to the output file?(TRUE) 
 Or should the sequence overwrite the output file?(FALSE) Default is TRUE.}
+
+\item{adjust_limit}{the maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
+then the entire read is masked with ambigious characters. Default is 5.}
+
+\item{framed_output}{Boolean indicating if the output shouldhave leading dashes to establish a common
+reading frame in the output sequences. Default is TRUE. Param only applied if keep_flanks = FALSE.}
 }
 \value{
 a class object of code{"DNAseq"}

@@ -4,7 +4,7 @@
 \alias{new_DNAseq}
 \title{Build a new DNAseq class instance.}
 \usage{
-new_DNAseq(x = character(), name = character())
+new_DNAseq(x = character(), name = character(), phred = NULL)
 }
 \description{
 Build a new DNAseq class instance.

@@ -4,13 +4,13 @@
 \alias{read_fastq}
 \title{Read in raw data from a fastq file.}
 \usage{
-read_fastq(x, keep_quality = FALSE)
+read_fastq(x, keep_quality = TRUE)
 }
 \arguments{
 \item{x}{The name of the fastq file to read data from.}
 
 \item{keep_quality}{Boolean indicating if the Phred quality scores should be 
-retained in the output dataframe. Default is FALSE.}
+retained in the output dataframe. Default is TRUE}
 }
 \description{
 Read in raw data from a fastq file.
