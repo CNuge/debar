@@ -4,8 +4,8 @@
 \alias{meta_check}
 \title{Run the log file and reject processing code after running the denoise pipeline.}
 \usage{
-meta_check(x, log_data = list(), keep_rejects = FALSE,
-  reject_filename = "rejects.fastq", log_file = FALSE, ...)
+meta_check(x, log_data = list(), log_file = FALSE,
+  keep_rejects = FALSE, reject_filename = "rejects.fastq", ...)
 }
 \description{
 Run the log file and reject processing code after running the denoise pipeline.

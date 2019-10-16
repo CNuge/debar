@@ -10,8 +10,8 @@
 #' to the sequence output. Default = NULL.
 #' @param phred_test Default = TRUE.
 #' @param min_avg_qv The minimum average phred score for a read to be retained.
-#' @param max_perc_low The maximum percentage of nucleotides in the string with QV values lower than 20. Default is 25%
-#' @param max_perc_ultra_low The maximum percentage of nucleotides in the string with QV values lower than 10. Default is 5%
+#' @param max_perc_low The maximum frequency of nucleotides in the string with QV values lower than 20. Default is 0.25
+#' @param max_perc_ultra_low The maximum frequency of nucleotides in the string with QV values lower than 10. Default is 5
 #' @param dir_check Should both the forward and reverse compliments be considered?
 #' @param min_match The minimum number of sequential matches to the PHMM for a sequence to be denoised.
 #' Otherwise flag the sequence as a reject.
@@ -224,16 +224,27 @@ denoise_file.default = function(x, ..., filename = 'output.fastq',  file_type = 
                                   reject_filename = reject_filename, ...)
     }
   }else{
-    parallel::mclapply(1:length(data$sequence), function(i, ...){
-      temp = denoise(data$sequence[[i]], filename = filename, name = data$header_data[[i]], phred = data$quality[[i]], ...)
-      #TODO - if the reassignment from within the mclapply leads to errors
-      #then remove the log_data assignment here. still need the bad reads saved
-      log_data = meta_check(x = temp, log_data = log_data, 
-                                  keep_rejects = keep_rejects, 
-                                  log_file = log_file,
-                                  reject_filename = reject_filename,  ...)
-      NULL
+    if(log_file == FALSE){
+      parallel::mclapply(1:length(data$sequence), function(i, ...){
+        temp = denoise(data$sequence[[i]], filename = filename, name = data$header_data[[i]], phred = data$quality[[i]], ...)
+        meta_check(x = temp, log_data = FALSE, 
+                             keep_rejects = keep_rejects, 
+                             log_file = log_file,
+                             reject_filename = reject_filename,  ...)
+        NULL
       }, mc.cores = multicore)
+    }else{
+      log_row = list(total_reads = 0, good_count = 0, reject_count = 0, good_denoised = 0, good_unaltered = 0)
+      log_rows = parallel::mclapply(1:length(data$sequence), function(i, log_row, ...){
+        temp = denoise(data$sequence[[i]], filename = filename, name = data$header_data[[i]], phred = data$quality[[i]], ...)
+        meta_check(x = temp, log_data = log_data, 
+                   keep_rejects = keep_rejects, 
+                   log_file = log_file,
+                   reject_filename = reject_filename,  ...)
+        NULL
+      }, mc.cores = multicore)
+      
+    }
   }
   
   if(log_file == TRUE){

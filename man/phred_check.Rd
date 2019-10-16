@@ -15,9 +15,9 @@ phred_check(x, ...)
 
 \item{min_avg_qv}{The minimum average phred score for a read to be retained.}
 
-\item{max_perc_low}{The maximum percentage of nucleotides in the string with QV values lower than 20. Default is 25%}
+\item{max_perc_low}{The maximum frequency of nucleotides in the string with QV values lower than 20. Default is 0.25}
 
-\item{max_perc_ultra_low}{The maximum percentage of nucleotides in the string with QV values lower than 10. Default is 5%}
+\item{max_perc_ultra_low}{The maximum frequency of nucleotides in the string with QV values lower than 10. Default is 5}
 }
 \description{
 Check the numeric phred scores and
