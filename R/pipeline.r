@@ -1,19 +1,4 @@
 
-#TODO - write code to run the phred test and set reads to x4reject = TRUE if certain criteria not met.
-
-#' Adjust the sequences based on the nt path outputs.
-#'
-#' @param x a DNAseq class object.
-phred_check = function(x, ...){
-  UseMethod("outseq")
-}
-
-#' @rdname phred_check
-#' @export
-phred_check.DNAseq = function(x, ...){
-  x
-}
-
 #' Run the denoiser pipeline for a sequence read.
 #'
 #' 
@@ -23,11 +8,16 @@ phred_check.DNAseq = function(x, ...){
 #' @param phred an optional character string. The phred score string corresponding to the nucleotide string.
 #' If passed then the input phred scores will be modified along with the nucleotides and carried through
 #' to the sequence output. Default = NULL.
+#' @param phred_test Default = TRUE.
+#' @param min_avg_qv
+#' @param max_perc_low The maximum percentage of nucleotides in the string with QV values lower than 20. Default is 25%
+#' @param max_perc_ultra_low The maximum percentage of nucleotides in the string with QV values lower than 10. Default is 5%
 #' @param dir_check Should both the forward and reverse compliments be considered?
 #' @param min_match The minimum number of sequential matches to the PHMM for a sequence to be denoised.
 #' Otherwise flag the sequence as a reject.
 #' @param censor_length the number of base pairs in either direction of a PHMM correction
 #' to convert to placeholder characters. Default is 5.
+#' @param added_phred
 #' @param added_phred The phred character to use for characters inserted into the original sequence.
 #' @param adjust_limit the maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
 #' then the entire read is rejected. Default is 3.
@@ -70,12 +60,16 @@ denoise = function(x, ...){
 denoise.default = function(x, ...,
                              name = character(),
                              phred = NULL, 
+                             phred_check = TRUE,
+                             min_avg_qv = 20,
+                             max_perc_low = 0.25,
+                             max_perc_ultra_low = 0.05,
                              dir_check = TRUE, 
                              min_match = 100,
-                             phred_check = FALSE,
-                             ambig_char = "N",
                              censor_length = 5,
+                             added_phred = "*",
                              adjust_limit = 5,
+                             ambig_char = "N",
                              to_file = TRUE,
                              keep_flanks = TRUE,
                              keep_phred = TRUE,
@@ -91,10 +85,12 @@ denoise.default = function(x, ...,
                              ){
 
   dat = DNAseq(x, name = name , phred = phred)
-  #TODO - here run a quick check on the phred scores, only proceed if certain quality values
-  # are met, or manual override, otherwise skip the remaining steps.
-  if(phred_check==TRUE){
-    dat = phred_test(dat)  
+
+  if(phred_test==TRUE){
+    dat = phred_check(dat, min_avg_qv = min_avg_qv, 
+                           max_perc_low = max_perc_low, 
+                           max_perc_ultra_low=max_perc_ultra_low, 
+                           ...)  
   }else{
     dat$reject = FALSE
   }
@@ -102,26 +98,40 @@ denoise.default = function(x, ...,
   if(dat$reject == TRUE && terminate_rejects == TRUE){
     return(dat)
   }
-  
-  dat = frame(dat, ...)
+
+  dat = frame(dat, dir_check = dir_check, 
+                   min_match = min_match,
+                   ...)
   
   if(dat$reject == TRUE && terminate_rejects == TRUE){
     return(dat)
   }
   
-  dat = adjust(dat, ...)
+  dat = adjust(dat, censor_length= censor_length,
+                    added_phred = added_phred,
+                    ...)
   if(aa_check == TRUE){
-    dat = aa_check(dat, ...)
+    dat = aa_check(dat, trans_table = trans_table, 
+                        frame_offset = frame_offset,
+                        ...)
   }
   
-  dat = outseq(dat, ...)
+  dat = outseq(dat, keep_flanks = keep_flanks, 
+                    ambig_char = ambig_char, 
+                    adjust_limit = ambig_char,
+                    ...)
   
   if(dat$reject == TRUE && terminate_rejects == TRUE){
     return(dat)
   }
   
   if(to_file == TRUE){
-    dat = write_wrapper(dat, filename = filename, ...)
+    dat = write_wrapper(dat, filename = filename, 
+                             outformat = outformat,
+                             append=append,
+                             keep_phred = keep_phred,
+                             phred_placeholder = phred_placeholder,
+                             ...)
   } 
   dat
 }
@@ -183,7 +193,6 @@ denoise_file = function(x, ...){
 #' @export
 denoise_file.default = function(x, ..., filename = 'output.fastq',  file_type = "fastq", 
                                   log_file = FALSE, keep_rejects = FALSE, multicore = FALSE){
-  print(paste0("writing output to:", filename))
   #set up additional output paramaters if needed
   if(keep_rejects == TRUE){
     reject_filename = paste0("rejects_",filename)

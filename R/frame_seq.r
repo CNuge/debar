@@ -8,14 +8,6 @@ individual_DNAbin = function(dna_string){
 }
 
 
-#' Return a labelled list 
-#' @keywords internal
-phred2numeric = function(phred_string){
-  outvec = gtools::asc(unlist(strsplit(phred_string, "")))
-  return(outvec - 33)
-}
-
-
 #' Return the reverse compliment for a DNA sequence
 #' @keywords internal
 rev_comp = function(x){
@@ -260,7 +252,7 @@ frame.DNAseq = function(x, ..., dir_check = TRUE, min_match = 100){
   org_seq_vec = strsplit(tolower(x$raw), split='')[[1]]
   #add the labels
   if(!is.null(x$phred)){
-    names(org_seq_vec) = strsplit(tolower(x$phred), split='')[[1]]
+    names(org_seq_vec) = strsplit(x$phred, split='')[[1]]
   }
   
   #check for leading inserts, if present remove them and reframe the sequence for higher accuracy.

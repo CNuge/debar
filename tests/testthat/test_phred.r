@@ -61,5 +61,23 @@ test_that("fastq phred scores can be processed and maintained correctly", {
   test_seqdenoise3$raw  
   test_seqdenoise3$data
   test_seqdenoise3$adjusted_sequence
-    
+  
+  
+  ########################
+  # This one has low QV and should therefore be rejected
+  t4_seq = "AGTTAACAAATCATAAAGATATTGGTACCTTATACTTTATTTTTGGAGCTTGAGCTGGTATAATTGGCACATCCCTTAGTATTATTATTCGTGCAGAATTAGGACATCCAGGTACATTTATTGGTAATGACNNNNNNNNNNNTGTTATTGTTACTGCTCATGCCTTTATTATAATTTTTTTCATAGTTATACCAATTATAATCGGTGGATTTGGAAATTGACTTGTACCTTTAATATTAGGTGCCCCCGATATAGCCTTTCCCCNNNNNNNNNNTATAAGATTTTGAATATTACCCCCTTCTATTACTTTATTACTAACAAGAAGACTTGTAGAGAATGGAGCAGGTACCGGATGAACAGTTTACCCACCATTAGCCGCTAATATTTCTCATGCTGGATCCTCAGTTGACCTAGCAATTTTCTCTTTACACTTAGCTGGGATTTCTTCCATTCTAGGAGCTGTAAATTTTATTACTACAATTATCAATATACGATCAAATGGAATTTCTTTCGACCGTATGCCTTTATTTGTATGATCTGTCTTTATTACAGCTATTTTATTACTTTTATCATTGCCTGTTTTAGCCGGAGCAATTACAATATTATTAACTGATCGTAATTTAAATACATCATTCTTTGACCCTGCAGGAGGGGGAGATCCAATTCTTTACCAACATTTATTTTGATTTTTGGTCATCCATGAAGTTTA"
+  t4_phred = "f<$)m)a.h4fvhfn{;mw[]z^z^zeyqz$f[anxi@wjpu$1fycjn~pmtsjzjqlxd_@tndylkbmxw{w|ufkczea$vr[g&lc9>aa_i+chb~=$qgnzbc|[gfoc]m4d|]~$kx@ar$pd=q+*l0c_r0$j~ke}]johyykhsl^[9d|aem*ymms_ci[x|{wr)]ep^g}anfgqyglr_epojypjzjmyizonitr~?z$qap}[^ri|iap:jnkf~n_~]h_przt3_]_zbe^sp$t3syx1ockj-l-jg>awmxd^i|||4@>gkebc]qfkx7$aeuq_9f[cx+>w[ng$qcyerornojy^:ebaqgvigh}q$nsaie]wkmlb7vmo=xfh{{4ezz@g$2>_>gpduqv$d8aslz=_kreydpogohj}shpfbx;gh_=i=l^pzu{|>[jppudcrmozuyypviked_h>oe5$0nw^qbd_&$axh_jdt0[us?btbdqbg[c9yzxeqrbtpk$^nysxcjau]c{zyt9jijefrjthkzsx[vnce;cqi<n-w>$]*x<lnl]q99jopiqhjas[qq2bvdpitly/gp]d|tni:winz{:ci}rw[hm[ub_ktmfw_evvdxwlouipinqjn_lisfsb)jcvrf]dhl_^$:w[]gfjb$wx?als{{1cj$kuxlhszp_qdr[:gex[la7$d_a$nbkxws0$.$5kvb;-plhaclh>^"
+  
+  test_seqdenoise4 = DNAseq(t4_seq, name = "test4", phred = t4_phred)
+  
+  test_seqdenoise4 = frame(test_seqdenoise4)
+  test_seqdenoise4 = adjust(test_seqdenoise4)
+  test_seqdenoise4 = outseq(test_seqdenoise4)
+  
+  test_seqdenoise4$name
+  test_seqdenoise4$raw  
+  test_seqdenoise4$data
+  test_seqdenoise4$adjusted_sequence
+  
+  
 })
