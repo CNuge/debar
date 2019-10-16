@@ -235,15 +235,23 @@ denoise_file.default = function(x, ..., filename = 'output.fastq',  file_type = 
       }, mc.cores = multicore)
     }else{
       log_row = list(total_reads = 0, good_count = 0, reject_count = 0, good_denoised = 0, good_unaltered = 0)
-      log_rows = parallel::mclapply(1:length(data$sequence), function(i, log_row, ...){
+      log_rows = parallel::mclapply(1:length(data$sequence), function(i, ...){
         temp = denoise(data$sequence[[i]], filename = filename, name = data$header_data[[i]], phred = data$quality[[i]], ...)
-        meta_check(x = temp, log_data = log_data, 
+        outrow = meta_check(x = temp, log_data = log_row, 
                    keep_rejects = keep_rejects, 
                    log_file = log_file,
                    reject_filename = reject_filename,  ...)
-        NULL
+        data.frame(outrow)
       }, mc.cores = multicore)
       
+      mc_log = do.call(rbind,log_rows)
+      
+      log_data[['total_reads']] = sum(mc_log$total_reads)
+      log_data[['good_count']] = sum(mc_log$good_count)
+      log_data[['reject_count']] = sum(mc_log$reject_count)
+      log_data[['good_denoised']] = sum(mc_log$good_denoised)
+      log_data[['good_unaltered']] = sum(mc_log$good_unaltered)
+
     }
   }
   

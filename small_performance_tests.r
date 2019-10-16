@@ -15,6 +15,7 @@ fastq_real_file = system.file('extdata/sequel_smrt_subset.fastq', package = 'seq
 #new ccs data, from 158 SMRT
 #in gz format
 fastq_gz_real_file = system.file('extdata/sequel_smrt_subset.fastq.gz', package = 'seqdenoise')
+fastq_gz_real_file = system.file('extdata/sequel_smrt_subset_mini.fastq', package = 'seqdenoise')
 
 denoise_file(fastq_gz_real_file, keep_flanks = TRUE, filename = "with_edges_seqdenoise_out.fastq")
 denoise_file(fastq_gz_real_file, keep_flanks = FALSE, phred_test = FALSE, filename = "noedges_nophredtest-with_edges_seqdenoise_out.fastq")
