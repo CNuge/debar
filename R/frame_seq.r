@@ -36,9 +36,9 @@ dir_check = function(x){
   rev_score = rev_ntPHMMout[['score']]
   
   if(rev_score > fwd_score){
-    outlist = list(ntBin = rev_ntBin, ntPHMMout = rev_ntPHMMout)
+    outlist = list(raw = rev_x, ntBin = rev_ntBin, ntPHMMout = rev_ntPHMMout)
   }else{
-    outlist = list(ntBin = fwd_ntBin, ntPHMMout = fwd_ntPHMMout)    
+    outlist = list(raw = x, ntBin = fwd_ntBin, ntPHMMout = fwd_ntPHMMout)    
   }
   return(outlist)
 }
@@ -229,6 +229,7 @@ frame.DNAseq = function(x, ..., dir_check = TRUE, min_match = 100){
   if(dir_check == TRUE){
     dir_out = dir_check(x$raw)
     #parse the outputs from the optimal direction.
+    x$raw = dir_out$raw
     x$data$ntBin = dir_out$ntBin
     x$data$ntPHMMout = dir_out$ntPHMMout
   }else{

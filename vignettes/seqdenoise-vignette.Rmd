@@ -71,8 +71,8 @@ x = DNAseq(data$sequence[[71]], name = 'test1')
 ```
 
 ```{r}
-print(data$sequence[71])
-test = denoise(data$sequence[71])
+
+test = denoise(data$sequence[[71]], to_file = FALSE)
 ```
 
 ```{r}
