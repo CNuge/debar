@@ -25,6 +25,12 @@ validate_DNAseq = function(new_instance){
                  "\nValid characters are: a t g c - n"))
     }
   }
+  
+  if(!is.null(new_instance$phred)){
+    if(nchar(new_instance$raw) != nchar(new_instance$phred)){
+      stop(paste("The length of the input DNA sequence and phred scores must match."))
+    }
+  }
   new_instance
 }
 

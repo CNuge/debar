@@ -88,13 +88,13 @@ denoise.default = function(x, ...,
   if(phred_test==TRUE){
     dat = phred_check(dat, min_avg_qv = min_avg_qv, 
                            max_perc_low = max_perc_low, 
-                           max_perc_ultra_low=max_perc_ultra_low, 
+                           max_perc_ultra_low = max_perc_ultra_low, 
                            ...)  
   }else{
     dat$reject = FALSE
   }
   
-  if(dat$reject == TRUE && terminate_rejects == TRUE){
+  if(dat$reject == TRUE && !is.null(dat$phred) && terminate_rejects == TRUE){
     return(dat)
   }
 
@@ -127,7 +127,7 @@ denoise.default = function(x, ...,
   if(to_file == TRUE){
     dat = write_wrapper(dat, filename = filename, 
                              outformat = outformat,
-                             append=append,
+                             append = append,
                              keep_phred = keep_phred,
                              phred_placeholder = phred_placeholder,
                              ...)
@@ -144,7 +144,7 @@ meta_check = function(x, log_data = list(), log_file = FALSE, keep_rejects = FAL
   if(keep_rejects == TRUE && x$reject == TRUE){
     x$outseq = x$raw
     x$outphred = x$phred
-    write_wrapper(temp, ...)
+    write_wrapper(x, filename = reject_filename, ...)
   }
   #add to the summary stats if the log file option is enabled
   if(log_file == TRUE){
@@ -229,7 +229,7 @@ denoise_file.default = function(x, ..., filename = 'output.fastq',  file_type = 
         meta_check(x = temp, log_data = FALSE, 
                              keep_rejects = keep_rejects, 
                              log_file = log_file,
-                             reject_filename = reject_filename,  ...)
+                             reject_filename = reject_filename, ...)
         NULL
       }, mc.cores = multicore)
     }else{

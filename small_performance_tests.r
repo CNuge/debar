@@ -24,6 +24,8 @@ denoise_file(fastq_gz_real_file, multicore = 8, keep_flanks = TRUE, filename = "
 denoise_file(fastq_gz_real_file, log_file = TRUE, keep_flanks = TRUE, filename = "log_info-with_edges_seqdenoise_out.fastq")
 denoise_file(fastq_gz_real_file, multicore = 8, log_file = TRUE, keep_flanks = TRUE, filename = "multicore-log_info-with_edges_seqdenoise_out.fastq")
 
+denoise_file(fastq_gz_real_file, log_file = TRUE, keep_rejects = TRUE, keep_flanks = TRUE, filename = "log_info-keep_rejects-with_edges_seqdenoise_out.fastq")
+denoise_file(fastq_gz_real_file, multicore = 8, log_file = TRUE, keep_rejects = TRUE, keep_flanks = TRUE, filename = "multicore-keep_rejects-log_info-with_edges_seqdenoise_out.fastq")
 
 ###############################################################
 

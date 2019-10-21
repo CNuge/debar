@@ -80,4 +80,22 @@ test_that("fastq phred scores can be processed and maintained correctly", {
   test_seqdenoise4$adjusted_sequence
   
   
+  #####################
+  # This one appears to be dropping the phred scores in the fq output, see if you can pin down the bug
+  @m54146_190221_235805/15859816/ccs
+  t5_seq = "GAGTCAGAGATCTATGGATCACTTGTGCAAGCATCACATCGTAGTAAACTTCTGGGTGTCCAAAAAAATCAAAATAAATGTTGATATAAAATTGGATCACCTCCTCCTGCTGGGTCAAAGAAAGATGTATTTAAATTTCGGTCGGTTAATAATATTGTAATAGCTCCAGCTAATACAGGTAGAGATAAAAGTAATAAAATAGCAGTAATTACAACAGATCATACAAATAAAGGTATTCGATCAAATGTAATACCTGTTGATCGTATATTAATTACAGTAGTAATGAAATTTACGGCTCCTAAAATAGAAGAAATACCAGCTAAATGTAATGAAAAAAATAGCTAAATCAACTGAGGCTCCTCCATGAGCAATCCCTGCTGATAGAGGAGGGTAAACTGTTCAACCAGTTCCAGCTCCATTTTCTACTATACTACTAGCTAATAATAATGTAAGAGAAGGGGGTAATATTCAAAAACTTATATTACCCCCTTCTCTTACATTATTATTAGCTAGTAGTATAGTAGAAAATGGAGCTGGAACTGGTTGAACAGTTTACCCTCCTCTATCAGCAGGGATTGCTCATGGAGGAGCCTCAGTTGATTTAGCTATTTTTTCATTACATTTAGCTGGTACTTCTTCTATTTTAGGAGCCGTAAATTTCATTACTACTGTAATTAATATACGATCAACAGGTATTACATTTGATCGAATACCTTTATTTGTATGATCTGTTGTAATTACTGCTATTTTATTACTTTTATCTCTACCTGTATTAGCTGGAGCTATTACAATATTATTAACCGACCGAAATTTAAATACATCTTTCTTTGACCCAGCAGGAGGAGGTGATCCAATTTTATATCAACATTTATTTTGATTTTTTGGACATCCAGAAGTTTACTACGATGTGATGCTTGCACAAGTGATCCATAGATCTCTGACTC"
+  t5_phred = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~V~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~0~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~:~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~t~~~~~~~~~~~~a~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~V~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+
+  test_seqdenoise5 = DNAseq(t5_seq, name = "test5", phred = t5_phred)
+  
+  test_seqdenoise5 = frame(test_seqdenoise5)
+  test_seqdenoise5 = adjust(test_seqdenoise5)
+  test_seqdenoise5 = outseq(test_seqdenoise5)
+  
+  test_seqdenoise5$name
+  test_seqdenoise5$raw  
+  test_seqdenoise5$data
+  test_seqdenoise5$adjusted_sequence
+  
+  
 })

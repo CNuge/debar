@@ -50,8 +50,6 @@ test_that("Artifical errors are denoised properly.", {
   #expect_equal(test_toy3_out$consensus, toy3_expected)
   
   
-
-  expect_equal(1,1)
 })
 
 

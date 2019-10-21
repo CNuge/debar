@@ -54,20 +54,21 @@ dim(data)
 ```
 
 ```{r}
-  dat1 = DNAseq(data$sequence[71], name = 'testseq1' )
-  
-  dat1 = frame(dat1)
-  
-  names(dat1)
-  
-  dat1 = adjust(dat1, censor_length = 5)
+x = denoise(data$sequence[[71]], keep_phred = FALSE)
+x
 
-  write_fastq(dat1)
-  
 ```
 
 ```{r}
-x = denoise(data$sequence[71], filename = "out.fastq")
+x = denoise(data$sequence[[78]], phred = data$quality[[78]])
+x
+
+```
+
+```{r}
+x = DNAseq(data$sequence[[71]], name = 'test1')
+
+
 ```
 
 ```{r}

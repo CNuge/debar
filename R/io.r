@@ -210,11 +210,11 @@ write_wrapper.DNAseq = function(x, ...,
   
   if(outformat == "fastq"){
     if(is.null(filename)){
-      write_fastq(x, ambig_char= ambig_char,
+      write_fastq(x, keep_phred = keep_phred, 
                   phred_placeholder = phred_placeholder, 
                   append = append, ...)
     }else{
-      write_fastq(x, ambig_char = ambig_char,
+      write_fastq(x, keep_phred = keep_phred,
                   filename = filename, 
                   phred_placeholder = phred_placeholder, 
                   append = append, ...)

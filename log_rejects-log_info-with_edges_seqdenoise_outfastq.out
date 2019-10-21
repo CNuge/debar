@@ -1,0 +1,2 @@
+"input_file","total_reads","good_count","reject_count","good_denoised","good_unaltered","start_time","end_time","time_elapsed"
+"/home/cnuge/R/x86_64-pc-linux-gnu-library/3.4/seqdenoise/extdata/sequel_smrt_subset.fastq.gz",250,220,30,60,160,2019-10-17 09:30:01,2019-10-17 09:34:36,4.59319892724355
