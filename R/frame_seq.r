@@ -224,7 +224,7 @@ frame = function(x, ...){
 
 #' @rdname frame
 #' @export
-frame.DNAseq = function(x, ..., dir_check = TRUE, min_match = 100){
+frame.DNAseq = function(x, ..., dir_check = TRUE, min_match = 100, terminate_rejects = TRUE){
   
   if(dir_check == TRUE){
     dir_out = dir_check(x$raw)
@@ -240,13 +240,17 @@ frame.DNAseq = function(x, ..., dir_check = TRUE, min_match = 100){
   #take the optimal direction's output string and reject if:
   #a. There is a large string of 2s (indicative of a chimera) 
   #OR
-  #b. There is not a continious match to the PHMMof at least the designated min_match length.
-  if(grepl(paste(rep("2", 400), collapse = ""), paste( x$data$ntPHMMout[['path']], collapse = "")) ||
-     !grepl(paste(rep("1", min_match), collapse = ""), paste( x$data$ntPHMMout[['path']], collapse = "")) ){
+  #b. There is not a continious match to the PHMM of at least the designated min_match length.
+  if(terminate_rejects == TRUE){
+    if(grepl(paste(rep("2", 400), collapse = ""), paste( x$data$ntPHMMout[['path']], collapse = "")) ||
+       !grepl(paste(rep("1", min_match), collapse = ""), paste( x$data$ntPHMMout[['path']], collapse = "")) ){
       x$reject = TRUE
       return(x)
-  }else{
+    }else{
       x$reject = FALSE
+    }
+  }else{
+    x$reject = FALSE
   }
     
   #turn the raw string into a vector, add phred labels as well.

@@ -50,6 +50,7 @@ adj_seq = function(frame_dat, path_out, censor_length = 3, added_phred = "*"){
   censor_0s = c() #these were deleted from true seq  
   censor_2s = c() #these were inserted into true seq
   match_seen = FALSE
+  first_0 = TRUE
 
   #adjustments to skip because they occur as a codon
   triple_inserts = triple_ins(path_out, path_pos, path_end)
@@ -79,6 +80,17 @@ adj_seq = function(frame_dat, path_out, censor_length = 3, added_phred = "*"){
         #the 0 in the path is not found as a member
         #of a triple, these are missing codons and likely true
         if(!i %in% triple_inserts){
+          
+          if(first_0 == TRUE){
+            #First add the bp at this position normally if previous position not a 0
+            new_seq = c(new_seq, org_seq_vec[org_seq_pos])
+            org_seq_pos = org_seq_pos + 1
+            
+            new_pos = new_pos + 1
+            match_seen = TRUE
+            first_0 = FALSE
+          }
+          #then add a placeholder behind it
           add_char = '-'
           
           if(!is.null(names(org_seq_vec))){
@@ -88,6 +100,9 @@ adj_seq = function(frame_dat, path_out, censor_length = 3, added_phred = "*"){
           new_seq = c(new_seq, add_char)
           new_pos = new_pos + 1
           censor_0s = c(censor_0s, new_pos)
+          if(path_out[(i+1)] != 0){
+            first_0 = TRUE
+          }
         }
       }
       
@@ -139,7 +154,7 @@ adj_seq = function(frame_dat, path_out, censor_length = 3, added_phred = "*"){
     #censor_2s
     if(!is.null(censor_2s)){
       censor_2s_masks = unlist(lapply(censor_2s, function(pos){
-        (pos-(censor_length-1)):(pos+censor_length)
+        (pos-(censor_length)):(pos+censor_length-1)
       }))
       censor_2s_masks = unique(censor_2s_masks)
       censor_2s_masks = censor_2s_masks[censor_2s_masks>0]

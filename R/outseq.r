@@ -34,7 +34,7 @@ outseq.DNAseq = function(x, keep_flanks = TRUE, ambig_char = "N", adjust_limit =
                        x$data$raw_removed_end), # part removed from the end of first frame() call
                      collapse = "")
     
-    if(!is.null(names(x$adjusted_sequence))){
+    if(!is.null(names(x$adjusted_sequence)) || !is.null(names(x$frame_dat$removed_lead))|| !is.null(names(x$data$raw_removed_front))){
       x$outphred = paste(c(names(x$data$raw_removed_front), #part removed in front of first frame() call
                            names(x$frame_dat$removed_lead), #part removed in second frame() call
                            names(x$adjusted_sequence[dashes_rm:length(x$adjusted_sequence)]), #the 'sweet spot' that is denoised

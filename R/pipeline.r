@@ -100,6 +100,7 @@ denoise.default = function(x, ...,
 
   dat = frame(dat, dir_check = dir_check, 
                    min_match = min_match,
+                   terminate_rejects= terminate_rejects,
                    ...)
   
   if(dat$reject == TRUE && terminate_rejects == TRUE){
