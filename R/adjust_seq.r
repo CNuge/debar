@@ -100,8 +100,10 @@ adj_seq = function(frame_dat, path_out, censor_length = 3, added_phred = "*"){
           new_seq = c(new_seq, add_char)
           new_pos = new_pos + 1
           censor_0s = c(censor_0s, new_pos)
-          if(path_out[(i+1)] != 0){
-            first_0 = TRUE
+          if(i < path_end){
+            if(path_out[(i+1)] != 0){
+              first_0 = TRUE
+            }
           }
         }
       }
@@ -142,7 +144,7 @@ adj_seq = function(frame_dat, path_out, censor_length = 3, added_phred = "*"){
     #censor_0s
     if(!is.null(censor_0s)){
       censor_0s_masks = unlist(lapply(censor_0s, function(pos){
-        (pos-censor_length):(pos+censor_length)
+        (pos-censor_length-1):(pos+censor_length-1)
       }))		
       censor_0s_masks = unique(censor_0s_masks)
       censor_0s_masks = censor_0s_masks[censor_0s_masks>0]
