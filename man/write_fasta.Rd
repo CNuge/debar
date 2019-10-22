@@ -29,15 +29,7 @@ a class object of code{"DNAseq"}
 Output the denoised consensus sequence to a fasta file.
 }
 \examples{
-#previously called
-ex_data = DNAseq(example_nt_string, name = 'ex1')
-ex_data =  frame(ex_data)
-ex_data = adjust(ex_data)
-ex_data = consensus(ex_data)
-#write to a fasta file with the default output file
-write_fasta(ex_data)
-#specify the path to a custom output file, overwrite its current contents
-write_fasta(ex_data, filename = 'example_out.fasta', append = FALSE)
+
 }
 \seealso{
 \code{\link{DNAseq}}

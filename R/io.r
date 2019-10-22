@@ -84,15 +84,7 @@ read_fasta = function(x){
 #' @seealso \code{\link{frame}}
 #' @seealso \code{\link{adjust}}
 #' @examples
-#' #previously called
-#' ex_data = DNAseq(example_nt_string, name = 'ex1')
-#' ex_data =  frame(ex_data)
-#' ex_data = adjust(ex_data)
-#' ex_data = consensus(ex_data)
-#' #write to a fasta file with the default output file
-#' write_fasta(ex_data)
-#' #specify the path to a custom output file, overwrite its current contents
-#' write_fasta(ex_data, filename = 'example_out.fasta', append = FALSE)
+#' 
 #' @export
 #' @name write_fasta
 write_fasta = function(x, ...){
@@ -129,15 +121,7 @@ write_fasta.DNAseq = function(x, ...,
 #' @seealso \code{\link{frame}}
 #' @seealso \code{\link{adjust}}
 #' @examples
-#' #previously called
-#' ex_data = DNAseq(example_nt_string, name = 'ex1')
-#' ex_data =  frame(ex_data)
-#' ex_data = adjust(ex_data)
-#' ex_data = consensus(ex_data)
-#' #write to a fasta file with the default output file
-#' write_fastq(ex_data)
-#' #specify the path to a custom output file, overwrite its current contents
-#' write_fastq(ex_data, filename = 'example_out.fastq', append = FALSE)
+#' 
 #' @export
 #' @name write_fastq
 write_fastq = function(x, ...){
@@ -153,9 +137,6 @@ write_fastq.DNAseq = function(x, ...,
                                  keep_phred = TRUE,
                                  phred_placeholder = "#"){
 
-  #TODO - need to make sure the phred scores are modified and carried through
-  #then when the outseq is generated, also turn the phred numbers back into
-  #the corresponding characters
   if(keep_phred == TRUE){
     if(is.null(x$phred)){
       stop("Cannot keep the phred scores for a DNAseq with no phred inputs")

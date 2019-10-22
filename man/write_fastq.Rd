@@ -31,15 +31,7 @@ a class object of code{"DNAseq"}
 Output the denoised sequence to a fastq format with placeholder phred scores.
 }
 \examples{
-#previously called
-ex_data = DNAseq(example_nt_string, name = 'ex1')
-ex_data =  frame(ex_data)
-ex_data = adjust(ex_data)
-ex_data = consensus(ex_data)
-#write to a fasta file with the default output file
-write_fastq(ex_data)
-#specify the path to a custom output file, overwrite its current contents
-write_fastq(ex_data, filename = 'example_out.fastq', append = FALSE)
+
 }
 \seealso{
 \code{\link{DNAseq}}
