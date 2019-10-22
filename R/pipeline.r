@@ -9,6 +9,7 @@
 #' If passed then the input phred scores will be modified along with the nucleotides and carried through
 #' to the sequence output. Default = NULL.
 #' @param phred_test Default = TRUE.
+#' @param keep_phred Should the original PHRED scores be kept in the output? Default is TRUE.
 #' @param min_avg_qv The minimum average phred score for a read to be retained.
 #' @param max_perc_low The maximum frequency of nucleotides in the string with QV values lower than 20. Default is 0.25
 #' @param max_perc_ultra_low The maximum frequency of nucleotides in the string with QV values lower than 10. Default is 5
@@ -24,10 +25,6 @@
 #' prior to outputting to the file. Default is TRUE. 
 #' False will lead to only the denoised sequence for the 657bp barcode region being output to the file.
 #' @param ambig_char The character to use for ambigious positions in the sequence that is output to the file. Default is N.
-#' @param adjust_limit the maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
-#' then the entire read is masked with ambigious characters. Default is 5.
-#' @param framed_output Boolean indicating if the output shouldhave leading dashes to establish a common
-#' reading frame in the output sequences. Default is TRUE. Param only applied if keep_flanks = FALSE.
 #' @param to_file Boolean indicating whether the sequence should be written to a file. Default is TRUE.
 #' @param outformat The format of the output file. Options are fasta or fastq (default) format.
 #' @param filename The name of the file to output the data to. Default filenames are respectively: denoised.fasta or denoised.fastq.
@@ -47,7 +44,7 @@
 #' @return a class object of code{"DNAseq"} 
 #' @examples
 #' # Denoise example sequence with default paramaters.
-#' ex_data = denoise(example_nt_string, name = 'example_sequence_1')
+#' ex_data = denoise(example_nt_string, name = 'example_sequence_1', keep_phred = FALSE)
 #' @export
 #' @name denoise
 denoise = function(x, ...){
@@ -76,7 +73,6 @@ denoise.default = function(x, ...,
                              terminate_rejects = TRUE,
                              filename = NULL, 
                              phred_placeholder = "#",
-                             write_masked = TRUE,
                              aa_check = FALSE, 
                              trans_table = 0,
                              frame_offset = 0,
@@ -259,7 +255,7 @@ denoise_file.default = function(x, ..., filename = 'output.fastq',  file_type = 
     log_data[['end_time']] = Sys.time()
     log_data[['time_elapsed']] = difftime(log_data[['end_time']] , log_data[['start_time']] , units = "mins")
     log_data = data.frame(log_data)
-    write.csv(log_data, log_filename, row.names = FALSE)
+    utils::write.csv(log_data, log_filename, row.names = FALSE)
   }
 }
 

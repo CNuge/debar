@@ -7,7 +7,8 @@
 \usage{
 frame(x, ...)
 
-\method{frame}{DNAseq}(x, ..., dir_check = TRUE, min_match = 100)
+\method{frame}{DNAseq}(x, ..., dir_check = TRUE, min_match = 100,
+  terminate_rejects = TRUE)
 }
 \arguments{
 \item{x}{a DNAseq class object.}
@@ -18,6 +19,10 @@ frame(x, ...)
 
 \item{min_match}{The minimum number of sequential matches to the PHMM for a sequence to be denoised.
 Otherwise flag the sequence as a reject.}
+
+\item{terminate_rejects}{Should a check be made to enusre minimum homology of the input sequence to the PHMM.
+Makes sure there are not more than 400 consecutive insert states and not less than the minimum number of
+sequential matches. Default is True}
 }
 \value{
 a class object of code{"DNAseq"}
@@ -27,9 +32,7 @@ Take a DNAseq object and put sequences in common reading frame
 }
 \examples{
 #previously called
-ex_data = DNAseq(ex_ccs_read_list, name = 'ex1')
-#frame the ccs reads, will utilize the PHMM corresponding to the order specified in the object.
-ex_data =  frame(ex_data)
+
 }
 \seealso{
 \code{\link{DNAseq}}

@@ -203,14 +203,15 @@ set_frame = function(org_seq_vec, path_out){
 #' @param dir_check Should both the forward and reverse compliments be considered?
 #' @param min_match The minimum number of sequential matches to the PHMM for a sequence to be denoised.
 #' Otherwise flag the sequence as a reject.
+#' @param terminate_rejects Should a check be made to enusre minimum homology of the input sequence to the PHMM.
+#' Makes sure there are not more than 400 consecutive insert states and not less than the minimum number of
+#' sequential matches. Default is True
 #' @param ... additional arguments to be passed between methods.
 #' @return a class object of code{"DNAseq"} 
 #' @seealso \code{\link{DNAseq}}
 #' @examples
 #' #previously called
-#' ex_data = DNAseq(ex_ccs_read_list, name = 'ex1')
-#' #frame the ccs reads, will utilize the PHMM corresponding to the order specified in the object.
-#' ex_data =  frame(ex_data)
+#' 
 #' @export
 #' @name frame
 frame = function(x, ...){

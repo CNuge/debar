@@ -13,9 +13,8 @@ denoise(x, ...)
   censor_length = 5, added_phred = "*", adjust_limit = 5,
   ambig_char = "N", to_file = TRUE, keep_flanks = TRUE,
   keep_phred = TRUE, outformat = "fastq", terminate_rejects = TRUE,
-  filename = NULL, phred_placeholder = "#", write_masked = TRUE,
-  aa_check = FALSE, trans_table = 0, frame_offset = 0,
-  append = TRUE)
+  filename = NULL, phred_placeholder = "#", aa_check = FALSE,
+  trans_table = 0, frame_offset = 0, append = TRUE)
 }
 \arguments{
 \item{x}{a DNA sequence string.}
@@ -57,6 +56,8 @@ then the entire read is rejected. Default is 3.}
 prior to outputting to the file. Default is TRUE. 
 False will lead to only the denoised sequence for the 657bp barcode region being output to the file.}
 
+\item{keep_phred}{Should the original PHRED scores be kept in the output? Default is TRUE.}
+
 \item{outformat}{The format of the output file. Options are fasta or fastq (default) format.}
 
 \item{terminate_rejects}{Boolean indicating if analysis of sequences that fail to meet phred quality score or path 
@@ -79,12 +80,6 @@ framed sequence the the first nucelotide of the first codon. Used only when aa_c
 
 \item{append}{Should the denoised sequence be appended to the output file?(TRUE) 
 Or should the sequence overwrite the output file?(FALSE) Default is TRUE.}
-
-\item{adjust_limit}{the maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
-then the entire read is masked with ambigious characters. Default is 5.}
-
-\item{framed_output}{Boolean indicating if the output shouldhave leading dashes to establish a common
-reading frame in the output sequences. Default is TRUE. Param only applied if keep_flanks = FALSE.}
 }
 \value{
 a class object of code{"DNAseq"}
@@ -94,5 +89,5 @@ Run the denoiser pipeline for a sequence read.
 }
 \examples{
 # Denoise example sequence with default paramaters.
-ex_data = denoise(example_nt_string, name = 'example_sequence_1')
+ex_data = denoise(example_nt_string, name = 'example_sequence_1', keep_phred = FALSE)
 }

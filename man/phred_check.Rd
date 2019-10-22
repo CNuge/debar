@@ -13,6 +13,8 @@ phred_check(x, ...)
 \arguments{
 \item{x}{a DNAseq class object.}
 
+\item{...}{additional arguments to be passed between methods.}
+
 \item{min_avg_qv}{The minimum average phred score for a read to be retained.}
 
 \item{max_perc_low}{The maximum frequency of nucleotides in the string with QV values lower than 20. Default is 0.25}

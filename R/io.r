@@ -176,7 +176,10 @@ write_fastq.DNAseq = function(x, ...,
 
 #' A wrapper function to deploy the fastq and fata output functions.
 #' 
+#' @param x a DNAseq class object.
+#' @param ... additional arguments to be passed between methods.
 #' @param filename The name of the file to output the data to. Default is "denoised.fasta".
+#' @param outformat The format of the output data, either fasta for fastq. Default is fastq.
 #' @param append Should the ccs consensus sequence be appended to the output file?(TRUE) 
 #' Or overwrite the file?(FALSE) Default is TRUE.
 #' @param keep_phred Should the original PHRED scores be kept in the output? Default is TRUE.
@@ -188,7 +191,7 @@ write_wrapper = function(x, ...){
   UseMethod("write_wrapper")
 }
 
-#' @rdname write_fastq
+#' @rdname write_wrapper
 #' @export
 write_wrapper.DNAseq = function(x, ...,
                               filename = "denoised.fastq", 

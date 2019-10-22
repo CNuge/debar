@@ -2,12 +2,23 @@
 % Please edit documentation in R/io.r
 \name{write_wrapper}
 \alias{write_wrapper}
+\alias{write_wrapper.DNAseq}
 \title{A wrapper function to deploy the fastq and fata output functions.}
 \usage{
 write_wrapper(x, ...)
+
+\method{write_wrapper}{DNAseq}(x, ..., filename = "denoised.fastq",
+  outformat = "fastq", append = TRUE, keep_phred = TRUE,
+  phred_placeholder = "#")
 }
 \arguments{
+\item{x}{a DNAseq class object.}
+
+\item{...}{additional arguments to be passed between methods.}
+
 \item{filename}{The name of the file to output the data to. Default is "denoised.fasta".}
+
+\item{outformat}{The format of the output data, either fasta for fastq. Default is fastq.}
 
 \item{append}{Should the ccs consensus sequence be appended to the output file?(TRUE) 
 Or overwrite the file?(FALSE) Default is TRUE.}

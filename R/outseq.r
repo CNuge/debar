@@ -15,7 +15,7 @@ outseq = function(x, ...){
 
 #' @rdname outseq
 #' @export
-outseq.DNAseq = function(x, keep_flanks = TRUE, ambig_char = "N", adjust_limit = 5){
+outseq.DNAseq = function(x, ..., keep_flanks = TRUE, ambig_char = "N", adjust_limit = 5){
   
   if(keep_flanks == TRUE){
     

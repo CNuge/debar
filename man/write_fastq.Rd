@@ -3,17 +3,12 @@
 \name{write_fastq}
 \alias{write_fastq}
 \alias{write_fastq.DNAseq}
-\alias{write_wrapper.DNAseq}
 \title{Output the denoised sequence to a fastq format with placeholder phred scores.}
 \usage{
 write_fastq(x, ...)
 
 \method{write_fastq}{DNAseq}(x, ..., filename = "denoised.fastq",
   append = TRUE, keep_phred = TRUE, phred_placeholder = "#")
-
-\method{write_wrapper}{DNAseq}(x, ..., filename = "denoised.fastq",
-  outformat = "fastq", append = TRUE, keep_phred = TRUE,
-  phred_placeholder = "#")
 }
 \arguments{
 \item{x}{a DNAseq class object.}

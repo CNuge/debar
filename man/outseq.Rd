@@ -7,7 +7,7 @@
 \usage{
 outseq(x, ...)
 
-\method{outseq}{DNAseq}(x, keep_flanks = TRUE, ambig_char = "N",
+\method{outseq}{DNAseq}(x, ..., keep_flanks = TRUE, ambig_char = "N",
   adjust_limit = 5)
 }
 \arguments{
