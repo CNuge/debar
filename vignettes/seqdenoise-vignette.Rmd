@@ -9,11 +9,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup}
+```{r setup, echo = FALSE}
 library(seqdenoise)
 ```
 
 ## Abstract
+
 
 ## Introduction
 preamble here
@@ -26,24 +27,39 @@ preamble here
 
 ### The data
 
-For demonstration of the workflow, `seqdenoiser` contains several example files. The first is a fastq file with series of single molecule, real-time (SMRT) sequencing reads generated on the Pacific BioSciences SEQUEL platform. These data are derived from 5 unique samples animal samples, from which 658bp amplicons of the mitochondrial cyctochrom c oxidase I gene were isolated and sequenced. 
+For demonstration of the workflow, `seqdenoise` contains several example files. The first is a fastq file with series of single molecule, real-time (SMRT) sequencing reads generated on the Pacific BioSciences SEQUEL platform. These data are derived from 5 unique samples animal samples, from which ~658bp amplicons of the mitochondrial cyctochrom c oxidase I gene were isolated and sequenced. 
+
+`seqdenoise` is able to operate on inputs from either fasta or fastq files, or their gzipped equivalents. 
+
+```{r}
+
+fastq_example_file = system.file('extdata/sequel_smrt_subset.fastq', package = 'seqdenoise')
+
+fastq_example_file = system.file('extdata/sequel_smrt_subset.fastq.gz', package = 'seqdenoise')
+
+```
 
 
 ## Using the package
 ### for the impatient
+The progam contains a wrapper function `denoise_file` that allows for a user to run the entire denoiser pipeline in a single step (there are quantitatively informed defaults for executing the full pipline, but it is highly reccommended that a user acclimate themselves to the `denoise` pipeline options to ensure that the paramaters make sense for their given dataset and needs)
 
-```{r}
-#example data files 
-#for dev:
-#fastq_dat_file = './inst/extdata/ccs_subset.fastq'
+All that is needed is for the input and output files to be specified. The program by default will read in the input file, run each sequence through the denoising algorithm, and then output the denoised sequences to the specified output file. The denoise pipeline contains certain rules (see below for details on these paramaters) that lead to some sequences being rejected entirely, the `keep_rejects` option allows a user to output these rejected sequences to another file for futher inspection. The program also has an option for generating a simple log file, and allows for multicore execution of the denoising pipeline, by simply specify the number of avaliable cores.
+```{r, eval = FALSE}
+#NOTE - this code is not run so as to avoid the generation of output files!
+#
+#our input file with noisy sequence data is fastq_example_file. 
+#output is "example_output.fastq"
+denoise_file(fastq_example_file, filename = "example_output.fastq")
 
-fastq_dat_file = system.file('extdata/ccs_subset.fastq', package = 'seqdenoise')
+denoise_file(fastq_example_file,filename = "multicore-example_output.fastq", multicore = 8, log_file = TRUE, keep_rejects = TRUE )
 
-fastq_real_file = system.file('extdata/sequel_smrt_subset.fastq', package = 'seqdenoise')
 
-fastq_gz_real_file = system.file('extdata/sequel_smrt_subset.fastq.gz', package = 'seqdenoise')
-
+ 
 ```
+
+
+### batch analyses in R
 
 ```{r}
 
