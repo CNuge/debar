@@ -44,7 +44,7 @@ fastq_example_file = system.file('extdata/sequel_smrt_subset.fastq.gz', package 
 ### for the impatient
 The progam contains a wrapper function `denoise_file` that allows for a user to run the entire denoiser pipeline in a single step (there are quantitatively informed defaults for executing the full pipline, but it is highly reccommended that a user acclimate themselves to the `denoise` pipeline options to ensure that the paramaters make sense for their given dataset and needs)
 
-All that is needed is for the input and output files to be specified. The program by default will read in the input file, run each sequence through the denoising algorithm, and then output the denoised sequences to the specified output file. The denoise pipeline contains certain rules (see below for details on these paramaters) that lead to some sequences being rejected entirely, the `keep_rejects` option allows a user to output these rejected sequences to another file for futher inspection. The program also has an option for generating a simple log file, and allows for multicore execution of the denoising pipeline, by simply specify the number of avaliable cores.
+All that is needed is for the input and output files to be specified. The program by default will read in the input file, run each sequence through the denoising algorithm, and then output the denoised sequences to the specified output file. The denoise pipeline contains certain rules (see below for details on these paramaters) that lead to some sequences being rejected entirely, the `keep_rejects` option allows a user to output these rejected sequences to another file for futher inspection. The program also has an option for generating a simple log file, and allows for multicore execution of the denoising pipeline, by simply specify the number of avaliable cores. Additionally you can type `?denoise` to see a list of denoise paramaters, that can be passed through the `denoise_file` wrapper function as well.
 ```{r, eval = FALSE}
 #NOTE - this code is not run so as to avoid the generation of output files!
 #
@@ -58,15 +58,27 @@ denoise_file(fastq_example_file,filename = "multicore-example_output.fastq", mul
  
 ```
 
+Thats all it takes to get `seqdenoise` removing errors from COI barcode data. Below the ins and outs of the program are discussed in more details, to help users make more informed paramater tuning decisions for the denoising of their own data
 
-### batch analyses in R
+### read in the data
+
+The `read_fasta` and `read_fastq` functions allow users to read data into R for denoising. These functions produce dataframes with columns containing the header data, sequence data and PHRED quality scores (for fastq only - there is an option to discard the quality scores if they are not of interest to the user). 
 
 ```{r}
-
-data = read_fastq(fastq_gz_real_file)
+data = read_fastq(fastq_example_file)
+names(data)
 head(data)
 
 ```
+
+
+### Simple example
+
+
+### batch analyses in R
+
+
+
 
 ```{r}
 dim(data)
