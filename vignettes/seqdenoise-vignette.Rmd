@@ -15,11 +15,10 @@ library(seqdenoise)
 
 ## Abstract
 
-
 ## Introduction
+preamble here
 
-
-## The coiDenoiser Package
+### Implementation
 
 ### Dependencies
 `seqdenoiser` is dependent on [the `aphid` package](https://github.com/shaunpwilkinson/aphid) for comparison of sequences against the COI-5P PHMMs. The `ape` is also a requirement because sequences are internally converted to ape "DNAbin" objects. 
@@ -28,6 +27,10 @@ library(seqdenoise)
 ### The data
 
 For demonstration of the workflow, `seqdenoiser` contains several example files. The first is a fastq file with series of single molecule, real-time (SMRT) sequencing reads generated on the Pacific BioSciences SEQUEL platform. These data are derived from 5 unique samples animal samples, from which 658bp amplicons of the mitochondrial cyctochrom c oxidase I gene were isolated and sequenced. 
+
+
+## Using the package
+### for the impatient
 
 ```{r}
 #example data files 
@@ -95,112 +98,5 @@ outputs[[2]]
 
 
 
-
-### Step 0: quick start
-
-Just show the file-file function and say this is all you need unless you wish to get into the nitty gritty.
-
-### Step 1: loading and formatting data
-
-```{r eval=FALSE, include=FALSE}
-#Build the fastq dataframe
-ccs_df = read_fastq(fastq_gz_real_file)
-head(ccs_df)
-```
-
-```{r}
-?denoise
-```
-
-
-### Step 2: denoisng the sequences 
-
-```{r eval=FALSE, include=FALSE}
-vdenoise = Vectorize(denoise)
-
-start_time = Sys.time()
-ccs_list = vdenoise(ccs_df$sequence, ccs_df$header_data,  to_file = FALSE)
-end_time = Sys.time()
-time_dif = difftime( end_time, start_time, units = "secs")
-
-print(paste("vectorizing the application to the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
-```
-
-```{r eval=FALSE, include=FALSE}
-library("parallel")
-
-start_time = Sys.time()
-ccs_list = mclapply(1:length(ccs_df$sequence),  function(i){
-  denoise(ccs_df$sequence[i], ccs_df$header_data[i],  to_file = FALSE)},  mc.cores = detectCores())
-end_time = Sys.time()
-time_dif = difftime( end_time, start_time, units = "secs")
-print(paste("multicore applying to the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
-
-```
-
-```{r eval=FALSE, include=FALSE}
-
-start_time = Sys.time()
-ccs_list = lapply(1:length(ccs_df$sequence), function(i){
-  denoise(ccs_df$sequence[i], ccs_df$header_data[i],  to_file = FALSE)
-  })
-end_time = Sys.time()
-time_dif = difftime( end_time, start_time, units = "secs")
-print(paste("mapplying to the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
-
-```
-
-
-```{r eval=FALSE, include=FALSE}
-
-ccs_list = list()
-start_time = Sys.time()
-
-for(i in 1:length(ccs_df$sequence)){
-  ccs_list[[i]] = denoise(ccs_df[[i,'sequence']],
-                          ccs_df[[i,'header_data']],
-                        	censor_length = 3,
-                        	to_file = FALSE)
-}
-
-
-end_time = Sys.time()
-time_dif = difftime( end_time, start_time, units = "secs")
-print(paste("looping the dataframe of", length(ccs_df$sequence), "sequences took:", as.integer(time_dif), "seconds"))
-
-```
-
-
-You can access the individual components of the outputs using the dollar sign notation.
-
-```{r eval=FALSE, include=FALSE}
-ccs_list[2]
-names(ccs_list[[2]])
-
-
-```
-
-The parts of the denoise workflow can be executed individually if the users wishes to have more control over the timing and execution of the denoising process.
-```{r eval=FALSE, include=FALSE}
-
-ex_data = DNAseq(ccs_df[[5,'sequence']], name = 'row 5 example')
-
-ex_data = frame(ex_data)
-ex_data = adjust(ex_data)
-
-```
-
-### Step 5: outputing the denoised consenus sequences to a file.
-
-The denoise pipeline can be used to output  
-
-
-```{r}
-
-#can then write the consensus sequece to a fasta or fastq file
-#write_fasta(ex_data)
-#write_fastq(ex_data)
-
-```
 
 
