@@ -168,7 +168,7 @@ adj_seq = function(frame_dat, path_out, censor_length = 3, added_phred = "*"){
 
   adj_count = length(c(censor_0s,censor_2s))
   
-  return(list(c(frame_dat$front, new_seq), adj_count, trimmed_end))
+  return(list(c(frame_dat$front, new_seq), adj_count, trimmed_end, censor_0s, censor_2s))
 }
 
 #c(new_seq, trimmed_end) == org_seq_vec
@@ -206,6 +206,8 @@ adjust.DNAseq = function(x, ..., censor_length = 5,  added_phred = "*"){
   x$adjusted_sequence = adj_out[[1]]
   x$adjustment_count = adj_out[[2]]
   x$data$adjusted_trimmed = adj_out[[3]]
+  x$data$deletes_changed = adj_out[[4]]
+  x$data$inserts_changed = adj_out[[5]]
   return(x)
 }
 
