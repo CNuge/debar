@@ -178,7 +178,7 @@ adj_seq = function(frame_dat, path_out, censor_length = 3, added_phred = "*"){
 #' @param x a DNAseq class object.
 #' @param ... additional arguments to be passed between methods.
 #' @param censor_length the number of base pairs in either direction of a PHMM correction
-#' to convert to placeholder characters. Default is 3.
+#' to convert to placeholder characters. Default is 7.
 #' @param added_phred The phred character to use for characters inserted into the original sequence.
 #' @return a class object of code{"ccs_reads"} 
 #' @seealso \code{\link{DNAseq}}
@@ -199,7 +199,7 @@ adjust = function(x, ...){
 
 #' @rdname adjust
 #' @export
-adjust.DNAseq = function(x, ..., censor_length = 5,  added_phred = "*"){
+adjust.DNAseq = function(x, ..., censor_length = 7,  added_phred = "*"){
   
   adj_out = adj_seq(x$frame_dat, x$data$path, censor_length = censor_length, added_phred = added_phred)
 

@@ -28,7 +28,7 @@ test_that("Messy SEQUEL sequences are processed as anticipated", {
   
   test_seqdenoise2 = DNAseq(t2, name = "test1")
   test_seqdenoise2 = frame(test_seqdenoise2)
-  test_seqdenoise2 = adjust(test_seqdenoise2)
+  test_seqdenoise2 = adjust(test_seqdenoise2,  censor_length = 5)
   test_seqdenoise2 = outseq(test_seqdenoise2)
   
   #no corrections applied for this one
@@ -57,7 +57,7 @@ test_that("Messy SEQUEL sequences are processed as anticipated", {
   # test_seqdenoise3$data$raw_removed_front
   # test_seqdenoise3$frame_dat
   
-  test_seqdenoise3 = adjust(test_seqdenoise3)
+  test_seqdenoise3 = adjust(test_seqdenoise3, censor_length = 5)
   # test_seqdenoise3$adjusted_sequence
   test_seqdenoise3 = outseq(test_seqdenoise3)
   
@@ -81,7 +81,7 @@ test_that("Messy SEQUEL sequences are processed as anticipated", {
   # test_seqdenoise4$data$raw_removed_front
   # test_seqdenoise4$frame_dat
   
-  test_seqdenoise4 = adjust(test_seqdenoise4)
+  test_seqdenoise4 = adjust(test_seqdenoise4,  censor_length = 5)
   # test_seqdenoise4$adjusted_sequence
   test_seqdenoise4 = outseq(test_seqdenoise4)
   
@@ -111,7 +111,7 @@ test_that("Messy SEQUEL sequences are processed as anticipated", {
   #see if moving the back to the front reveals a circle?
   #test_seqdenoise5$data$path
 
-  test_seqdenoise5 = adjust(test_seqdenoise5)
+  test_seqdenoise5 = adjust(test_seqdenoise5,  censor_length = 5)
 
   test_seqdenoise5 = outseq(test_seqdenoise5, adjust_limit  = 5)
   
@@ -155,7 +155,7 @@ test_that("Messy SEQUEL sequences are processed as anticipated", {
   test_seqdenoise6 = frame(test_seqdenoise6)
   #test_seqdenoise6$data$path
   
-  test_seqdenoise6 = adjust(test_seqdenoise6)
+  test_seqdenoise6 = adjust(test_seqdenoise6,  censor_length = 5)
   
   test_seqdenoise6 = outseq(test_seqdenoise6, adjust_limit  = 5)
   

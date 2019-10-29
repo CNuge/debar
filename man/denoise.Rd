@@ -10,10 +10,10 @@ denoise(x, ...)
 \method{denoise}{default}(x, ..., name = character(), phred = NULL,
   phred_test = TRUE, min_avg_qv = 20, max_perc_low = 0.25,
   max_perc_ultra_low = 0.05, dir_check = TRUE, min_match = 100,
-  censor_length = 5, added_phred = "*", adjust_limit = 5,
+  censor_length = 7, added_phred = "*", adjust_limit = 5,
   ambig_char = "N", to_file = TRUE, keep_flanks = TRUE,
   keep_phred = TRUE, outformat = "fastq", terminate_rejects = TRUE,
-  filename = NULL, phred_placeholder = "#", aa_check = FALSE,
+  filename = NULL, phred_placeholder = "#", aa_check = TRUE,
   trans_table = 0, frame_offset = 0, append = TRUE)
 }
 \arguments{
@@ -41,7 +41,7 @@ to the sequence output. Default = NULL.}
 Otherwise flag the sequence as a reject.}
 
 \item{censor_length}{the number of base pairs in either direction of a PHMM correction
-to convert to placeholder characters. Default is 5.}
+to convert to placeholder characters. Default is 7.}
 
 \item{added_phred}{The phred character to use for characters inserted into the original sequence.}
 
@@ -68,7 +68,7 @@ match thresholds should be terminated early (prior to sequence adjustment and wr
 \item{phred_placeholder}{The character to input for the phred score line. Default is '#'. 
 Used with write_fastq and keep_phred == FALSE only.}
 
-\item{aa_check}{Boolean indicating whether the amino acid sequence should be generated and assessed for stop codons. Default = FALSE.}
+\item{aa_check}{Boolean indicating whether the amino acid sequence should be generated and assessed for stop codons. Default = TRUE.}
 
 \item{trans_table}{The translation table to use for translating from nucleotides to amino acids. Default is 0, meaning
 that censored translation is performed (amigious codons ignored). Used only when aa_check = TRUE.}

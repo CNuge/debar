@@ -7,7 +7,7 @@
 \usage{
 adjust(x, ...)
 
-\method{adjust}{DNAseq}(x, ..., censor_length = 5, added_phred = "*")
+\method{adjust}{DNAseq}(x, ..., censor_length = 7, added_phred = "*")
 }
 \arguments{
 \item{x}{a DNAseq class object.}
@@ -15,7 +15,7 @@ adjust(x, ...)
 \item{...}{additional arguments to be passed between methods.}
 
 \item{censor_length}{the number of base pairs in either direction of a PHMM correction
-to convert to placeholder characters. Default is 3.}
+to convert to placeholder characters. Default is 7.}
 
 \item{added_phred}{The phred character to use for characters inserted into the original sequence.}
 }

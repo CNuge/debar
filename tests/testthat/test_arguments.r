@@ -19,7 +19,7 @@ test_that("Input arguments are handled correctly.", {
   expect_equal(ex2$reject, TRUE)
   
   ex3 = denoise(super_short, keep_phred = FALSE, terminate_rejects = FALSE, to_file = FALSE)
-  #ex3$rejec t== FALSE
+  #ex3$reject== FALSE
   expect_equal(ex3$reject, FALSE)
   #ex3$outseq == toupper(rev_comp(super_short))
   expect_equal(ex3$outseq, toupper(rev_comp(super_short)))

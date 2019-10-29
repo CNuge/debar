@@ -17,7 +17,7 @@
 #' @param min_match The minimum number of sequential matches to the PHMM for a sequence to be denoised.
 #' Otherwise flag the sequence as a reject.
 #' @param censor_length the number of base pairs in either direction of a PHMM correction
-#' to convert to placeholder characters. Default is 5.
+#' to convert to placeholder characters. Default is 7.
 #' @param added_phred The phred character to use for characters inserted into the original sequence.
 #' @param adjust_limit the maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
 #' then the entire read is rejected. Default is 3.
@@ -34,7 +34,7 @@
 #' Used with write_fastq and keep_phred == FALSE only.
 #' @param terminate_rejects Boolean indicating if analysis of sequences that fail to meet phred quality score or path 
 #' match thresholds should be terminated early (prior to sequence adjustment and writing to file). Default it true.
-#' @param aa_check Boolean indicating whether the amino acid sequence should be generated and assessed for stop codons. Default = FALSE.
+#' @param aa_check Boolean indicating whether the amino acid sequence should be generated and assessed for stop codons. Default = TRUE.
 #' @param trans_table The translation table to use for translating from nucleotides to amino acids. Default is 0, meaning
 #' that censored translation is performed (amigious codons ignored). Used only when aa_check = TRUE.
 #' @param frame_offset The offset to the reading frame to be applied for translation. By default the offset
@@ -62,7 +62,7 @@ denoise.default = function(x, ...,
                              max_perc_ultra_low = 0.05,
                              dir_check = TRUE, 
                              min_match = 100,
-                             censor_length = 5,
+                             censor_length = 7,
                              added_phred = "*",
                              adjust_limit = 5,
                              ambig_char = "N",
@@ -73,7 +73,7 @@ denoise.default = function(x, ...,
                              terminate_rejects = TRUE,
                              filename = NULL, 
                              phred_placeholder = "#",
-                             aa_check = FALSE, 
+                             aa_check = TRUE, 
                              trans_table = 0,
                              frame_offset = 0,
                              append = TRUE
@@ -110,6 +110,9 @@ denoise.default = function(x, ...,
     dat = aa_check(dat, trans_table = trans_table, 
                         frame_offset = frame_offset,
                         ...)
+    if(dat$stop_codons == TRUE){
+      dat$reject == TRUE
+    }
   }
   
   dat = outseq(dat, keep_flanks = keep_flanks, 
