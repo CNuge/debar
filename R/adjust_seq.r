@@ -1,6 +1,5 @@
 
 
-
 #' Look for triple inserts in the PHMM path.
 #' @keywords internal
 triple_ins = function(x, path_start, path_end){
@@ -18,7 +17,25 @@ triple_ins = function(x, path_start, path_end){
   }else{
     return(c())
   }
-  
+}
+
+#' Look for triple deletes in the PHMM path.
+#' @keywords internal
+triple_dels = function(x, path_start, path_end){
+  deletes = c(path_start:path_end)[x[path_start:path_end] == 2]
+  triples = c()
+  if(length(deletes) > 2){
+    for(i in 1:(length(deletes)-2)){
+      potential = deletes[i]:(deletes[i]+2) 
+      observed = deletes[i:(i+2)]
+      if(isTRUE(all.equal(potential, observed))){
+        triples = c(triples, observed)
+      }
+    }
+    return(triples)
+  }else{
+    return(c())
+  }
 }
 
 #' Adjust the DNA sequence based on the ntPHMM path
@@ -54,7 +71,8 @@ adj_seq = function(frame_dat, path_out, censor_length = 3, added_phred = "*"){
 
   #adjustments to skip because they occur as a codon
   triple_inserts = triple_ins(path_out, path_pos, path_end)
-
+  triple_deletes = triple_dels(path_out, path_pos, path_end)
+  
   for(i in path_pos:path_end){
     #this prevents additions beyond the end of the original sequence.
     if(org_seq_pos > length(org_seq_vec)){
@@ -124,11 +142,12 @@ adj_seq = function(frame_dat, path_out, censor_length = 3, added_phred = "*"){
         if(paste(path_out[i:(i+4)], collapse='') == "22222"){
           break        
         }
-      
-        #there was a bp insertion, skip this bp in the original seq
-        org_seq_pos = org_seq_pos + 1
-        
-        censor_2s = c(censor_2s, new_pos)
+        if(!i %in% triple_deletes){
+          #there was a bp insertion, skip this bp in the original seq
+          org_seq_pos = org_seq_pos + 1
+          
+          censor_2s = c(censor_2s, new_pos)
+        }
       }
     }
   }
