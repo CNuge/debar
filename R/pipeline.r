@@ -110,11 +110,12 @@ denoise.default = function(x, ...,
     dat = aa_check(dat, trans_table = trans_table, 
                         frame_offset = frame_offset,
                         ...)
-    if(dat$stop_codons == TRUE){
-      dat$reject == TRUE
-    }
   }
-  
+
+  if(dat$reject == TRUE && terminate_rejects == TRUE){
+    return(dat)
+  }
+
   dat = outseq(dat, keep_flanks = keep_flanks, 
                     ambig_char = ambig_char, 
                     adjust_limit = ambig_char,

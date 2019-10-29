@@ -61,10 +61,12 @@ aa_check.DNAseq = function(x, ..., trans_table = 0, frame_offset = 0){
   #if there is a stop codon
   if(grepl('\\*', x$aaSeq)){
     x$stop_codons = TRUE
-    censor_at = first_stop(x$aaSeq)
-    censor_str = strsplit(x$adjusted_seq, "")[[1]]
-    censor_str[censor_at:length(censor_str)] = "N"
-    x$adjusted_seq = paste(censor_str, collapse = "")
+    x$reject = TRUE
+    # below is for if the sequence should be masked in case of stop codons
+    #censor_at = first_stop(x$aaSeq)
+    #censor_str = strsplit(x$adjusted_seq, "")[[1]]
+    #censor_str[censor_at:length(censor_str)] = "N"
+    #x$adjusted_seq = paste(censor_str, collapse = "")
   }else{
     x$stop_codons = FALSE
   }
