@@ -10,11 +10,12 @@ denoise(x, ...)
 \method{denoise}{default}(x, ..., name = character(), phred = NULL,
   phred_test = TRUE, min_avg_qv = 20, max_perc_low = 0.25,
   max_perc_ultra_low = 0.05, dir_check = TRUE, min_match = 100,
-  censor_length = 7, added_phred = "*", adjust_limit = 5,
-  ambig_char = "N", to_file = TRUE, keep_flanks = TRUE,
-  keep_phred = TRUE, outformat = "fastq", terminate_rejects = TRUE,
-  filename = NULL, phred_placeholder = "#", aa_check = TRUE,
-  trans_table = 0, frame_offset = 0, append = TRUE)
+  max_inserts = 400, censor_length = 7, added_phred = "*",
+  adjust_limit = 5, ambig_char = "N", to_file = TRUE,
+  keep_flanks = TRUE, keep_phred = TRUE, outformat = "fastq",
+  terminate_rejects = TRUE, filename = NULL, phred_placeholder = "#",
+  aa_check = TRUE, trans_table = 0, frame_offset = 0,
+  append = TRUE)
 }
 \arguments{
 \item{x}{a DNA sequence string.}
@@ -39,6 +40,10 @@ to the sequence output. Default = NULL.}
 
 \item{min_match}{The minimum number of sequential matches to the PHMM for a sequence to be denoised.
 Otherwise flag the sequence as a reject.}
+
+\item{max_inserts}{The maximum number of sequention insert states occuring in a sequence 
+(including the flanking regions). If this number is
+exceeded than the entire read will be discarded if terminate_rejects = TRUE. Default is 400.}
 
 \item{censor_length}{the number of base pairs in either direction of a PHMM correction
 to convert to placeholder characters. Default is 7.}

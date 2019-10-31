@@ -8,7 +8,7 @@
 frame(x, ...)
 
 \method{frame}{DNAseq}(x, ..., dir_check = TRUE, min_match = 100,
-  terminate_rejects = TRUE)
+  max_inserts = 400, terminate_rejects = TRUE)
 }
 \arguments{
 \item{x}{a DNAseq class object.}
@@ -19,6 +19,10 @@ frame(x, ...)
 
 \item{min_match}{The minimum number of sequential matches to the PHMM for a sequence to be denoised.
 Otherwise flag the sequence as a reject.}
+
+\item{max_inserts}{The maximum number of sequention insert states occuring in a sequence 
+(including the flanking regions). If this number is
+exceeded than the entire read will be discarded if terminate_rejects = TRUE. Default is 400.}
 
 \item{terminate_rejects}{Should a check be made to enusre minimum homology of the input sequence to the PHMM.
 Makes sure there are not more than 400 consecutive insert states and not less than the minimum number of

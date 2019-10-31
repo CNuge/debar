@@ -22,7 +22,7 @@ preamble here
 ### Implementation
 
 ### Dependencies
-`DAPR` is dependent on [the `aphid` package](https://github.com/shaunpwilkinson/aphid) for comparison of sequences against the COI-5P PHMMs. The `ape` is also a requirement because sequences are internally converted to `ape` "DNAbin" objects. 
+`DAPR` is dependent on [the `aphid` package](https://github.com/shaunpwilkinson/aphid) for comparison of sequences against the COI-5P PHMMs. The `ape` is a requirement because sequences are internally converted to `ape` "DNAbin" objects and the package `sequinr` is utilized in obtaining the reverse compliment of input sequences when needed.
 
 
 ### The data
@@ -107,10 +107,10 @@ ex$reject #this read meets the phred_check thresholds, so it should not be rejec
 ### Framing the barcode sequence
 The `frame` function is one of the two main workhorses in the denoising pipeline. It takes the raw data sequence and compares it against the nucleotide profile hidden Markov model (PHMM), generating the statistical information (The Viterbi algorithm's output path) that is used to apply corrections to the sequence read. Since the PHMM is a profile of only the 657bp region of COI-5P (and not capable of denoising surrounding data) it also takes the input sequence and removes any flanking regions that fall outside of the 657bp COI-5P region. Don't worry though, if you wish to keep these parts of your sequence, there is an option to include the removed flanking sequences in the output (you may want these if they contian important identifying information, i.e. tags to relate multiplexed reads back to their sample of origin). Just be aware that if you do keep the flaking regions, any errors in these regions will go uncorrected!
 
-By default, the `frame` function will compare both the forward and reverse compliments of an input read to the PHMM and use the log likelihood values to pick the direction that best matches the COI-5P profile.
+By default, the `frame` function will compare both the forward and reverse compliments of an input read to the PHMM and use the log likelihood values to pick the direction that best matches the COI-5P profile. If you are confident that all reads being denoised are in the forward oritentation, then you can speed up the frame function by setting the optionL `dir_check = FALSE` (in this case `frame` will not generate the reverse compliment, and only pass the sequence through the PHMM in the forwad orientation). Additionally `frame` contains an additional set of options that can be use to filter out small fragments and potential chimeric sequences. When the `terminate_rejects` option is set to `TRUE` then the following two checks are run: (1) checks to see if a sequence contains more than `max_inserts` (default = 400) consecutive insert states in the PHMM path (i.e. 400 or more consecutive bp in the sequence appear to *not* be part of COI-5P) (2) checks if the sequence contains less than `min_match`(default = 100) consecutive matches to the PHMM. If either condition is met the sequence will be flagged for rejection and not framed. 
 
 ```{r}
-?frame
+ex = frame(ex)
 ```
 #TODO - explain the terminate rejects option better in the documentation. explicitly state that the min_match only comes into effect if the terminate rejects option is on.
 

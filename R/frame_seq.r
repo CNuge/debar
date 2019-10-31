@@ -203,6 +203,9 @@ set_frame = function(org_seq_vec, path_out){
 #' @param dir_check Should both the forward and reverse compliments be considered?
 #' @param min_match The minimum number of sequential matches to the PHMM for a sequence to be denoised.
 #' Otherwise flag the sequence as a reject.
+#' @param max_inserts The maximum number of sequention insert states occuring in a sequence 
+#' (including the flanking regions). If this number is
+#' exceeded than the entire read will be discarded if terminate_rejects = TRUE. Default is 400.
 #' @param terminate_rejects Should a check be made to enusre minimum homology of the input sequence to the PHMM.
 #' Makes sure there are not more than 400 consecutive insert states and not less than the minimum number of
 #' sequential matches. Default is True
@@ -225,7 +228,7 @@ frame = function(x, ...){
 
 #' @rdname frame
 #' @export
-frame.DNAseq = function(x, ..., dir_check = TRUE, min_match = 100, terminate_rejects = TRUE){
+frame.DNAseq = function(x, ..., dir_check = TRUE, min_match = 100, max_inserts = 400, terminate_rejects = TRUE){
   
   if(dir_check == TRUE){
     dir_out = dir_check(x$raw)
@@ -243,7 +246,7 @@ frame.DNAseq = function(x, ..., dir_check = TRUE, min_match = 100, terminate_rej
   #OR
   #b. There is not a continious match to the PHMM of at least the designated min_match length.
   if(terminate_rejects == TRUE){
-    if(grepl(paste(rep("2", 400), collapse = ""), paste( x$data$ntPHMMout[['path']], collapse = "")) ||
+    if(grepl(paste(rep("2", max_inserts), collapse = ""), paste( x$data$ntPHMMout[['path']], collapse = "")) ||
        !grepl(paste(rep("1", min_match), collapse = ""), paste( x$data$ntPHMMout[['path']], collapse = "")) ){
       x$reject = TRUE
       return(x)

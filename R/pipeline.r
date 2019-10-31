@@ -16,6 +16,9 @@
 #' @param dir_check Should both the forward and reverse compliments be considered?
 #' @param min_match The minimum number of sequential matches to the PHMM for a sequence to be denoised.
 #' Otherwise flag the sequence as a reject.
+#' @param max_inserts The maximum number of sequention insert states occuring in a sequence 
+#' (including the flanking regions). If this number is
+#' exceeded than the entire read will be discarded if terminate_rejects = TRUE. Default is 400.
 #' @param censor_length the number of base pairs in either direction of a PHMM correction
 #' to convert to placeholder characters. Default is 7.
 #' @param added_phred The phred character to use for characters inserted into the original sequence.
@@ -62,6 +65,7 @@ denoise.default = function(x, ...,
                              max_perc_ultra_low = 0.05,
                              dir_check = TRUE, 
                              min_match = 100,
+                             max_inserts = 400,
                              censor_length = 7,
                              added_phred = "*",
                              adjust_limit = 5,
@@ -96,6 +100,7 @@ denoise.default = function(x, ...,
 
   dat = frame(dat, dir_check = dir_check, 
                    min_match = min_match,
+                   max_inserts = max_inserts,
                    terminate_rejects= terminate_rejects,
                    ...)
   
