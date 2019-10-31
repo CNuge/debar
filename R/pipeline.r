@@ -179,9 +179,6 @@ meta_check = function(x, log_data = list(), log_file = FALSE, keep_rejects = FAL
 #'@param ... additional arguments to be passed to the \link{denoise} function.
 #'
 #'@seealso \code{\link{denoise}}
-#'@examples
-#' fastq_dat_file = system.file('extdata/ccs_subset.fastq', package = 'coiDenoiser')
-#' denoise_file(fastq_dat_file, to_file = FALSE)
 #'
 #' @export
 #' @name denoise_file  
