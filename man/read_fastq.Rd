@@ -15,7 +15,3 @@ retained in the output dataframe. Default is TRUE}
 \description{
 Read in raw data from a fastq file.
 }
-\examples{
-filename = system.file('extdata/ccs_subset.fastq', package = 'seqdenoise')
-data = read_fastq(filename)
-}

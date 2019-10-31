@@ -105,12 +105,14 @@ ex$reject #this read meets the phred_check thresholds, so it should not be rejec
 
 
 ### Framing the barcode sequence
-The `frame` function is one of the two main workhorses in the denoising pipeline. It takes the raw data sequence and compares it against the nucleotide profile hidden Markov model (PHMM), generating the statistical information (The Viterbi algorithm's output path) that is used to apply corrections to the sequence read.
+The `frame` function is one of the two main workhorses in the denoising pipeline. It takes the raw data sequence and compares it against the nucleotide profile hidden Markov model (PHMM), generating the statistical information (The Viterbi algorithm's output path) that is used to apply corrections to the sequence read. Since the PHMM is a profile of only the 657bp region of COI-5P (and not capable of denoising surrounding data) it also takes the input sequence and removes any flanking regions that fall outside of the 657bp COI-5P region. Don't worry though, if you wish to keep these parts of your sequence, there is an option to include the removed flanking sequences in the output (you may want these if they contian important identifying information, i.e. tags to relate multiplexed reads back to their sample of origin). Just be aware that if you do keep the flaking regions, any errors in these regions will go uncorrected!
+
+By default, the `frame` function will compare both the forward and reverse compliments of an input read to the PHMM and use the log likelihood values to pick the direction that best matches the COI-5P profile.
 
 ```{r}
 ?frame
 ```
-
+#TODO - explain the terminate rejects option better in the documentation. explicitly state that the min_match only comes into effect if the terminate rejects option is on.
 
 ### Adjusting the sequence
 

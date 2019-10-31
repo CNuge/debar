@@ -12,7 +12,3 @@ read_fasta(x)
 \description{
 Read in raw data from a fasta file.
 }
-\examples{
-filename = system.file('extdata/ccs_subset.fasta', package = 'coiDenoiser')
-data = read_fasta(filename)
-}

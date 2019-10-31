@@ -5,9 +5,6 @@
 #' @param x The name of the fastq file to read data from.
 #' @param keep_quality Boolean indicating if the Phred quality scores should be 
 #' retained in the output dataframe. Default is TRUE
-#' @examples
-#' filename = system.file('extdata/ccs_subset.fastq', package = 'seqdenoise')
-#' data = read_fastq(filename)
 #' @export
 #' @name read_fastq
 read_fastq = function(x, keep_quality = TRUE){
@@ -53,9 +50,6 @@ read_fastq = function(x, keep_quality = TRUE){
 #' Read in raw data from a fasta file.
 #' 
 #' @param x The name of the fasta file to read data from
-#' @examples
-#' filename = system.file('extdata/ccs_subset.fasta', package = 'coiDenoiser')
-#' data = read_fasta(filename)
 #' @export
 #' @name read_fasta
 read_fasta = function(x){
