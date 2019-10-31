@@ -83,8 +83,6 @@ read_fasta = function(x){
 #' @seealso \code{\link{DNAseq}}
 #' @seealso \code{\link{frame}}
 #' @seealso \code{\link{adjust}}
-#' @examples
-#' 
 #' @export
 #' @name write_fasta
 write_fasta = function(x, ...){
@@ -120,8 +118,6 @@ write_fasta.DNAseq = function(x, ...,
 #' @seealso \code{\link{DNAseq}}
 #' @seealso \code{\link{frame}}
 #' @seealso \code{\link{adjust}}
-#' @examples
-#' 
 #' @export
 #' @name write_fastq
 write_fastq = function(x, ...){

@@ -30,9 +30,6 @@ a class object of code{"DNAseq"}
 \description{
 Output the denoised sequence to a fastq format with placeholder phred scores.
 }
-\examples{
-
-}
 \seealso{
 \code{\link{DNAseq}}
 

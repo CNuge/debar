@@ -28,9 +28,6 @@ a class object of code{"DNAseq"}
 \description{
 Output the denoised consensus sequence to a fasta file.
 }
-\examples{
-
-}
 \seealso{
 \code{\link{DNAseq}}
 
