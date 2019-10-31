@@ -1,5 +1,5 @@
 ---
-title: "seqdenoise-vignette"
+title: "DAPR - Denoising Amplicons for PRotein coding markers"
 author: "Cameron M. Nugent"
 data: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -27,7 +27,7 @@ preamble here
 
 ### The data
 
-For demonstration of the workflow, `seqdenoise` contains several example files. The first is a fastq file with series of single molecule, real-time (SMRT) sequencing reads generated on the Pacific BioSciences SEQUEL platform. These data are derived from 5 unique samples animal samples, from which amplicons of the Folmer region of the mitochondrial cyctochrome c oxidase I gene were isolated and sequenced. 
+For demonstration of the workflow, `DAPR` contains several example files. The first is a fastq file with series of single molecule, real-time (SMRT) sequencing reads generated on the Pacific BioSciences SEQUEL platform. These data are derived from 5 unique samples animal samples, from which amplicons of the Folmer region of the mitochondrial cyctochrome c oxidase I gene were isolated and sequenced. 
 
 `seqdenoise` is able to operate on inputs from either fasta or fastq files, or their gzipped equivalents. For the vignette e
 
@@ -66,24 +66,32 @@ The `read_fasta` and `read_fastq` functions allow users to read data into R for 
 ```{r}
 data = read_fastq(fastq_example_file)
 names(data)
-head(data)
-
+#head(data) - to view the first few records
 ```
 
 ## Denoiser pipeline - components and walkthrough
+*explain that here it is demonstrated on a single sequence, step by step. all paramaters for these individual componenets can be passed to the `denoise` function to control the operation in a single step.
+
 
 ### Building a DNAseq object
 
+ex will store a DNAseq object, with the raw sequence, the name of the sequence (in this case the read id) and optionally the PHRED quality scores as well.
+
 ```{r}
-
-
+i = 71 #the row number from the example dataframe to be analyzed in the single sequence demonstration
+ex = DNAseq(data$sequence[[i]], name = data$header_data[[i]], phred = data$quality[[i]])
+ex #
 ```
 
 
-### Checking sequence quality with Phred scores
+### Checking sequence quality with Phred scores (optional)
+If you're denoising data from a fastq file, you may wish to utilize the `phred_check` function as well. This function can help separate out low quality reads from a dataset in an efficient manner. Instead of running every single sequence through the statistical models used for denoising, this pre-check can be used to remove sequences with quality values not eclipsing the given thresholds. The quality thresholds filter reads if they do not meet a minimum average phred score (`min_avg_qv`), if the frequence of low quality reads (QV < 20) is too high (`max_perc_low`) or if the frequency of ultra low quality reads (QV <10) is too high (`max_perc_ultra_low`). If these thresholds are eclipsed, the `DNAseq` object's `reject` field will be `TRUE`.
+
 ```{r}
+#run the phred_check with the default paramaters
+ex = phred_check(ex)
 
-
+ex$reject #this read meets the phred_check thresholds, so it should not be rejected based on this information
 ```
 
 
@@ -121,7 +129,7 @@ dim(data)
 ```
 
 ```{r}
-x = denoise(data$sequence[[71]], keep_phred = FALSE)
+x = denoise(data$sequence[[71]], keep_phred = FALSE, to_file = FALSE)
 x
 
 ```
