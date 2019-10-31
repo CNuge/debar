@@ -1,5 +1,4 @@
 
-
 #' Look for triple inserts in the PHMM path.
 #' @keywords internal
 triple_ins = function(x, path_start, path_end){

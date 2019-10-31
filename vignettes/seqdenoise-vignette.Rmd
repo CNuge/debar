@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, echo = FALSE}
+```{r loadlib, echo = TRUE, results = 'hide', message=FALSE, warning=FALSE}
 library(seqdenoise)
 ```
 
@@ -22,19 +22,19 @@ preamble here
 ### Implementation
 
 ### Dependencies
-`seqdenoiser` is dependent on [the `aphid` package](https://github.com/shaunpwilkinson/aphid) for comparison of sequences against the COI-5P PHMMs. The `ape` is also a requirement because sequences are internally converted to ape "DNAbin" objects. 
+`DAPR` is dependent on [the `aphid` package](https://github.com/shaunpwilkinson/aphid) for comparison of sequences against the COI-5P PHMMs. The `ape` is also a requirement because sequences are internally converted to `ape` "DNAbin" objects. 
 
 
 ### The data
 
-For demonstration of the workflow, `seqdenoise` contains several example files. The first is a fastq file with series of single molecule, real-time (SMRT) sequencing reads generated on the Pacific BioSciences SEQUEL platform. These data are derived from 5 unique samples animal samples, from which ~658bp amplicons of the mitochondrial cyctochrom c oxidase I gene were isolated and sequenced. 
+For demonstration of the workflow, `seqdenoise` contains several example files. The first is a fastq file with series of single molecule, real-time (SMRT) sequencing reads generated on the Pacific BioSciences SEQUEL platform. These data are derived from 5 unique samples animal samples, from which amplicons of the Folmer region of the mitochondrial cyctochrome c oxidase I gene were isolated and sequenced. 
 
-`seqdenoise` is able to operate on inputs from either fasta or fastq files, or their gzipped equivalents. 
+`seqdenoise` is able to operate on inputs from either fasta or fastq files, or their gzipped equivalents. For the vignette e
 
 ```{r}
-
-fastq_example_file = system.file('extdata/sequel_smrt_subset.fastq', package = 'seqdenoise')
-
+#The following example file is used as an input in the vignette
+#also available 
+#fastq_example_file = system.file('extdata/sequel_smrt_subset.fastq', package = 'seqdenoise')
 fastq_example_file = system.file('extdata/sequel_smrt_subset.fastq.gz', package = 'seqdenoise')
 
 ```
@@ -42,25 +42,24 @@ fastq_example_file = system.file('extdata/sequel_smrt_subset.fastq.gz', package 
 
 ## Using the package
 ### for the impatient
-The progam contains a wrapper function `denoise_file` that allows for a user to run the entire denoiser pipeline in a single step (there are quantitatively informed defaults for executing the full pipline, but it is highly reccommended that a user acclimate themselves to the `denoise` pipeline options to ensure that the paramaters make sense for their given dataset and needs)
+The progam contains a wrapper function `denoise_file` that allows for a user to run the entire denoiser pipeline in a single step (there are quantitatively informed defaults for executing the full pipline, but it is highly reccommended that a user acclimate themselves to the `denoise` pipeline options to ensure that the paramaters make sense for their given dataset and analysis goals).
 
-All that is needed is for the input and output files to be specified. The program by default will read in the input file, run each sequence through the denoising algorithm, and then output the denoised sequences to the specified output file. The denoise pipeline contains certain rules (see below for details on these paramaters) that lead to some sequences being rejected entirely, the `keep_rejects` option allows a user to output these rejected sequences to another file for futher inspection. The program also has an option for generating a simple log file, and allows for multicore execution of the denoising pipeline, by simply specify the number of avaliable cores. Additionally you can type `?denoise` to see a list of denoise paramaters, that can be passed through the `denoise_file` wrapper function as well.
+All that is needed is for the input and output files to be specified. The program by default will read in the input file, run each sequence through the denoising algorithm, and then output the denoised sequences to the specified output file. The denoise pipeline contains certain rules (that a user can control - see below for details on these paramaters) that lead to some sequences being rejected entirely, the `keep_rejects` option allows a user to output these rejected sequences to another file for futher inspection. The program also has an option for generating a simple log file, and allows for multicore execution of the denoising pipeline by simply specify the number of cores the process should utilize. Additionally you can type `?denoise` to see a list of all available denoise paramaters that can be passed to the `denoise_file` wrapper function as well (paramaters are explored in more detail below).
 ```{r, eval = FALSE}
-#NOTE - this code is not run so as to avoid the generation of output files!
+# NOTE - this block of code is not run so as to avoid the generation of output files!
 #
-#our input file with noisy sequence data is fastq_example_file. 
-#output is "example_output.fastq"
+# Our input file with noisy sequence data is fastq_example_file. 
+# Output file is "example_output.fastq"
+# If you do wish to run these examples, then please double check your working directory!
 denoise_file(fastq_example_file, filename = "example_output.fastq")
 
 denoise_file(fastq_example_file,filename = "multicore-example_output.fastq", multicore = 8, log_file = TRUE, keep_rejects = TRUE )
 
-
- 
 ```
 
 Thats all it takes to get `seqdenoise` removing errors from COI barcode data. Below the ins and outs of the program are discussed in more details, to help users make more informed paramater tuning decisions for the denoising of their own data
 
-### read in the data
+### Data input
 
 The `read_fasta` and `read_fastq` functions allow users to read data into R for denoising. These functions produce dataframes with columns containing the header data, sequence data and PHRED quality scores (for fastq only - there is an option to discard the quality scores if they are not of interest to the user). 
 
@@ -71,11 +70,48 @@ head(data)
 
 ```
 
+## Denoiser pipeline - components and walkthrough
 
-### Simple example
+### Building a DNAseq object
+
+```{r}
 
 
-### batch analyses in R
+```
+
+
+### Checking sequence quality with Phred scores
+```{r}
+
+
+```
+
+
+### Framing the barcode sequence
+
+
+```{r}
+
+
+```
+
+
+### Adjusting the sequence
+
+
+### Amino Acid check
+
+
+### Creating the output sequence
+
+
+
+### Writing the 
+
+
+
+
+## Batch analyses in R
 
 
 
