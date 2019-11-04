@@ -9,6 +9,10 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+#TODO - explain the terminate rejects option better in the documentation. explicitly state that the min_match only comes into effect if the terminate rejects option is on.
+#TODO - use the explinations I've written here in the vignette to bolster the documentation. Add detail beyond just a single sentence to the explinations.
+#TODO - strip the @ character offf of read_fastq name inputs, reapply the @ character in the write fastq output
+
 ```{r loadlib, echo = TRUE, results = 'hide', message=FALSE, warning=FALSE}
 library(seqdenoise)
 ```
@@ -22,7 +26,7 @@ preamble here
 ### Implementation
 
 ### Dependencies
-`DAPR` is dependent on [the `aphid` package](https://github.com/shaunpwilkinson/aphid) for comparison of sequences against the COI-5P PHMMs. The `ape` is a requirement because sequences are internally converted to `ape` "DNAbin" objects and the package `sequinr` is utilized in obtaining the reverse compliment of input sequences when needed.
+`DAPR` is dependent on [the `aphid` package](https://github.com/shaunpwilkinson/aphid) for comparison of sequences against a COI-5P nucleotide PHMM. The package `ape` is a requirement because sequences are internally converted to `ape` "DNAbin" objects. The package `sequinr` is utilized in obtaining the reverse compliment of input sequences when needed.
 
 
 ### The data
@@ -112,7 +116,7 @@ By default, the `frame` function will compare both the forward and reverse compl
 ```{r}
 ex = frame(ex)
 ```
-#TODO - explain the terminate rejects option better in the documentation. explicitly state that the min_match only comes into effect if the terminate rejects option is on.
+
 
 ### Adjusting the sequence
 
@@ -151,10 +155,52 @@ ex = aa_check(ex) #the default behaviour should suit >99% of user's needs
 
 ### Creating the output sequence
 
+Once the DNA sequence has been framed, adjusted and checked for evidence of uncorrected errors the output sequence can be generated. The default amibigious character used in the output sequence is "N" (`ambig_char = "N"`). This character is substituted into the output sequence where adjustments and censorship have occurred. Additionally, there are two styles of output sequences that can be produced: trimmed and framed sequences or sequences with flanking informaiton reattached. 
+  The default behaviour of `outseq` is to keep the flanks of sequences (controlled by the paramater `keep_flanks = TRUE`). Any DNA sequence information that was outside of the framed COI-5P profile region is reattached to the ends of the sequence to create the output sequence. This is done so that `DAPR` can be applied in the analysis of raw sequence data that contains important information outside of the barcode region required in subsequent analysis steps. For example if the seuqence are tagged with sample specific barcode sequences, this information is preserved in the output sequence so that post-denoising sequences can be demultiplexed and assigned to their correct source. Since flanking regions are excluded by the `frame` function, these regions are not denoised and any errors present in these portions of the sequence will go uncorrected. Note: the PHRED quality scores corresponding to the flanking sequence regions are preserved where applicable.
+  The second option is to set the `keep_flanks` option to `FALSE`. This will lead to any flanking sequence being discarded and the output of only the DNA sequence for the COI-5P profile region. If there are missing bp at the front of the COI-5P profile region, placeholder characters are added to that all output sequences are in a common reading frame.
+  If the DNAseq object contains PHRED scores, the PHRED output string corresponding to the desired DNA output string will be generated as well.
+
+```{r}
+#option a - reattach the flanking sequence
+ex = outseq(ex) 
+ex$outseq
+nchar(ex$outseq) # the flanking
+ex$outphred
+```
 
 
-### Writing the 
+```{r}
+#option b - output on the sequence for the COI-5P region
+ex = outseq(ex, keep_flanks = FALSE) 
+ex$outseq #placeholder characters added to the front of the sequence to establish common reading frame when necessary
+nchar(ex$outseq) # only the COI-5P region is outout
 
+```
+
+### Writing to file
+Once the denoising of the sequence is completed, its components can be further queried and evaluated in within R, or the sequence can be saved to an output file.
+
+`DAPR` contains functions for outputting sequences in either fastq or fasta format (`write_fastq` and `write_fasta` respectively). When a sequence is output, the `name` field of the DNAseq object is used to create the header line for the sequence and the `outseq` field becomes the sequence written to the file. Both output options have an `append` option, for which the default is `TRUE`. When `TRUE` the ouput is appended to an existing file with the specified name (`filename` paramater), if changed to `FALSE` than an existing file will be overwritten.
+
+
+```{r, eval = FALSE}
+# note - the out demonstration markdown cells are set to eval = FALSE so that output files are not generated
+# and saved without you reading this message and doing it on purpose. Make sure to check your working directory first!
+
+write_fasta(ex, filename = "out.fa" , append = TRUE) #will append ex's output sequence to out.fa 
+
+write_fasta(ex, filename = "out.fa" , append = FALSE) #will overwrite out.fa with the data for ex.
+```
+
+The `write_fastq` file contains two additional paramaters relating to the handling of PHRED quality scores. If `keep_phred` is set to `TRUE`, then the PHRED scores contianed in the DNAseq object will be used to build the PHRED line in the fastq record being output. If `keep_phred` is set to `FALSE`, or the DNAseq object does not possess PHRED scores (i.e. it originated from a fasta file) then the PHRED line will be filled with the specified `phred_placeholder` character specified by the user (or the default: `#`, an extremly low PHRED score of 2).
+
+```{r} 
+write_fastq(ex, filename = "out.fq") # default - appends output sequence to the file and keeps the objects phred scores
+
+write_fastq(ex, filename = "out.fq" , append = FALSE, keep_phred = FALSE, phred_placeholder = "?") #alternative - overwrites 
+# file and discards the phred scores, replacing them with the character "?" the correct number of times.
+
+```
 
 
 

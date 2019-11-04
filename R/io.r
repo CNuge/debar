@@ -69,7 +69,6 @@ read_fasta = function(x){
 #' 
 #' @param x a DNAseq class object.
 #' @param ... additional arguments to be passed between methods.
-#' @param keep_flanks Default is TRUE.
 #' @param filename The name of the file to output the data to. Default is "denoised.fasta".
 #' @param append Should the ccs consensus sequence be appended to the output file?(TRUE) 
 #' Or overwrite the file?(FALSE) Default is TRUE.
@@ -87,7 +86,6 @@ write_fasta = function(x, ...){
 #' @rdname write_fasta
 #' @export
 write_fasta.DNAseq = function(x, ...,
-                                 keep_flanks = TRUE,       
                                  filename = "denoised.fasta", 
                                  append = TRUE){
 
