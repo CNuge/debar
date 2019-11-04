@@ -122,8 +122,8 @@ The `adjust` function is the component of the denoising pipeline where identifie
 
   A conservative censorship size of 7 was decided upon by analysis of the mean miss distance (and standard deviation) in only the incorrect adjustments. The mean plus two standard deviations (2.3 + (2*1.98) = 6.26) was rounded up, based on the test results this would lead to the censorship of greater than 95% of errors that were not correctly identified by the PHMM. This explination is given to the user to inform any potential decisions about altering the censorship length. The default is highly conservative as the summary statistics used to calulate the length omit the 61.8% of the time that corrections were applied exactly. The use can make the censorship of reads as conservative as they wish (`censor_length` = 657 would mask a read showing a single bp deviation from the COI profile) or disable this feature (`censor_length` = 0) and accept all corrections made by the `adjust` algorithm.
 
-  The 
-
+  The second additional paramater accepted by `adjust` is `added_phred`. This parameter is only employed if the DNAseq object possesses [PHRED quality scores](https://en.wikipedia.org/wiki/Phred_quality_score). The specified character (default is: `*` - a quality score of 9, which is a low value) is assigned to any placeholder characters that are inserted into the sequence by the adjustment algorithm. This is done so that the the relationships between PHRED scores and their corresponding base pairs are preserved (if a bp is deleted its PHRED score is removed as well), if downstream analyses or processing of the data rely on the PHRED scores, this information is still available.
+  
 ```{r}
 ex = adjust(ex, censor_length = 4)
 ```
