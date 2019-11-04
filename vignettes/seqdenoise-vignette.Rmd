@@ -140,6 +140,14 @@ ex$adjusted_sequence[150:164]
 
 ### Amino Acid check
 
+  Following the framing and adjustment of the sequence, `aa_check` can be used to translate the adjusted DNA sequence to amino acids and conduct a check of the amino acid sequence for the presence of stop codons. This is easier (i.e. translation is only performed once) because the `frame` function sets the DNA sequences in a common oritentation and reading frame. The `aa_check` function's search for stop codons provides a simple double check of the `adjust` algorithm's performance. If stop codons are present then this indicates that reading frame shifts have not been corrected properly in the adjustment phase. Sequences of this kind will be flagged for rejection. This check is not perfect, as any persisting frameshifts late in the sequence may not be suffiently disruptive to produce a stop codon.
+  
+  A few more technical notes of the `aa_check` function: 1. sequences are translated using [the censored translation table described and implemented within `coil`](https://github.com/CNuge/coil/blob/master/vignettes/coil-vignette.Rmd). This is done so that the `aa_check` function is not biased against taxonomic groups that employ more esoteric translation tables. You can overide the default behaviour and pass [the number of the genetic code](https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi) if it is known for certain (with `trans_table` paramater) or even override the reading frame used for translation with the paramter `frame_offset`.  2. If you are familiar with `coil`](https://github.com/CNuge/coil) you will be aware that it compares translated sequences against an amino acid PHMM to identify sequences with errors. This is not done within the present amino acid check namely in the interest of speed (comparing sequences to the PHMMs is computationally costly) and because the potentially large number of placeholder characters in a sequence resulting from the `adjust` algorithm would lower the likelihood scores of the corresponding amino acid sequences (due to a surplus of placeholders) and lead to a large number of false rejections. **Author's note:** If you are dying for the integration of an amino acid PHMM comparison, send me an email and I can add this function.
+
+```{r}
+ex = aa_check(ex) #the default behaviour should suit >99% of user's needs
+  
+```
 
 ### Creating the output sequence
 
