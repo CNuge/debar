@@ -29,12 +29,12 @@ read_fastq = function(x, keep_quality = TRUE){
     
     if(length(lines) == n){
       if(keep_quality == TRUE){
-        records = rbind(records, data.frame(header_data = lines[1], 
+        records = rbind(records, data.frame(header_data = substr(lines[1], 2, nchar(lines[1])), 
                                             sequence = lines[2], 
                                             quality = lines[4], 
                                             stringsAsFactors = FALSE))
       }else{
-        records = rbind(records, data.frame(header_data = lines[1], 
+        records = rbind(records, data.frame(header_data = substr(lines[1], 2, nchar(lines[1])), 
                                             sequence = lines[2], 
                                             stringsAsFactors = FALSE))
       }
@@ -56,7 +56,10 @@ read_fasta = function(x){
   
   data = readLines(x)
   
-  records = data.frame(header = data[seq(1,length(data), 2)],
+  head_line = data[seq(1,length(data), 2)]
+  head_line = substr(head_line, 2, nchar(head_line))
+  
+  records = data.frame(header = head_line,
                        sequence = data[seq(2,length(data), 2)], 
                        stringsAsFactors = FALSE)
   
@@ -129,12 +132,12 @@ write_fastq.DNAseq = function(x, ...,
     if(is.null(x$phred)){
       stop("Cannot keep the phred scores for a DNAseq with no phred inputs")
     }
-    outstring = paste(x$name, "\n",
+    outstring = paste("@", x$name, "\n",
                       x$outseq, "\n",
                       "+\n",
                       x$outphred, sep="")
   }else{
-    outstring = paste(x$name, "\n",
+    outstring = paste("@", x$name, "\n",
                       x$outseq, "\n",
                       "+\n",
                       paste(rep(phred_placeholder, times = nchar(x$outseq)), collapse = ""), sep="")

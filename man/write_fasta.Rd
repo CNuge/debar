@@ -7,15 +7,13 @@
 \usage{
 write_fasta(x, ...)
 
-\method{write_fasta}{DNAseq}(x, ..., keep_flanks = TRUE,
-  filename = "denoised.fasta", append = TRUE)
+\method{write_fasta}{DNAseq}(x, ..., filename = "denoised.fasta",
+  append = TRUE)
 }
 \arguments{
 \item{x}{a DNAseq class object.}
 
 \item{...}{additional arguments to be passed between methods.}
-
-\item{keep_flanks}{Default is TRUE.}
 
 \item{filename}{The name of the file to output the data to. Default is "denoised.fasta".}
 
