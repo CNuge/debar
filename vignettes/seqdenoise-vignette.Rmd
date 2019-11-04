@@ -12,6 +12,7 @@ vignette: >
 #TODO - explain the terminate rejects option better in the documentation. explicitly state that the min_match only comes into effect if the terminate rejects option is on.
 #TODO - use the explinations I've written here in the vignette to bolster the documentation. Add detail beyond just a single sentence to the explinations.
 #TODO - strip the @ character offf of read_fastq name inputs, reapply the @ character in the write fastq output
+#TODO - some of this information is probably better included in the top section of the documentation. i.e. really small level minituae about the translation tables not needed here.
 
 ```{r loadlib, echo = TRUE, results = 'hide', message=FALSE, warning=FALSE}
 library(seqdenoise)
@@ -199,7 +200,6 @@ write_fastq(ex, filename = "out.fq") # default - appends output sequence to the 
 
 write_fastq(ex, filename = "out.fq" , append = FALSE, keep_phred = FALSE, phred_placeholder = "?") #alternative - overwrites 
 # file and discards the phred scores, replacing them with the character "?" the correct number of times.
-
 ```
 
 
