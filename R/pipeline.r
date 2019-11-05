@@ -210,13 +210,16 @@ denoise_file.default = function(x, ..., filename = 'output.fastq',  file_type = 
   
   #read in the data
   if(file_type == "fastq"){
+    print(paste0("Reading fastq file:", x))
     data = read_fastq(x)
   }else if(file_type == "fasta"){
+    print(paste0("Reading fasta file:", x))
     data = read_fasta(x)
   }else{
     stop("file_type must be either fasta or fastq")
   }
 
+  print(paste0("Denoising data from file"))
   if(multicore == FALSE){
     for(i in 1:length(data$sequence)){
       temp = denoise(data$sequence[[i]], filename = filename, name = data$header_data[[i]], phred = data$quality[[i]], ...)
@@ -226,6 +229,7 @@ denoise_file.default = function(x, ..., filename = 'output.fastq',  file_type = 
                                   reject_filename = reject_filename, ...)
     }
   }else{
+    print(paste0("multithreading across ", multicore, " cores."))
     if(log_file == FALSE){
       parallel::mclapply(1:length(data$sequence), function(i, ...){
         temp = denoise(data$sequence[[i]], filename = filename, name = data$header_data[[i]], phred = data$quality[[i]], ...)
@@ -263,6 +267,8 @@ denoise_file.default = function(x, ..., filename = 'output.fastq',  file_type = 
     log_data = data.frame(log_data)
     utils::write.csv(log_data, log_filename, row.names = FALSE)
   }
+  
+  print("Done.")
 }
 
 
