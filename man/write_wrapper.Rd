@@ -7,7 +7,7 @@
 \usage{
 write_wrapper(x, ...)
 
-\method{write_wrapper}{DNAseq}(x, ..., filename = "denoised.fastq",
+\method{write_wrapper}{DNAseq}(x, ..., outfile = "denoised.fastq",
   outformat = "fastq", append = TRUE, keep_phred = TRUE,
   phred_placeholder = "#")
 }
@@ -16,7 +16,7 @@ write_wrapper(x, ...)
 
 \item{...}{additional arguments to be passed between methods.}
 
-\item{filename}{The name of the file to output the data to. Default is "denoised.fasta".}
+\item{outfile}{The name of the file to output the data to. Default is "denoised.fasta".}
 
 \item{outformat}{The format of the output data, either fasta for fastq. Default is fastq.}
 

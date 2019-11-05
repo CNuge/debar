@@ -7,7 +7,7 @@
 \usage{
 write_fastq(x, ...)
 
-\method{write_fastq}{DNAseq}(x, ..., filename = "denoised.fastq",
+\method{write_fastq}{DNAseq}(x, ..., outfile = "denoised.fastq",
   append = TRUE, keep_phred = TRUE, phred_placeholder = "#")
 }
 \arguments{
@@ -15,7 +15,7 @@ write_fastq(x, ...)
 
 \item{...}{additional arguments to be passed between methods.}
 
-\item{filename}{The name of the file to output the data to. Default is "denoised.fasta".}
+\item{outfile}{The name of the file to output the data to. Default is "denoised.fasta".}
 
 \item{append}{Should the ccs consensus sequence be appended to the output file?(TRUE) 
 Or overwrite the file?(FALSE) Default is TRUE.}

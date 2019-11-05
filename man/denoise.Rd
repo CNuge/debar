@@ -13,7 +13,7 @@ denoise(x, ...)
   max_inserts = 400, censor_length = 7, added_phred = "*",
   adjust_limit = 5, ambig_char = "N", to_file = TRUE,
   keep_flanks = TRUE, keep_phred = TRUE, outformat = "fastq",
-  terminate_rejects = TRUE, filename = NULL, phred_placeholder = "#",
+  terminate_rejects = TRUE, outfile = NULL, phred_placeholder = "#",
   aa_check = TRUE, trans_table = 0, frame_offset = 0,
   append = TRUE)
 }
@@ -68,7 +68,7 @@ False will lead to only the denoised sequence for the 657bp barcode region being
 \item{terminate_rejects}{Boolean indicating if analysis of sequences that fail to meet phred quality score or path 
 match thresholds should be terminated early (prior to sequence adjustment and writing to file). Default it true.}
 
-\item{filename}{The name of the file to output the data to. Default filenames are respectively: denoised.fasta or denoised.fastq.}
+\item{outfile}{The name of the file to output the data to. Default filenames are respectively: denoised.fasta or denoised.fastq.}
 
 \item{phred_placeholder}{The character to input for the phred score line. Default is '#'. 
 Used with write_fastq and keep_phred == FALSE only.}

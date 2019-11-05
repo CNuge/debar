@@ -7,7 +7,7 @@
 \usage{
 write_fasta(x, ...)
 
-\method{write_fasta}{DNAseq}(x, ..., filename = "denoised.fasta",
+\method{write_fasta}{DNAseq}(x, ..., outfile = "denoised.fasta",
   append = TRUE)
 }
 \arguments{
@@ -15,7 +15,7 @@ write_fasta(x, ...)
 
 \item{...}{additional arguments to be passed between methods.}
 
-\item{filename}{The name of the file to output the data to. Default is "denoised.fasta".}
+\item{outfile}{The name of the file to output the data to. Default is "denoised.fasta".}
 
 \item{append}{Should the ccs consensus sequence be appended to the output file?(TRUE) 
 Or overwrite the file?(FALSE) Default is TRUE.}

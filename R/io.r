@@ -62,7 +62,7 @@ read_fasta = function(x){
 #' 
 #' @param x a DNAseq class object.
 #' @param ... additional arguments to be passed between methods.
-#' @param filename The name of the file to output the data to. Default is "denoised.fasta".
+#' @param outfile The name of the file to output the data to. Default is "denoised.fasta".
 #' @param append Should the ccs consensus sequence be appended to the output file?(TRUE) 
 #' Or overwrite the file?(FALSE) Default is TRUE.
 #' @return a class object of code{"DNAseq"} 
@@ -79,13 +79,13 @@ write_fasta = function(x, ...){
 #' @rdname write_fasta
 #' @export
 write_fasta.DNAseq = function(x, ...,
-                                 filename = "denoised.fasta", 
+                                 outfile = "denoised.fasta", 
                                  append = TRUE){
 
   outstring = paste(">", x$name, "\n",
                     x$outseq, sep = '')
   
-  write(outstring, file = filename, append = append)
+  write(outstring, file = outfile, append = append)
 }
 
 
@@ -94,7 +94,7 @@ write_fasta.DNAseq = function(x, ...,
 #' 
 #' @param x a DNAseq class object.
 #' @param ... additional arguments to be passed between methods.
-#' @param filename The name of the file to output the data to. Default is "denoised.fasta".
+#' @param outfile The name of the file to output the data to. Default is "denoised.fasta".
 #' @param append Should the ccs consensus sequence be appended to the output file?(TRUE) 
 #' Or overwrite the file?(FALSE) Default is TRUE.
 #' @param keep_phred Should the original PHRED scores be kept in the output? Default is TRUE.
@@ -113,7 +113,7 @@ write_fastq = function(x, ...){
 #' @rdname write_fastq
 #' @export
 write_fastq.DNAseq = function(x, ...,
-                                 filename = "denoised.fastq", 
+                                 outfile = "denoised.fastq", 
                                  append = TRUE, 
                                  keep_phred = TRUE,
                                  phred_placeholder = "#"){
@@ -133,14 +133,14 @@ write_fastq.DNAseq = function(x, ...,
                       paste(rep(phred_placeholder, times = nchar(x$outseq)), collapse = ""), sep="")
   }
   
-  write(outstring, file =  filename, append = append)
+  write(outstring, file =  outfile, append = append)
 }
 
 #' A wrapper function to deploy the fastq and fata output functions.
 #' 
 #' @param x a DNAseq class object.
 #' @param ... additional arguments to be passed between methods.
-#' @param filename The name of the file to output the data to. Default is "denoised.fasta".
+#' @param outfile The name of the file to output the data to. Default is "denoised.fasta".
 #' @param outformat The format of the output data, either fasta for fastq. Default is fastq.
 #' @param append Should the ccs consensus sequence be appended to the output file?(TRUE) 
 #' Or overwrite the file?(FALSE) Default is TRUE.
@@ -156,7 +156,7 @@ write_wrapper = function(x, ...){
 #' @rdname write_wrapper
 #' @export
 write_wrapper.DNAseq = function(x, ...,
-                              filename = "denoised.fastq", 
+                              outfile = "denoised.fastq", 
                               outformat = "fastq",
                               append = TRUE, 
                               keep_phred = TRUE,
@@ -166,21 +166,21 @@ write_wrapper.DNAseq = function(x, ...,
   }
   
   if(outformat == "fasta"){
-    if(is.null(filename)){
+    if(is.null(outfile)){
       write_fasta(x, append = append, ...)
     }else{
-      write_fasta(x, filename = filename, append = append, ...)
+      write_fasta(x, outfile = outfile, append = append, ...)
     }
   }
   
   if(outformat == "fastq"){
-    if(is.null(filename)){
+    if(is.null(outfile)){
       write_fastq(x, keep_phred = keep_phred, 
                   phred_placeholder = phred_placeholder, 
                   append = append, ...)
     }else{
       write_fastq(x, keep_phred = keep_phred,
-                  filename = filename, 
+                  outfile = outfile, 
                   phred_placeholder = phred_placeholder, 
                   append = append, ...)
     }
