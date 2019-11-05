@@ -1,4 +1,8 @@
 
+
+#
+#x = 'inst/extdata/4K_read_test.fastq'
+
 #' Read in raw data from a fastq file.
 #' 
 #' 
