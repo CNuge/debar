@@ -1,30 +1,60 @@
 
+ 
+x = '/home/cnuge/bin/eval-seqdenoise/data/4k_read_test.fastq'
+#current time
+start = Sys.time()
+y = seqdenoise::read_fastq(x)
+end = Sys.time()
 
-# 
-# x = '/home/cnuge/bin/seqdenoise/inst/extdata/4k_read_test.fastq'
-# #current time
-# start = Sys.time()
-# y = seqdenoise::read_fastq(x)
-# end = Sys.time()
-# 
-# elapsed = difftime(end, start, units = 'secs')
-# elapsed
-# 
-# start = Sys.time()
-# y = read_fastq(x)
-# end = Sys.time()
-# 
-# elapsed_new = difftime(end, start, units = 'secs')
-# elapsed_new
-# 
-# z =  system.file('extdata/sequel_smrt_subset.fastq.gz', package = 'seqdenoise')
-# 
-# start = Sys.time()
-# y = read_fastq(z)
-# end = Sys.time()
-# 
-# elapsed_new = difftime(end, start, units = 'secs')
-# elapsed_new
+elapsed = difftime(end, start, units = 'secs')
+elapsed
+
+start = Sys.time()
+y = simple_read_fastq(x)
+end = Sys.time()
+
+elapsed_new = difftime(end, start, units = 'secs')
+elapsed_new
+
+
+
+
+#' Read in raw data from a fastq file.
+#' 
+#' 
+#' @param x The name of the fastq file to read data from.
+#' @param keep_quality Boolean indicating if the Phred quality scores should be 
+#' retained in the output dataframe. Default is TRUE
+#' @export
+#' @name read_fastq
+simple_read_fastq = function(x, keep_quality = TRUE){
+  
+  records = list()  
+  
+  n = 4
+  lines = c()
+  
+  for(i in readLines(x)){
+    
+    lines = c(lines, i)
+    
+    if(length(lines) == n){
+      records[[length(records)+1]] =  c(substr(lines[1], 2, nchar(lines[1])),
+                                      lines[2],
+                                      lines[4])
+      lines = c()
+    }
+  }
+  
+  out = data.frame(do.call(rbind, records) , stringsAsFactors = FALSE)
+  names(out)= c("header_data", "sequence", "quality")
+  
+  if(keep_quality == FALSE){
+    out$quality = NULL
+  }
+  
+  return(out)
+}
 
 
 #' Read in raw data from a fastq file.
