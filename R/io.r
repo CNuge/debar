@@ -1,24 +1,4 @@
 
- 
-x = '/home/cnuge/bin/eval-seqdenoise/data/4k_read_test.fastq'
-#current time
-start = Sys.time()
-y = seqdenoise::read_fastq(x)
-end = Sys.time()
-
-elapsed = difftime(end, start, units = 'secs')
-elapsed
-
-start = Sys.time()
-y = simple_read_fastq(x)
-end = Sys.time()
-
-elapsed_new = difftime(end, start, units = 'secs')
-elapsed_new
-
-
-
-
 #' Read in raw data from a fastq file.
 #' 
 #' 
@@ -27,7 +7,7 @@ elapsed_new
 #' retained in the output dataframe. Default is TRUE
 #' @export
 #' @name read_fastq
-simple_read_fastq = function(x, keep_quality = TRUE){
+read_fastq = function(x, keep_quality = TRUE){
   
   records = list()  
   
@@ -55,47 +35,6 @@ simple_read_fastq = function(x, keep_quality = TRUE){
   
   return(out)
 }
-
-
-#' Read in raw data from a fastq file.
-#' 
-#' 
-#' @param x The name of the fastq file to read data from.
-#' @param keep_quality Boolean indicating if the Phred quality scores should be 
-#' retained in the output dataframe. Default is TRUE
-#' @export
-#' @name read_fastq
-read_fastq = function(x, keep_quality = TRUE){
-  
-  if(keep_quality == TRUE){  
-    records = list(header_data = character(),
-                   sequence = character(), 
-                   quality = character())  
-  }else{
-    records = list(header_data = character(),
-                   sequence = character())  
-  }
-  n = 4
-  lines = c()
-  
-  for(i in readLines(x)){
-    
-    lines = c(lines, i)
-    
-    if(length(lines) == n){
-      records$header_data = c(records$header_data,  substr(lines[1], 2, nchar(lines[1])))
-      records$sequence = c(records$sequence, lines[2])      
-      
-      if(keep_quality == TRUE){
-        records$quality =c(records$quality, lines[4])
-      }
-      lines = c()
-    }
-  }
-  
-  return(data.frame(records, stringsAsFactors = FALSE))
-}
-
 
 
 #' Read in raw data from a fasta file.
