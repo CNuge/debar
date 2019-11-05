@@ -1,7 +1,31 @@
 
 
-#
-#x = 'inst/extdata/4K_read_test.fastq'
+# 
+# x = '/home/cnuge/bin/seqdenoise/inst/extdata/4k_read_test.fastq'
+# #current time
+# start = Sys.time()
+# y = seqdenoise::read_fastq(x)
+# end = Sys.time()
+# 
+# elapsed = difftime(end, start, units = 'secs')
+# elapsed
+# 
+# start = Sys.time()
+# y = read_fastq(x)
+# end = Sys.time()
+# 
+# elapsed_new = difftime(end, start, units = 'secs')
+# elapsed_new
+# 
+# z =  system.file('extdata/sequel_smrt_subset.fastq.gz', package = 'seqdenoise')
+# 
+# start = Sys.time()
+# y = read_fastq(z)
+# end = Sys.time()
+# 
+# elapsed_new = difftime(end, start, units = 'secs')
+# elapsed_new
+
 
 #' Read in raw data from a fastq file.
 #' 
@@ -13,40 +37,33 @@
 #' @name read_fastq
 read_fastq = function(x, keep_quality = TRUE){
   
-  if(keep_quality == TRUE){
-    records = data.frame(header_data = character(),
-                         sequence = character(), 
-                         quality = character(),
-                         stringsAsFactors = FALSE)
+  if(keep_quality == TRUE){  
+    records = list(header_data = character(),
+                   sequence = character(), 
+                   quality = character())  
   }else{
-    records = data.frame(header_data = character(),
-                         sequence = character(), 
-                         stringsAsFactors = FALSE)
+    records = list(header_data = character(),
+                   sequence = character())  
   }
-  
   n = 4
   lines = c()
   
   for(i in readLines(x)){
-  
+    
     lines = c(lines, i)
     
     if(length(lines) == n){
+      records$header_data = c(records$header_data,  substr(lines[1], 2, nchar(lines[1])))
+      records$sequence = c(records$sequence, lines[2])      
+      
       if(keep_quality == TRUE){
-        records = rbind(records, data.frame(header_data = substr(lines[1], 2, nchar(lines[1])), 
-                                            sequence = lines[2], 
-                                            quality = lines[4], 
-                                            stringsAsFactors = FALSE))
-      }else{
-        records = rbind(records, data.frame(header_data = substr(lines[1], 2, nchar(lines[1])), 
-                                            sequence = lines[2], 
-                                            stringsAsFactors = FALSE))
+        records$quality =c(records$quality, lines[4])
       }
       lines = c()
-    }  
+    }
   }
   
-  return(records)
+  return(data.frame(records, stringsAsFactors = FALSE))
 }
 
 

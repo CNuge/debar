@@ -15,6 +15,11 @@ vignette: >
 #TODO - some of this information is probably better included in the top section of the documentation. i.e. really small level minituae about the translation tables not needed here.
 #TODO - if the output format is .gz, then have the final step being the gunzipping of the file. (may need to strip .gz off of the input file name prior to outputting)
 
+
+# ERRORS:
+#TODO - python can read the fq files (~half gig) in like a second, the code for my read_fastq and read_fasta function has some bottlenecks I need to resolve to get the denoiser working
+#TODO - issues with the generation of the output files
+
 ```{r loadlib, echo = TRUE, results = 'hide', message=FALSE, warning=FALSE}
 library(seqdenoise)
 ```
