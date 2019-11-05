@@ -218,6 +218,10 @@ denoise_file.default = function(x, ..., outfile = 'output.fastq',  file_type = "
   }else{
     stop("file_type must be either fasta or fastq")
   }
+  
+  if(substr(outfile, nchar(outfile)-2, nchar(outfile)) == ".gz"){
+    outfile=substr(outfile, 1, nchar(outfile)-3)
+  }
 
   print(paste0("Denoising data from file"))
   if(multicore == FALSE){

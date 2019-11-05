@@ -8,18 +8,15 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
+#Documentation
 #TODO - explain the terminate rejects option better in the documentation. explicitly state that the min_match only comes into effect if the terminate rejects option is on.
 #TODO - use the explinations I've written here in the vignette to bolster the documentation. Add detail beyond just a single sentence to the explinations.
 #TODO - make sure the different combination of inputs and outputs don't cause errors. i.e. try denoise_file for fastq with keep_phred = false. need to make sure all the different combos are valid if they're to be presented to the user.
 #TODO - some of this information is probably better included in the top section of the documentation. i.e. really small level minituae about the translation tables not needed here.
-#TODO - if the output format is .gz, then have the final step being the gunzipping of the file. (may need to strip .gz off of the input file name prior to outputting)
 
+# IO style:
 #TODO - either keep rejects or the log file are throwing an error with the real data. find the cause.
 
-# ERRORS:
-#TODO - python can read the fq files (~half gig) in like a second, the code for my read_fastq and read_fasta function has some bottlenecks I need to resolve to get the denoiser working
-#TODO - issues with the generation of the output files
 
 ```{r loadlib, echo = TRUE, results = 'hide', message=FALSE, warning=FALSE}
 library(seqdenoise)
