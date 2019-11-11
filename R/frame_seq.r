@@ -245,16 +245,22 @@ frame.DNAseq = function(x, ..., dir_check = TRUE, min_match = 100, max_inserts =
   #a. There is a large string of 2s (indicative of a chimera) 
   #OR
   #b. There is not a continious match to the PHMM of at least the designated min_match length.
-  if(terminate_rejects == TRUE){
-    if(grepl(paste(rep("2", max_inserts), collapse = ""), paste( x$data$ntPHMMout[['path']], collapse = "")) ||
-       !grepl(paste(rep("1", min_match), collapse = ""), paste( x$data$ntPHMMout[['path']], collapse = "")) ){
-      x$reject = TRUE
-      return(x)
-    }else{
-      x$reject = FALSE
-    }
+  if(grepl(paste(rep("2", max_inserts), collapse = ""), paste( x$data$ntPHMMout[['path']], collapse = "")) ||
+     !grepl(paste(rep("1", min_match), collapse = ""), paste( x$data$ntPHMMout[['path']], collapse = "")) ){
+    
+    x$reject = TRUE
   }else{
     x$reject = FALSE
+  }
+  #if the reject condition is met and we are early terminating rejects,
+  #then clean the object and return as opposed to establishing reading frame.
+  if(terminate_rejects == TRUE && x$reject == TRUE){
+    x$data$path = x$data$ntPHMMout[['path']]
+    
+    x$data$ntBin = NULL
+    x$data$ntPHMMout = NULL
+    
+    return(x) 
   }
     
   #turn the raw string into a vector, add phred labels as well.
