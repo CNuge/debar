@@ -33,3 +33,4 @@ a class object of code{"DNAseq"}
 \description{
 A wrapper function to deploy the fastq and fata output functions.
 }
+\keyword{internal}

@@ -15,7 +15,6 @@ vignette: >
 #TODO - some of this information is probably better included in the top section of the documentation. i.e. really small level minituae about the translation tables not needed here.
 
 # IO style:
-#TODO - either keep rejects or the log file are throwing an error with the real data. find the cause.
 #TODO - make sure the different combination of inputs and outputs don't cause errors. i.e. try denoise_file for fastq with keep_phred = false. need to make sure all the different combos are valid if they're to be presented to the user.
 
 
@@ -206,7 +205,6 @@ write_fastq(ex, filename = "out.fq") # default - appends output sequence to the 
 write_fastq(ex, filename = "out.fq" , append = FALSE, keep_phred = FALSE, phred_placeholder = "?") #alternative - overwrites 
 # file and discards the phred scores, replacing them with the character "?" the correct number of times.
 ```
-
 
 
 ## Batch analyses in R

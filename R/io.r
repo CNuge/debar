@@ -4,7 +4,14 @@
 #' 
 #' @param x The name of the fastq file to read data from.
 #' @param keep_quality Boolean indicating if the Phred quality scores should be 
-#' retained in the output dataframe. Default is TRUE
+#' retained in the output dataframe. Default is TRUE.
+#' @examples
+#' #read in an unzipped fastq file
+#' fastq_example_file = system.file('extdata/sequel_smrt_subset.fastq', package = 'seqdenoise')
+#' data = read_fastq(fastq_example_file)
+#' #read in a gzipped fastq file and do not keep the phred scores
+#' gz_fastq_example_file = system.file('extdata/sequel_smrt_subset.fastq.gz', package = 'seqdenoise')
+#' data2 = read_fastq(gz_fastq_example_file, keep_quality = FALSE)
 #' @export
 #' @name read_fastq
 read_fastq = function(x, keep_quality = TRUE){
@@ -39,7 +46,10 @@ read_fastq = function(x, keep_quality = TRUE){
 
 #' Read in raw data from a fasta file.
 #' 
-#' @param x The name of the fasta file to read data from
+#' @param x The name of the fasta file to read data from.
+#' @examples
+#' fasta_example_file = system.file('extdata/ccs_subset.fasta', package = 'seqdenoise')
+#' data = read_fasta(fasta_example_file)
 #' @export
 #' @name read_fasta
 read_fasta = function(x){
@@ -148,13 +158,14 @@ write_fastq.DNAseq = function(x, ...,
 #' @param phred_placeholder The character to input for the phred score line. Default is '#'.
 #' @return a class object of code{"DNAseq"}
 #'
-#'
+#' @keywords internal
+#' @name write_wrapper
 write_wrapper = function(x, ...){
   UseMethod("write_wrapper")
 }
 
 #' @rdname write_wrapper
-#' @export
+#' @keywords internal
 write_wrapper.DNAseq = function(x, ...,
                               outfile = "denoised.fastq", 
                               outformat = "fastq",

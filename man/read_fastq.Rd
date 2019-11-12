@@ -10,8 +10,16 @@ read_fastq(x, keep_quality = TRUE)
 \item{x}{The name of the fastq file to read data from.}
 
 \item{keep_quality}{Boolean indicating if the Phred quality scores should be 
-retained in the output dataframe. Default is TRUE}
+retained in the output dataframe. Default is TRUE.}
 }
 \description{
 Read in raw data from a fastq file.
+}
+\examples{
+#read in an unzipped fastq file
+fastq_example_file = system.file('extdata/sequel_smrt_subset.fastq', package = 'seqdenoise')
+data = read_fastq(fastq_example_file)
+#read in a gzipped fastq file and do not keep the phred scores
+gz_fastq_example_file = system.file('extdata/sequel_smrt_subset.fastq.gz', package = 'seqdenoise')
+data2 = read_fastq(gz_fastq_example_file, keep_quality = FALSE)
 }

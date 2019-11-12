@@ -7,8 +7,12 @@
 read_fasta(x)
 }
 \arguments{
-\item{x}{The name of the fasta file to read data from}
+\item{x}{The name of the fasta file to read data from.}
 }
 \description{
 Read in raw data from a fasta file.
+}
+\examples{
+fasta_example_file = system.file('extdata/ccs_subset.fasta', package = 'seqdenoise')
+data = read_fasta(fasta_example_file)
 }
