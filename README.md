@@ -1,4 +1,4 @@
-# seqDenoise <img src="man/coilHex.png" align="right"/>
+# seqDenoise 
 ## An R package for the denoising coi5p barcode data generatd through Pacific Biosciences single molecule, real-time (SMRT) sequencing.
 [![Build Status](https://travis-ci.com/CNuge/seqdenoise.svg?token=H6eQaqsE1kLqYX3zZ1Xz&branch=master)](https://travis-ci.com/CNuge/seqdenoise)
 --------------------------------------------------------
