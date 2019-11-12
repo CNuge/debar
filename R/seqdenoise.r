@@ -19,24 +19,32 @@
 #' 
 #' @section Functions:
 #' \itemize{
-#' \item \code{\link{denoise_file}}} Run the denoise pipeline for each sequence in a specified input file.
-#' \item \code{\link{denoise}}} Run the denoise pipeline for a specified sequence
+#' \item \code{\link{denoise_file}} Run the denoise pipeline for each sequence in a specified input file.
+#' \item \code{\link{denoise}} Run the denoise pipeline for a specified sequence
 #' 
-#' \item \code{\link{read_fasta}}} Read data from a fasta file to a data frame.
-#' \item \code{\link{read_fastq}}} Read data from a fastq file to a data frame. 
-#' \item \code{\link{write_fasta}}} Write a denoised sequence to the specified fasta file.
-#' \item \code{\link{write_fastq}}} Write a denoised sequence and associated quality information to the specified fastq file.
+#' \item \code{\link{read_fasta}} Read data from a fasta file to a data frame.
+#' \item \code{\link{read_fastq}} Read data from a fastq file to a data frame. 
+#' \item \code{\link{write_fasta}} Write a denoised sequence to the specified fasta file.
+#' \item \code{\link{write_fastq}} Write a denoised sequence and associated quality information to the specified fastq file.
 #' 
-#' \item \code{\link{phred_check}}} Check that specified quality thresholds are met for a sequence read.
-#' \item \code{\link{frame}}} Match a sequence against the COI-5P PHMM using the Viterbi algorithm to establish the reading frame,
+#' \item \code{\link{DNAseq}} Builds a DNAseq class object
+#' \item \code{\link{phred_check}} Check that specified quality thresholds are met for a sequence read.
+#' \item \code{\link{frame}} Match a sequence against the COI-5P PHMM using the Viterbi algorithm to establish the reading frame,
 #' optional rejection of sequence based on the quality of the match to the PHMM.
-#' \item \code{\link{adjust}}} Use the PHMM path output corresponding to the sequence to adjust the DNA sequence and remove indels.
+#' \item \code{\link{adjust}} Use the PHMM path output corresponding to the sequence to adjust the DNA sequence and remove indels.
 #' Optional censorship of sequence around the corrections.
-#' \item \code{\link{aa_check}}} Translate the adjusted sequence to amino acids and check it for stop codons.
-#' \item \code{\link{outseq}}} Construct the output data for the given sequence. Optionally can include or exculde sequence data from
+#' \item \code{\link{aa_check}} Translate the adjusted sequence to amino acids and check it for stop codons.
+#' \item \code{\link{outseq}} Construct the output data for the given sequence. Optionally can include or exculde sequence data from
 #' outside of the COI-5P region (part of sequence that was not denoised).
-#'  
+#' }
 #' 
-#' \item \code{\link{DNAseq}}} Builds a DNAseq class object
+#' @section Data
+#' \itemize{
+#' \item \code{\link{example_nt_string}} An example COI-5P sequence with no errors.
+#' \item \code{\link{example_nt_string_errors}} An example COI-5P sequence with two indel errors.
+#' }
+#' @author Cameron M. Nugent
+#' @docType package
+#' @name seqdenoise
 #################
 NULL

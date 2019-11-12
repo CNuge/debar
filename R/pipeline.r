@@ -55,7 +55,10 @@
 #' @return a class object of code{"DNAseq"} 
 #' @examples
 #' # Denoise example sequence with default paramaters.
-#' ex_data = denoise(example_nt_string_errors, name = 'example_sequence_1', keep_phred = FALSE, to_file = FALSE)
+#' ex_data = denoise(example_nt_string_errors, 
+#'                   name = 'example_sequence_1', 
+#'                   keep_phred = FALSE, 
+#'                   to_file = FALSE)
 #' 
 #' #fastq data from a file
 #' #previously run
@@ -63,8 +66,12 @@
 #' data = read_fastq(fastq_example_file)
 #' #denoise the first sequence in the file
 #' #use a custom censor length and no amino acid check
-#' dn_dat_1 = denoise(x = data$sequence[[1]], name = data$header[[1]], phred = data$quality[[1]], 
-#'                     censor_length = 11, aa_check = FALSE, to_file = FALSE)
+#' dn_dat_1 = denoise(x = data$sequence[[1]], 
+#'                     name = data$header[[1]], 
+#'                     phred = data$quality[[1]], 
+#'                     censor_length = 11, 
+#'                     aa_check = FALSE, 
+#'                     to_file = FALSE)
 #' @export
 #' @name denoise
 denoise = function(x, ...){

@@ -83,29 +83,3 @@ censored_translation = function(dna_str, reading_frame = 1){
 	return(aa_str)
 }
 
-
-#' Determine the translation table to use for a given phylogenetic group.
-#'
-#' Recommends which translation table to use if taxonomic data is avaliable.
-#' The reccomendations are based on the translation tables reported for different
-#' taxonomic classifications on the barcode of life database
-#' (http://www.boldsystems.org/index.php).
-#'
-#' @param x a taxonomic designation (allowed ranks: family, order, class, phylum).
-#' @return an integer indicating the correct translation table.
-#' @examples
-#' which_trans_table("Chordata") #phylum
-#' which_trans_table("Actinopterygii") #class
-#' which_trans_table("Akentrogonida")  #order
-#' which_trans_table("Hydrobiidae") #family
-#' @details
-#' If which_trans_table is unable to identify a translation table to utilize,
-#' more information on translation tables can be found here: https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi
-#' @export
-which_trans_table = function(x) {
-    use_tab = trans_df$trans_table[trans_df$phylogeny == tolower(x)]
-    if(length(use_tab) == 0){
-      return(0)
-    }
-    return(use_tab)
-}

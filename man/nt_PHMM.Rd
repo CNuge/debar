@@ -9,7 +9,7 @@
 nt_PHMM
 }
 \description{
-This model is stored in the coi5p package and was trained on a representitive
+This model is stored in the package and was trained on a representitive
 sample of the barcode of life database (http://www.boldsystems.org/index.php).
 }
 \keyword{internal}
