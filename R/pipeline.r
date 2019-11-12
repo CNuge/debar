@@ -1,6 +1,14 @@
 
 #' Run the denoiser pipeline for a sequence read.
 #'
+#' This function runs the complete denoising pipeline for a given input sequence and its corresponding
+#' name and phred scores. The default behaviour is set to interface with fastq files (standard output for
+#' most sequencers). If you are working with fata from a fasta file (no quality information) then you will
+#' obligated to pass the following paramater: `keep_phred = FALSE`. Since the pipeline is designed for recieving or 
+#' outputting either fasta or fastq data, this function is hevaily paramaterized. Note that not all paramaters will
+#' affect all use cases (i.e. if your outformat is to a fasta file, then the phred_placeholder paramater is ignored
+#' as this option only pertains to fastq outputs). The user is encouraged to read the vignette for a detailed 
+#' walkthrough of the denoiser pipeline that will help identify the paramaters that relate to their given needs.
 #' 
 #' @param x a DNA sequence string.
 #' @param ... additional arguments to be passed between methods.
@@ -47,7 +55,16 @@
 #' @return a class object of code{"DNAseq"} 
 #' @examples
 #' # Denoise example sequence with default paramaters.
-#' ex_data = denoise(example_nt_string, name = 'example_sequence_1', keep_phred = FALSE)
+#' ex_data = denoise(example_nt_string_errors, name = 'example_sequence_1', keep_phred = FALSE, to_file = FALSE)
+#' 
+#' #fastq data from a file
+#' #previously run
+#' fastq_example_file = system.file('extdata/sequel_smrt_subset.fastq', package = 'seqdenoise')
+#' data = read_fastq(fastq_example_file)
+#' #denoise the first sequence in the file
+#' #use a custom censor length and no amino acid check
+#' dn_dat_1 = denoise(x = data$sequence[[1]], name = data$header[[1]], phred = data$quality[[1]], 
+#'                     censor_length = 11, aa_check = FALSE, to_file = FALSE)
 #' @export
 #' @name denoise
 denoise = function(x, ...){
@@ -171,19 +188,37 @@ meta_check = function(x, log_data = list(), log_file = FALSE, keep_rejects = FAL
 }
 
 
-#'Denoise sequence data from a given file.
+#' Denoise sequence data from a given file.
 #'
-#'@param x The name of the file to denoise sequences from.
-#'@param outfile The name of the file to output sequences to.
-#'@param file_type The format of the file to be denoised. Options are fastq or fasta. Default is fastq.
-#'@param log_file Boolean indicating if a log file should be produced. Default is FALSE.
-#'@param keep_rejects Boolean indicating if the bad reads should be written to a separate file (with the name
-#'"rejects_" + outfile). Defaut is false
-#'@param multicore An integer specifying the number of cores over which to multithread the denoising process. 
-#'Default is FALSE, meaning the process is not multithreaded.
-#'@param ... additional arguments to be passed to the \link{denoise} function.
+#' This function allows for direct input to output exectution of the denoising pipeline. All paramaters for the 
+#' fasta/fastq input and output functions as well as the denoise pipeline can be passed to this function. Please consult
+#' the documentation for those functions for a list of available paramaters. The function will
+#' run the denoise pipeline with the specified paramaters for all sequences in the input file, and write the denoised sequences
+#' and corresponding header/quality information to the output file. Additionally the function allows for rejected reads to
+#' be kept and sequestered to an additional output file (as opposed to being discarded) and also allows for a log file to
+#' be produced that tracks several statistics including the execition time, number of denoised reads and number of
+#' rejected reads.
+#' 
+#' Using this function is optimized by the appropriation of the multicore option, which allows a user to specify a number of
+#' cores that the denoising process should be multithreaded across. The more cores available, the faster the denoising of the 
+#' input data. It should be noted that the multithreading relies on the entire fastq file being read into memory, because of
+#' this your machine's available ram will need to exceed the size of the unzipped fastq file being denoised. If your file
+#' size exceeds the available memory you may want to consider spliting the input into several smaller files and denoising them
+#' each with this function (this is a fast solution as the multicore option can be used to speed up denoising). Alternatively,
+#' you can depoly the `denoise` function in an iterative fashion, reading in/denoising and writing only a single fq entry at
+#' a time. This would require a much smaller memory footprint, but would be much slower due to the lack of multithreading.
+#' 
+#' @param x The name of the file to denoise sequences from.
+#' @param outfile The name of the file to output sequences to.
+#' @param file_type The format of the file to be denoised. Options are fastq or fasta. Default is fastq.
+#' @param log_file Boolean indicating if a log file should be produced. Default is FALSE.
+#' @param keep_rejects Boolean indicating if the bad reads should be written to a separate file (with the name
+#' "rejects_" + outfile). Defaut is FALSE.
+#' @param multicore An integer specifying the number of cores over which to multithread the denoising process. 
+# 'Default is FALSE, meaning the process is not multithreaded.
+#' @param ... additional arguments to be passed to the \link{denoise} and input/output functions.
 #'
-#'@seealso \code{\link{denoise}}
+#' @seealso \code{\link{denoise}}
 #'
 #' @export
 #' @name denoise_file  

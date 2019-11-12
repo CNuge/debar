@@ -90,9 +90,25 @@ Or should the sequence overwrite the output file?(FALSE) Default is TRUE.}
 a class object of code{"DNAseq"}
 }
 \description{
-Run the denoiser pipeline for a sequence read.
+This function runs the complete denoising pipeline for a given input sequence and its corresponding
+name and phred scores. The default behaviour is set to interface with fastq files (standard output for
+most sequencers). If you are working with fata from a fasta file (no quality information) then you will
+obligated to pass the following paramater: `keep_phred = FALSE`. Since the pipeline is designed for recieving or 
+outputting either fasta or fastq data, this function is hevaily paramaterized. Note that not all paramaters will
+affect all use cases (i.e. if your outformat is to a fasta file, then the phred_placeholder paramater is ignored
+as this option only pertains to fastq outputs). The user is encouraged to read the vignette for a detailed 
+walkthrough of the denoiser pipeline that will help identify the paramaters that relate to their given needs.
 }
 \examples{
 # Denoise example sequence with default paramaters.
-ex_data = denoise(example_nt_string, name = 'example_sequence_1', keep_phred = FALSE)
+ex_data = denoise(example_nt_string_errors, name = 'example_sequence_1', keep_phred = FALSE, to_file = FALSE)
+
+#fastq data from a file
+#previously run
+fastq_example_file = system.file('extdata/sequel_smrt_subset.fastq', package = 'seqdenoise')
+data = read_fastq(fastq_example_file)
+#denoise the first sequence in the file
+#use a custom censor length and no amino acid check
+dn_dat_1 = denoise(x = data$sequence[[1]], name = data$header[[1]], phred = data$quality[[1]], 
+                    censor_length = 11, aa_check = FALSE, to_file = FALSE)
 }

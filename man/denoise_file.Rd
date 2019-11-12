@@ -14,7 +14,7 @@ denoise_file(x, ...)
 \arguments{
 \item{x}{The name of the file to denoise sequences from.}
 
-\item{...}{additional arguments to be passed to the \link{denoise} function.}
+\item{...}{additional arguments to be passed to the \link{denoise} and input/output functions.}
 
 \item{outfile}{The name of the file to output sequences to.}
 
@@ -23,13 +23,29 @@ denoise_file(x, ...)
 \item{log_file}{Boolean indicating if a log file should be produced. Default is FALSE.}
 
 \item{keep_rejects}{Boolean indicating if the bad reads should be written to a separate file (with the name
-"rejects_" + outfile). Defaut is false}
+"rejects_" + outfile). Defaut is FALSE.}
 
-\item{multicore}{An integer specifying the number of cores over which to multithread the denoising process. 
-Default is FALSE, meaning the process is not multithreaded.}
+\item{multicore}{An integer specifying the number of cores over which to multithread the denoising process.}
 }
 \description{
-Denoise sequence data from a given file.
+This function allows for direct input to output exectution of the denoising pipeline. All paramaters for the 
+fasta/fastq input and output functions as well as the denoise pipeline can be passed to this function. Please consult
+the documentation for those functions for a list of available paramaters. The function will
+run the denoise pipeline with the specified paramaters for all sequences in the input file, and write the denoised sequences
+and corresponding header/quality information to the output file. Additionally the function allows for rejected reads to
+be kept and sequestered to an additional output file (as opposed to being discarded) and also allows for a log file to
+be produced that tracks several statistics including the execition time, number of denoised reads and number of
+rejected reads.
+}
+\details{
+Using this function is optimized by the appropriation of the multicore option, which allows a user to specify a number of
+cores that the denoising process should be multithreaded across. The more cores available, the faster the denoising of the 
+input data. It should be noted that the multithreading relies on the entire fastq file being read into memory, because of
+this your machine's available ram will need to exceed the size of the unzipped fastq file being denoised. If your file
+size exceeds the available memory you may want to consider spliting the input into several smaller files and denoising them
+each with this function (this is a fast solution as the multicore option can be used to speed up denoising). Alternatively,
+you can depoly the `denoise` function in an iterative fashion, reading in/denoising and writing only a single fq entry at
+a time. This would require a much smaller memory footprint, but would be much slower due to the lack of multithreading.
 }
 \seealso{
 \code{\link{denoise}}
