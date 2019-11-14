@@ -48,7 +48,6 @@ validate_DNAseq = function(new_instance){
 #' to the sequence output. Default = NULL.
 #'
 #' @return an object of class \code{"coi5p"}
-#' @seealso \code{\link{DNAseq}}
 #' @examples
 #' dat = DNAseq(example_nt_string)
 #' #named DNAseq sequence

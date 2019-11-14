@@ -14,8 +14,17 @@ first_stop = function(aa_str){
   (nchar(strsplit(aa_str, '\\*')[[1]][[1]])+1)*3
 }
 
-#' Translate the sequence and check log likelihood as a final double check.
+#' Translate the sequence and it for stop codons
 #'
+#' A side product of the framing and adjustment functions is that the reading frame of the sequence is established
+#' and translation can be conducted with high confidence. If the adjustment did in fact correct indel errors, the
+#' translated sequence should feature no stop codons. If stop codons are present this is grounds for rejection as 
+#' indel errors (or some other large issue) persists in the sequence.
+#' 
+#' This test has limitations, as any indels late in the DNA sequence may not lead to stop codons existing. Additionally
+#' by default censored translation is used by this function when producing the amino acid sequence, so as to 
+#' eliminate taxonomic bias against organisms with esoteric translation tables. The likelihood of catching errors is
+#' increased if the genetic code corresponding to sequences is known.
 #' 
 #' @param x a ccs_reads class object.
 #' @param ... additional arguments to be passed between methods.
@@ -36,6 +45,9 @@ first_stop = function(aa_str){
 #' ex_data = adjust(ex_data)
 #' #run the aa check on the adjusted sequences
 #' ex_data = aa_check(ex_data)
+#' ex_data$aaSeq #view the amino acid sequence
+#' ex_data$stop_codons # Boolean indicating if stop codons in the amino acid sequence
+#' 
 #' @export
 #' @name aa_check
 aa_check = function(x, ...){

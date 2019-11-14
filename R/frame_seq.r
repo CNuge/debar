@@ -239,10 +239,6 @@ frame = function(x, ...){
 } 
 
 
-
-#x = DNAseq(test_data$sequence[[243]], name = "test1", phred = test_data$quality[[243]])
-#x$phred
-
 #' @rdname frame
 #' @export
 frame.DNAseq = function(x, ..., dir_check = TRUE, min_match = 100, max_inserts = 400, terminate_rejects = TRUE){
