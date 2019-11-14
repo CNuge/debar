@@ -62,6 +62,7 @@ translate_codon = function(codon){
 #' @param reading_frame reading frame = 1 means the first bp in the string is the start of the
 #' first codon, can pass 1, 2 or 3. For 2 and 3 the first 1 and 2 bp will be
 #' dropped from translation respectively.
+#' @seealso \code{\link{aa_check}}
 #' @details
 #' Censored translation table:
 #'      AA  = FFLLSSSSYY?*CCWWLLLLPPPPHHQQRRRRII?MTTTTNN?KSS??VVVVAAAADDEEGGGG

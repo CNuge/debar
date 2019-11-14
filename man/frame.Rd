@@ -3,7 +3,7 @@
 \name{frame}
 \alias{frame}
 \alias{frame.DNAseq}
-\title{Take a DNAseq object and put sequences in common reading frame}
+\title{Take a DNAseq object and isolate the COI-5P region.}
 \usage{
 frame(x, ...)
 
@@ -15,28 +15,43 @@ frame(x, ...)
 
 \item{...}{additional arguments to be passed between methods.}
 
-\item{dir_check}{Should both the forward and reverse compliments be considered?}
+\item{dir_check}{Should both the forward and reverse compliments of a sequence be checked against
+the PHMM. Default is TRUE.}
 
 \item{min_match}{The minimum number of sequential matches to the PHMM for a sequence to be denoised.
 Otherwise flag the sequence as a reject.}
 
 \item{max_inserts}{The maximum number of sequention insert states occuring in a sequence 
-(including the flanking regions). If this number is
-exceeded than the entire read will be discarded if terminate_rejects = TRUE. Default is 400.}
+(including the flanking regions). If this number is exceeded than the entire read will be labelled for rejection. 
+Default is 400.}
 
 \item{terminate_rejects}{Should a check be made to enusre minimum homology of the input sequence to the PHMM.
-Makes sure there are not more than 400 consecutive insert states and not less than the minimum number of
-sequential matches. Default is True}
+Makes sure the match conditions are met prior to continuing with the framing of the sequence. If conditions not
+met then the function is stopped and the sequence labelled for rejection.}
 }
 \value{
 a class object of code{"DNAseq"}
 }
 \description{
-Take a DNAseq object and put sequences in common reading frame
+Raw DNA sequence is taken and compared against the nucleotide profile hidden Markov model (PHMM), 
+generating the statistical information later used to apply corrections to the sequence read. The 
+speed of this function and how it operates are dependent on the paramaters chosen. When dir_check == TRUE
+the function will compare the forward and reverse compliment against the PHMM. Since the PHMM comparison is
+a computationally intensive process, this option should be set to FALSE if you're data are all forward reads.
+}
+\details{
+The min match and max inserts provide the minimal amount of matching to the PHMM requried for a sequence to not
+be flagged for rejection. If you are dealing with sequence fragments much shorter than the entire COI-5P region you
+should lower these values.
 }
 \examples{
 #previously called
-
+hi_phred = paste0(rep("~~~", 217), collapse="")
+dat1 = DNAseq(example_nt_string_errors, name = "err_seq1", phred = hi_phred)
+dat1= frame(dat1)
+dat1$frame_dat # a labelled list with framing information is produced
+dat1$reject == FALSE # the match criteria were met, not labelled for rejection
+dat1$data$path #one can call and view the path diagram produced by the PHMM comparison.
 }
 \seealso{
 \code{\link{DNAseq}}

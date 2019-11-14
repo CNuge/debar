@@ -36,6 +36,8 @@ validate_DNAseq = function(new_instance){
 
 
 #' Build a DNAseq object from a DNA sequence string.
+#' 
+#' This can optionally include the DNA sequence's corresponding PHRED quality values and a sequencer identifier as well.
 #'
 #' @param x a nucleotide string.
 #' Valid characters within the nucleotide string are: a,t,g,c,-,n.
@@ -46,6 +48,7 @@ validate_DNAseq = function(new_instance){
 #' to the sequence output. Default = NULL.
 #'
 #' @return an object of class \code{"coi5p"}
+#' @seealso \code{\link{DNAseq}}
 #' @examples
 #' dat = DNAseq(example_nt_string)
 #' #named DNAseq sequence

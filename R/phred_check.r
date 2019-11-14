@@ -7,18 +7,34 @@ phred2numeric = function(phred_string){
 }
 
 
-#TODO - change the log file suffix from fq to .log
-#TODO - check the log file generation with the for loop running on just the head of the df... see where the issue with the
-# assignemt is
-
-
-#' Check the numeric phred scores and 
+#' Check that numeric phred scores indicate the sequence meets quality standards.
 #'
+#' This function is used to separate out low quality reads from a data set. Sequences with phred values not meeting
+#' the minimum quality standards specified. In the background it is converting the string of phred scores to numeric
+#' values and then comparing these against the thresholds to make sure the quality standards are met. If not, the
+#' returned DNAseq class will have a reject field equal to true.
 #' @param x a DNAseq class object.
 #' @param ... additional arguments to be passed between methods.
 #' @param min_avg_qv The minimum average phred score for a read to be retained.
 #' @param max_perc_low The maximum frequency of nucleotides in the string with QV values lower than 20. Default is 0.25
 #' @param max_perc_ultra_low The maximum frequency of nucleotides in the string with QV values lower than 10. Default is 5
+#' @return a class object of code{"DNAseq"} 
+#' @seealso \code{\link{DNAseq}}
+#' @examples
+#' # simulate a high quality phred score
+#' hi_phred = paste0(rep("~~~", 217), collapse="")
+#' dat1 = DNAseq(example_nt_string_errors, name = "phred_good", phred = hi_phred)
+#' dat1 = phred_check(dat1) #default params
+#' #check if the read should be rejected
+#' dat1$reject == FALSE
+#' # simulate a low quality phred score
+#' low_phred = paste0(rep("*0-", 217), collapse="")
+#' dat2 = DNAseq(example_nt_string_errors, name = "phred_bad", phred = low_phred)
+#' dat2 = phred_check(dat2) #default params
+#' #check if the read should be rejected
+#' dat2$reject == TRUE
+#' @export
+#' @name phred_check
 phred_check = function(x, ...){
   UseMethod("phred_check")
 }

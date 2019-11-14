@@ -16,6 +16,9 @@ vignette: >
 
 # IO style:
 #TODO - make sure the different combination of inputs and outputs don't cause errors. i.e. try denoise_file for fastq with keep_phred = false. need to make sure all the different combos are valid if they're to be presented to the user.
+#TODO - change the log file suffix from fq to .log
+#TODO - check the log file generation with the for loop running on just the head of the df... see where the issue with the
+# assignemt is
 
 
 ```{r loadlib, echo = TRUE, results = 'hide', message=FALSE, warning=FALSE}

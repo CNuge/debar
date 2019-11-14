@@ -3,7 +3,7 @@
 \name{phred_check}
 \alias{phred_check}
 \alias{phred_check.DNAseq}
-\title{Check the numeric phred scores and}
+\title{Check that numeric phred scores indicate the sequence meets quality standards.}
 \usage{
 phred_check(x, ...)
 
@@ -21,6 +21,26 @@ phred_check(x, ...)
 
 \item{max_perc_ultra_low}{The maximum frequency of nucleotides in the string with QV values lower than 10. Default is 5}
 }
+\value{
+a class object of code{"DNAseq"}
+}
 \description{
-Check the numeric phred scores and
+This function is used to separate out low quality reads from a data set. Sequences with phred values not meeting
+the minimum quality standards specified. In the background it is converting the string of phred scores to numeric
+values and then comparing these against the thresholds to make sure the quality standards are met. If not, the
+returned DNAseq class will have a reject field equal to true.
+}
+\examples{
+# simulate a high quality phred score
+hi_phred = paste0(rep("~~~", 217), collapse="")
+dat1 = DNAseq(example_nt_string_errors, name = "phred_good", phred = hi_phred)
+dat1 = phred_check(dat1) #default params
+#check if the read should be rejected
+dat1$reject == FALSE
+# simulate a low quality phred score
+low_phred = paste0(rep("*0-", 217), collapse="")
+dat2 = DNAseq(example_nt_string_errors, name = "phred_bad", phred = low_phred)
+dat2 = phred_check(dat2) #default params
+#check if the read should be rejected
+dat2$reject == TRUE
 }
