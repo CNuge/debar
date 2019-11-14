@@ -75,6 +75,7 @@ aa_check.DNAseq = function(x, ..., trans_table = 0, frame_offset = 0){
     x$stop_codons = TRUE
     x$reject = TRUE
     # below is for if the sequence should be masked in case of stop codons
+    # this functionality currently disabled - not conservative enough
     #censor_at = first_stop(x$aaSeq)
     #censor_str = strsplit(x$adjusted_seq, "")[[1]]
     #censor_str[censor_at:length(censor_str)] = "N"

@@ -22,6 +22,36 @@ outseq(x, ...)
 \item{adjust_limit}{the maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
 then the entire read is masked with ambigious characters. Default is 5.}
 }
+\value{
+a class object of code{"ccs_reads"}
+}
 \description{
 Get the final denoised output sequence for a read.
+}
+\examples{
+#previously run
+excess_string = paste0("CCCCCC", example_nt_string_errors, "CCCCCCCC", collapse="")
+ex_data = DNAseq(excess_string, name = 'ex1')
+ex_data =  frame(ex_data)
+ex_data = adjust(ex_data)
+#build output sequence with trimmed edges
+ex_data = outseq(ex_data, keep_flanks = TRUE)
+ex_data$outseq #view the output sequence, edges were reattached
+#you will avoid data loss on edge of sequence, but errors in edge, or
+#off target sequence will be present in the output
+#
+#build output sequence with only the COI-5P region
+ex_data = outseq(ex_data, keep_flanks = FALSE)
+ex_data$outseq #view the output sequence
+#Ns added to the front to buffer trimmed region
+#Note some sequence is lost due to the strange path match that occurs at the 
+#front of the sequence.
+ex_data$data$path
+}
+\seealso{
+\code{\link{DNAseq}}
+
+\code{\link{frame}}
+
+\code{\link{adjust}}
 }
