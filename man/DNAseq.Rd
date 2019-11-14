@@ -21,7 +21,7 @@ to the sequence output. Default = NULL.}
 an object of class \code{"coi5p"}
 }
 \description{
-Build a DNAseq object from a DNA sequence string.
+This can optionally include the DNA sequence's corresponding PHRED quality values and a sequencer identifier as well.
 }
 \examples{
 dat = DNAseq(example_nt_string)

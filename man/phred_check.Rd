@@ -44,3 +44,6 @@ dat2 = phred_check(dat2) #default params
 #check if the read should be rejected
 dat2$reject == TRUE
 }
+\seealso{
+\code{\link{DNAseq}}
+}

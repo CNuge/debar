@@ -3,7 +3,7 @@
 \name{aa_check}
 \alias{aa_check}
 \alias{aa_check.DNAseq}
-\title{Translate the sequence and check log likelihood as a final double check.}
+\title{Translate the sequence and it for stop codons}
 \usage{
 aa_check(x, ...)
 
@@ -26,7 +26,16 @@ framed sequence the the first nucelotide of the first codon.}
 a class object of code{"ccs_reads"}
 }
 \description{
-Translate the sequence and check log likelihood as a final double check.
+A side product of the framing and adjustment functions is that the reading frame of the sequence is established
+and translation can be conducted with high confidence. If the adjustment did in fact correct indel errors, the
+translated sequence should feature no stop codons. If stop codons are present this is grounds for rejection as 
+indel errors (or some other large issue) persists in the sequence.
+}
+\details{
+This test has limitations, as any indels late in the DNA sequence may not lead to stop codons existing. Additionally
+by default censored translation is used by this function when producing the amino acid sequence, so as to 
+eliminate taxonomic bias against organisms with esoteric translation tables. The likelihood of catching errors is
+increased if the genetic code corresponding to sequences is known.
 }
 \examples{
 #previously called
@@ -35,6 +44,9 @@ ex_data =  frame(ex_data)
 ex_data = adjust(ex_data)
 #run the aa check on the adjusted sequences
 ex_data = aa_check(ex_data)
+ex_data$aaSeq #view the amino acid sequence
+ex_data$stop_codons # Boolean indicating if stop codons in the amino acid sequence
+
 }
 \seealso{
 \code{\link{DNAseq}}
