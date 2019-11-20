@@ -9,12 +9,17 @@
 
 ## Installation
 
-
-
-
+The development version of `debar` can be installed directly from GitHub. You'll need to have the R package `devtools` installed and loaded. Also note if the build_vignettes option is set to true, you will need to have the R package `knitr` installed.
+```
+#install.packages("devtools")
+#install.packages("knitr") #required if build_vignettes = TRUE
+#library(devtools) 
+devtools::install_github("CNuge/debar", build_vignettes = TRUE)
+library(coil)
+```
 ## Use and examples
 
-The package's vignette contains detailed explinations of the functions and parameters of the `debar` denoising pipeline. The use is encouraged to read this document in order to get oriented and effectively deploy `debar` in the denoising of their own data. Following package installation, the vignette can be accessed from within R through the following command:
+The package's vignette contains detailed explanations of the functions and parameters of the `debar` denoising pipeline. The use is encouraged to read this document in order to get oriented and effectively deploy `debar` in the denoising of their own data. Following package installation, the vignette can be accessed from within R through the following command:
 ```
 vignette('debar-vignette')
 ```
@@ -34,7 +39,7 @@ vignette('debar-vignette')
 Initial design and default parameters are based on using seqDenoise with [single molecule real-time (SMRT) sequencing](https://www.pacb.com/smrt-science/smrt-sequencing/) on [the Pacific Biosciences SEQUEL platform](https://www.pacb.com/products-and-services/sequel-system/). Despite this, the package is designed to interface with fastq or fasta files of any origin (although the developers have yet to quantify performance on other data sources). The package uses a profile hidden Markov model (PHMMs) to identify and correct insertion and deletion errors within COI-5P sequences.
 
 
-## Acknowldgements
+## Acknowledgements
 
 
 
