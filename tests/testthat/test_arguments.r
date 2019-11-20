@@ -2,7 +2,7 @@
 test_that("Input arguments are handled correctly.", {
   
   #load in a set of example sequences  
-  fastq_gz_real_file = system.file('extdata/sequel_smrt_subset.fastq.gz', package = 'seqdenoise')
+  fastq_gz_real_file = system.file('extdata/coi_sequel_data_subset.fastq.gz', package = 'debar')
   data = read_fastq(fastq_gz_real_file)
   
   #

@@ -10,6 +10,7 @@
 ## Installation
 
 The development version of `debar` can be installed directly from GitHub. You'll need to have the R package `devtools` installed and loaded. Also note if the build_vignettes option is set to true, you will need to have the R package `knitr` installed.
+
 ```
 #install.packages("devtools")
 #install.packages("knitr") #required if build_vignettes = TRUE
@@ -25,7 +26,7 @@ vignette('debar-vignette')
 ```
 
 
-### File to file denoising
+### File-to-file denoising
 
 
 ### Denoising within R
