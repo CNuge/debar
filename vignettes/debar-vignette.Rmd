@@ -1,10 +1,10 @@
 ---
-title: "DAPR - Denoising Amplicons for PRotein coding markers"
+title: "Debar - DEnoising COI-5P BARcode data"
 author: "Cameron M. Nugent"
 data: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{seqdenoise-vignette}
+  %\VignetteIndexEntry{debar-vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
