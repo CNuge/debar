@@ -1,6 +1,6 @@
 # debar
 ## A denoiser for DNA barcode data 
-[![Build Status](https://travis-ci.com/CNuge/seqdenoise.svg?token=H6eQaqsE1kLqYX3zZ1Xz&branch=master)](https://travis-ci.com/CNuge/seqdenoise)
+[![Build Status](https://travis-ci.com/CNuge/debar.svg?token=H6eQaqsE1kLqYX3zZ1Xz&branch=master)](https://travis-ci.com/CNuge/debar)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 --------------------------------------------------------
 
