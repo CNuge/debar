@@ -1,11 +1,11 @@
 
-#' \pkg{seqdenoise}
+#' \pkg{debar}
 #'
-#' \pkg{seqdenoise} is an R package designed for the identification and removal 
+#' \pkg{debar} is an R package designed for the identification and removal 
 #' of insertion and deletion errors from COI-5P DNA barcode data.
 #' 
 #' @details 
-#' \pkg{seqdenoise} is built around the DNAseq object, which takes a COI-5P DNA barcode sequence
+#' \pkg{debar} is built around the DNAseq object, which takes a COI-5P DNA barcode sequence
 #' and optionally its associated name and PHRED quality information as input. The package utilizes
 #' a nucleotide profile hidden Markov model (PHMM) for the identification of the COI-5P region of 
 #' an input sequence and the identification and correction of indel errors from within the COI-5P 
@@ -48,6 +48,6 @@
 #' }
 #' @author Cameron M. Nugent
 #' @docType package
-#' @name seqdenoise
+#' @name debar
 #################
 NULL

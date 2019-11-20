@@ -1,6 +1,6 @@
-Package: seqdenoise
+Package: debar
 Type: Package
-Title: Denoising of PacBio circular consenus reads for COI-5P barcode data 
+Title: A COI-5P barcode Data Denoiser
 Version: 0.1.0
 Author: Cameron M. Nugent
 Maintainer: Cameron M. Nugent <nugentc@uoguelph.ca>
