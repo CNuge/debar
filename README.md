@@ -27,6 +27,29 @@ vignette('debar-vignette')
 
 
 ### File-to-file denoising
+Denoising of COI-5P data with `debar` can be conducted in a file-to-file fashion using the `denoise_file` function. 
+
+All a user needs to do is specify the input and output files and any custom paramaters (see `?denoise` or the manual for exhautive list). The `denoise_file` function accepts barcode data in either `fastq` or `fasta` formats (gzipped (`.gz`) files are also permitted).
+Small example inputs are included with the package. After installation, these can be accessed as follows:
+```
+fasta_example_file = system.file('extdata/coi_sequel_data_subset.fasta', package = 'debar')
+fastq_example_file = system.file('extdata/coi_sequel_data_subset.fastq', package = 'debar')
+gzfastq_example_file = system.file('extdata/coi_sequel_data_subset.fastq.gz', package = 'debar')
+```
+
+Note: running these examples will generate output files [in your current working directory!](https://support.rstudio.com/hc/en-us/articles/200711843-Working-Directories-and-Workspaces)
+```
+denoise_file(fastq_example_file, filename = "example_output.fastq")
+```
+
+File-to-file denoising can also be parallelized across multiple CPU cores. The denoising of each sequences in the input file is conducted separately, so using multiple cores will decrease the time needed to complete denoising roughly by a factor of the number of cores used. If you are denoising complete sequencer outputs, it is highly reccommend that you do so with as many cores as possible. For example, denoising of 160,000 sequence reads on a 64-core server (all default paramaters) takes approximately 1hr and 42 minutes, while on a laptop with only 8 cores would take almost 14 hours!
+
+```
+#debar works best when the tasks are highly parallelized
+denoise_file(fastq_example_file, filename = "multicore-example_output.fastq", multicore = 8, log_file = TRUE, keep_rejects = TRUE) #set the multicore parameter to the number of CPU cores available
+```
+
+
 
 
 ### Denoising within R
