@@ -22,7 +22,7 @@ vignette: >
 
 
 ```{r loadlib, echo = TRUE, results = 'hide', message=FALSE, warning=FALSE}
-library(seqdenoise)
+library(debar)
 ```
 
 ## Abstract

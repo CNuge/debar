@@ -39,12 +39,12 @@ relitavely low quality base).
 #previously called
 ex_data = DNAseq(example_nt_string_errors, name = 'error_adj_example')
 ex_data =  frame(ex_data)
-#adjust the sequence with default censor length is 3
+#adjust the sequence with default censor length is 7
 ex_data = adjust(ex_data)
-ex_data$adjusted_sequence #output is a vector, use outseq to build the string.
+ex_data$adjusted_sequence #output is a vector, use outseq to build the string
 #with a custom censorship size
 ex_data = adjust(ex_data, censor_length = 5)
-ex_data$adjusted_sequence #more base pairs turned to placeholders surrounding the corrections applied
+ex_data$adjusted_sequence #less flanking base pairs turned to placeholders
 ex_data$adjustment_count #get a count of the number of adjustments applied
 }
 \seealso{
