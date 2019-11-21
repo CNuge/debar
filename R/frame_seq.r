@@ -211,8 +211,11 @@ set_frame = function(org_seq_vec, path_out){
 #' should lower these values.
 #' 
 #' @param x a DNAseq class object.
-#' @param dir_check Should both the forward and reverse compliments of a sequence be checked against
-#' the PHMM. Default is TRUE.
+#' @param dir_check A boolean indicating if both the forward and reverse compliments of a sequence should 
+#' be checked against the PHMM. Default is TRUE.
+#' @param double_pass A boolean indicating if a second pass through the Viterbi algorithm should be conducted for sequences
+#' that had leading nucleotides not matching the PHMM. This improves the accurate establishment of reading frame and will
+#' reduce false rejections by the amino acid check, but this comes at a cost of additional processing time. Default is TRUE.
 #' @param min_match The minimum number of sequential matches to the PHMM for a sequence to be denoised.
 #' Otherwise flag the sequence as a reject.
 #' @param max_inserts The maximum number of sequention insert states occuring in a sequence 
@@ -241,7 +244,7 @@ frame = function(x, ...){
 
 #' @rdname frame
 #' @export
-frame.DNAseq = function(x, ..., dir_check = TRUE, min_match = 100, max_inserts = 400, terminate_rejects = TRUE){
+frame.DNAseq = function(x, ..., dir_check = TRUE, double_pass = TRUE, min_match = 100, max_inserts = 400, terminate_rejects = TRUE){
   
   if(dir_check == TRUE){
     dir_out = dir_check(x$raw)
@@ -284,7 +287,7 @@ frame.DNAseq = function(x, ..., dir_check = TRUE, min_match = 100, max_inserts =
   }
   
   #check for leading inserts, if present remove them and reframe the sequence for higher accuracy.
-  if(leading_ins(x$data$ntPHMMout[['path']])){
+  if(leading_ins(x$data$ntPHMMout[['path']]) && double_pass == TRUE){
     temp_frame = set_frame(org_seq_vec, x$data$ntPHMMout[['path']]) #run initial framing of the full sequence
     x$data$raw_removed_front = temp_frame[['removed_lead']] # keep any tirmmed edges of the raw sequence separate
     x$data$raw_removed_end = temp_frame[['removed_end']]    #

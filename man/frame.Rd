@@ -7,16 +7,20 @@
 \usage{
 frame(x, ...)
 
-\method{frame}{DNAseq}(x, ..., dir_check = TRUE, min_match = 100,
-  max_inserts = 400, terminate_rejects = TRUE)
+\method{frame}{DNAseq}(x, ..., dir_check = TRUE, double_pass = TRUE,
+  min_match = 100, max_inserts = 400, terminate_rejects = TRUE)
 }
 \arguments{
 \item{x}{a DNAseq class object.}
 
 \item{...}{additional arguments to be passed between methods.}
 
-\item{dir_check}{Should both the forward and reverse compliments of a sequence be checked against
-the PHMM. Default is TRUE.}
+\item{dir_check}{A boolean indicating if both the forward and reverse compliments of a sequence should 
+be checked against the PHMM. Default is TRUE.}
+
+\item{double_pass}{A boolean indicating if a second pass through the Viterbi algorithm should be conducted for sequences
+that had leading nucleotides not matching the PHMM. This improves the accurate establishment of reading frame and will
+reduce false rejections by the amino acid check, but this comes at a cost of additional processing time. Default is TRUE.}
 
 \item{min_match}{The minimum number of sequential matches to the PHMM for a sequence to be denoised.
 Otherwise flag the sequence as a reject.}

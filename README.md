@@ -32,8 +32,11 @@ Denoising of COI-5P data with `debar` can be conducted in a file-to-file fashion
 All a user needs to do is specify the input and output files and any custom paramaters (see `?denoise` or the manual for exhautive list). The `denoise_file` function accepts barcode data in either `fastq` or `fasta` formats (gzipped (`.gz`) files are also permitted).
 Small example inputs are included with the package. After installation, these can be accessed as follows:
 ```
+#fasta
 fasta_example_file = system.file('extdata/coi_sequel_data_subset.fasta', package = 'debar')
+#fastq
 fastq_example_file = system.file('extdata/coi_sequel_data_subset.fastq', package = 'debar')
+#gzipped fastq
 gzfastq_example_file = system.file('extdata/coi_sequel_data_subset.fastq.gz', package = 'debar')
 ```
 
@@ -48,6 +51,8 @@ File-to-file denoising can also be parallelized across multiple CPU cores. The d
 #debar works best when the tasks are highly parallelized
 denoise_file(fastq_example_file, filename = "multicore-example_output.fastq", multicore = 8, log_file = TRUE, keep_rejects = TRUE) #set the multicore parameter to the number of CPU cores available
 ```
+
+Certain paramater selections can further increase the speed with which `debar` can process data, but come with certain trade offs (that may or may not be worth consideration in the processing of your own data). The most drastic speed imrpovement is the provided 
 
 
 

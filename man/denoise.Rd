@@ -9,13 +9,13 @@ denoise(x, ...)
 
 \method{denoise}{default}(x, ..., name = character(), phred = NULL,
   phred_test = TRUE, min_avg_qv = 20, max_perc_low = 0.25,
-  max_perc_ultra_low = 0.05, dir_check = TRUE, min_match = 100,
-  max_inserts = 400, censor_length = 7, added_phred = "*",
-  adjust_limit = 5, ambig_char = "N", to_file = TRUE,
-  keep_flanks = TRUE, keep_phred = TRUE, outformat = "fastq",
-  terminate_rejects = TRUE, outfile = NULL, phred_placeholder = "#",
-  aa_check = TRUE, trans_table = 0, frame_offset = 0,
-  append = TRUE)
+  max_perc_ultra_low = 0.05, dir_check = TRUE, double_pass = TRUE,
+  min_match = 100, max_inserts = 400, censor_length = 7,
+  added_phred = "*", adjust_limit = 5, ambig_char = "N",
+  to_file = TRUE, keep_flanks = TRUE, keep_phred = TRUE,
+  outformat = "fastq", terminate_rejects = TRUE, outfile = NULL,
+  phred_placeholder = "#", aa_check = TRUE, trans_table = 0,
+  frame_offset = 0, append = TRUE)
 }
 \arguments{
 \item{x}{a DNA sequence string.}
@@ -36,7 +36,12 @@ to the sequence output. Default = NULL.}
 
 \item{max_perc_ultra_low}{The maximum frequency of nucleotides in the string with QV values lower than 10. Default is 5}
 
-\item{dir_check}{Should both the forward and reverse compliments be considered?}
+\item{dir_check}{A boolean indicating if both the forward and reverse compliments of a sequence should 
+be checked against the PHMM. Default is TRUE.}
+
+\item{double_pass}{A boolean indicating if a second pass through the Viterbi algorithm should be conducted for sequences
+that had leading nucleotides not matching the PHMM. This improves the accurate establishment of reading frame and will
+reduce false rejections by the amino acid check, but this comes at a cost of additional processing time. Default is TRUE.}
 
 \item{min_match}{The minimum number of sequential matches to the PHMM for a sequence to be denoised.
 Otherwise flag the sequence as a reject.}

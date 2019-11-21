@@ -21,7 +21,11 @@
 #' @param min_avg_qv The minimum average phred score for a read to be retained.
 #' @param max_perc_low The maximum frequency of nucleotides in the string with QV values lower than 20. Default is 0.25
 #' @param max_perc_ultra_low The maximum frequency of nucleotides in the string with QV values lower than 10. Default is 5
-#' @param dir_check Should both the forward and reverse compliments be considered?
+#' @param dir_check A boolean indicating if both the forward and reverse compliments of a sequence should 
+#' be checked against the PHMM. Default is TRUE.
+#' @param double_pass A boolean indicating if a second pass through the Viterbi algorithm should be conducted for sequences
+#' that had leading nucleotides not matching the PHMM. This improves the accurate establishment of reading frame and will
+#' reduce false rejections by the amino acid check, but this comes at a cost of additional processing time. Default is TRUE.
 #' @param min_match The minimum number of sequential matches to the PHMM for a sequence to be denoised.
 #' Otherwise flag the sequence as a reject.
 #' @param max_inserts The maximum number of sequention insert states occuring in a sequence 
@@ -87,7 +91,8 @@ denoise.default = function(x, ...,
                              min_avg_qv = 20,
                              max_perc_low = 0.25,
                              max_perc_ultra_low = 0.05,
-                             dir_check = TRUE, 
+                             dir_check = TRUE,
+                             double_pass = TRUE,
                              min_match = 100,
                              max_inserts = 400,
                              censor_length = 7,
@@ -122,7 +127,8 @@ denoise.default = function(x, ...,
     return(dat)
   }
 
-  dat = frame(dat, dir_check = dir_check, 
+  dat = frame(dat, dir_check = dir_check,
+                   double_pass = double_pass,
                    min_match = min_match,
                    max_inserts = max_inserts,
                    terminate_rejects= terminate_rejects,
