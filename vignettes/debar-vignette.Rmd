@@ -16,9 +16,6 @@ vignette: >
 
 # IO style:
 #TODO - make sure the different combination of inputs and outputs don't cause errors. i.e. try denoise_file for fastq with keep_phred = false. need to make sure all the different combos are valid if they're to be presented to the user.
-#TODO - change the log file suffix from fq to .log
-#TODO - check the log file generation with the for loop running on just the head of the df... see where the issue with the
-# assignemt is
 
 
 ```{r loadlib, echo = TRUE, results = 'hide', message=FALSE, warning=FALSE}
@@ -53,10 +50,12 @@ fastq_example_file = system.file('extdata/coi_sequel_data_subset.fastq.gz', pack
 
 
 ## Using the package
-### for the impatient
+### File-to-file denoising
+
 The progam contains a wrapper function `denoise_file` that allows for a user to run the entire denoiser pipeline in a single step (there are quantitatively informed defaults for executing the full pipline, but it is highly reccommended that a user acclimate themselves to the `denoise` pipeline options to ensure that the paramaters make sense for their given dataset and analysis goals).
 
 All that is needed is for the input and output files to be specified. The program by default will read in the input file, run each sequence through the denoising algorithm, and then output the denoised sequences to the specified output file. The denoise pipeline contains certain rules (that a user can control - see below for details on these paramaters) that lead to some sequences being rejected entirely, the `keep_rejects` option allows a user to output these rejected sequences to another file for futher inspection. The program also has an option for generating a simple log file, and allows for multicore execution of the denoising pipeline by simply specify the number of cores the process should utilize. Additionally you can type `?denoise` to see a list of all available denoise paramaters that can be passed to the `denoise_file` wrapper function as well (paramaters are explored in more detail below).
+
 ```{r, eval = FALSE}
 # NOTE - this block of code is not run so as to avoid the generation of output files!
 #
@@ -71,7 +70,22 @@ denoise_file(fastq_example_file, filename = "multicore-example_output.fastq", mu
 
 Thats all it takes to get `debar` removing errors from COI barcode data. Below the ins and outs of the program are discussed in more details, to help users make more informed paramater tuning decisions for the denoising of their own data
 
-### Data input
+#### Paramater combinations - speed and accuracy tradeoffs
+
+File-to-file denoising can also be parallelized across multiple CPU cores. The denoising of each sequences in the input file is conducted separately, so using multiple cores will decrease the time needed to complete denoising roughly by a factor of the number of cores used. If you are denoising complete sequencer outputs, it is highly reccommend that you do so with as many cores as possible. For example, denoising of 160,000 sequence reads on a 64-core server (all default paramaters) takes approximately 1hr and 42 minutes, while on a laptop with only 8 cores would take almost 14 hours!
+
+```
+#debar works best when the tasks are highly parallelized
+denoise_file(fastq_example_file, filename = "multicore-example_output.fastq", multicore = 8, log_file = TRUE, keep_rejects = TRUE) #set the multicore parameter to the number of CPU cores available
+```
+
+Certain parameter selections can further increase the speed with which `debar` can process data, but come with certain trade offs (that may or may not be worth consideration in the processing of your own data). The most drastic speed improvement is provided provided by disabling the direction check (dir_check). By default both the forward and reverse compliments of a read are compared to the PHMM, if your data consists only of forward reads, then disabling this option will result in a 30-50% reduction in processing. Other speed/accuracy trade offs are available and discussed within the 'Recommended parameter combinations' section of the package's vignette.
+
+
+### Denoiser pipeline - components and walk-through
+*explain that here it is demonstrated on a single sequence, step by step. all parameters for these individual components can be passed to the `denoise` function to control the operation in a single step.
+
+#### Data input
 
 The `read_fasta` and `read_fastq` functions allow users to read data into R for denoising. These functions produce dataframes with columns containing the header data, sequence data and PHRED quality scores (for fastq only - there is an option to discard the quality scores if they are not of interest to the user). 
 
@@ -81,11 +95,7 @@ names(data)
 #head(data) - to view the first few records
 ```
 
-## Denoiser pipeline - components and walk-through
-*explain that here it is demonstrated on a single sequence, step by step. all parameters for these individual components can be passed to the `denoise` function to control the operation in a single step.
-
-
-### Building a DNAseq object
+#### Building a DNAseq object
 
 The `debar` denoising pipeline is built around the custom `DNAseq` object, which is used to store the input sequence data and the outputs generated by the denoising process.
 
@@ -104,7 +114,7 @@ print("Available in the current DNAseq object:")
 names(ex)
 ```
 
-### Checking sequence quality with Phred scores (optional)
+#### Checking sequence quality with Phred scores (optional)
 
 If you're denoising data from a fastq file, you may wish to utilize the `phred_check` function as well. This function can help separate out low quality reads from a data set in an efficient manner. Instead of running every single sequence through the statistical models used for denoising, this pre-check can be used to remove sequences with quality values not eclipsing the given thresholds. The quality thresholds filter reads if they do not meet a minimum average phred score (`min_avg_qv`), if the frequency of low quality reads (QV < 20) is too high (`max_perc_low`) or if the frequency of ultra low quality reads (QV <10) is too high (`max_perc_ultra_low`). If these thresholds are eclipsed, the `DNAseq` object's `reject` field will be `TRUE`.
 
@@ -116,7 +126,7 @@ ex$reject #this read meets the phred_check thresholds, so it should not be rejec
 ```
 
 
-### Framing the barcode sequence
+#### Framing the barcode sequence
 The `frame` function is one of the two main workhorses in the denoising pipeline. It takes the raw data sequence and compares it against the nucleotide profile hidden Markov model (PHMM), generating the statistical information (The Viterbi algorithm's output path) that is used to apply corrections to the sequence read. Since the PHMM is a profile of only the 657bp region of COI-5P (and not capable of denoising surrounding data) it also takes the input sequence and removes any flanking regions that fall outside of the 657bp COI-5P region. Don't worry though, if you wish to keep these parts of your sequence, there is an option to include the removed flanking sequences in the output (you may want these if they contain important identifying information, i.e. tags to relate multiplexed reads back to their sample of origin). Just be aware that if you do keep the flaking regions, any errors in these regions will go uncorrected!
 
 By default, the `frame` function will compare both the forward and reverse compliments of an input read to the PHMM and use the log likelihood values to pick the direction that best matches the COI-5P profile. If you are confident that all reads being denoised are in the forward orientation, then you can speed up the frame function by setting the option: `dir_check = FALSE` (in this case `frame` will not generate the reverse compliment, and only pass the sequence through the PHMM in the forward orientation). Additionally `frame` contains an additional set of options that can be use to filter out small fragments and potential chimeric sequences. When the `terminate_rejects` option is set to `TRUE` then the following two checks are run: (1) checks to see if a sequence contains more than `max_inserts` (default = 400) consecutive insert states in the PHMM path (i.e. 400 or more consecutive bp in the sequence appear to *not* be part of COI-5P) (2) checks if the sequence contains less than `min_match`(default = 100) consecutive matches to the PHMM. If either condition is met the sequence will be flagged for rejection and not framed. 
@@ -126,7 +136,7 @@ ex = frame(ex)
 ```
 
 
-### Adjusting the sequence
+#### Adjusting the sequence
 
 The `adjust` function is the component of the denoising pipeline where identified errors in the sequence are corrected. Using the PHMM path output and the information about the framing of the sequence generated by the `frame` function, adjust applies insertion and deletion corrections to the DNA sequence. The series hidden match, insert and delete states in the PHMM path are assessed and used to correct the DNA sequence. Certain rules are applied in the adjustment algorithm to ensure that adjustments are not being applied to highly erroneous sequences, or sequences with deviations from the expected COI structure that may be biologically true. First, triple inserts or triple deletes (3 consecutive nucleotides missing or added) are not corrected by the adjust algorithm. This is because the insertion or deletion of a codon would preserve the integrity of the amino acid sequence (no frame shift). In fact, certain species do possess COI-5P sequences with full codons missing (i.e. they are 654bp in length); adjustments of sequences of this kind would be erroneous. Additionally, if 5 or more consecutive insert or delete states are encountered, the adjustment is ceased and the sequence is flagged for rejection. Drastic deviations of this kind are extremely improbable and indicative of a larger problem with the sequence than simply minor technical errors (i.e. a contaminant sequence or chimera).
 
@@ -150,7 +160,7 @@ The PHMM suggests a bp was missing at position 157 in the profile (the path can 
 ex$adjusted_sequence[150:164]
 ```
 
-### Amino Acid check
+#### Amino Acid check
 
   Following the framing and adjustment of the sequence, `aa_check` can be used to translate the adjusted DNA sequence to amino acids and conduct a check of the amino acid sequence for the presence of stop codons. This is easier (i.e. translation is only performed once) because the `frame` function sets the DNA sequences in a common orientation and reading frame. The `aa_check` function's search for stop codons provides a simple double check of the `adjust` algorithm's performance. If stop codons are present then this indicates that reading frame shifts have not been corrected properly in the adjustment phase. Sequences of this kind will be flagged for rejection. This check is not perfect, as any persisting frame shifts late in the sequence may not be sufficiently disruptive to produce a stop codon.
   
@@ -161,7 +171,7 @@ ex = aa_check(ex) #the default behaviour should suit >99% of user's needs
   
 ```
 
-### Creating the output sequence
+#### Creating the output sequence
 
 Once the DNA sequence has been framed, adjusted and checked for evidence of uncorrected errors the output sequence can be generated. The default ambiguous character used in the output sequence is "N" (`ambig_char = "N"`). This character is substituted into the output sequence where adjustments and censorship have occurred. Additionally, there are two styles of output sequences that can be produced: trimmed and framed sequences or sequences with flanking information reattached. 
   The default behaviour of `outseq` is to keep the flanks of sequences (controlled by the parameter `keep_flanks = TRUE`). Any DNA sequence information that was outside of the framed COI-5P profile region is reattached to the ends of the sequence to create the output sequence. This is done so that `debar` can be applied in the analysis of raw sequence data that contains important information outside of the barcode region required in subsequent analysis steps. For example if the sequence are tagged with sample specific barcode sequences, this information is preserved in the output sequence so that post-denoising sequences can be demultiplexed and assigned to their correct source. Since flanking regions are excluded by the `frame` function, these regions are not denoised and any errors present in these portions of the sequence will go uncorrected. Note: the PHRED quality scores corresponding to the flanking sequence regions are preserved where applicable.
@@ -185,7 +195,7 @@ nchar(ex$outseq) # only the COI-5P region is outout
 
 ```
 
-### Writing to file
+#### Writing to file
 Once the denoising of the sequence is completed, its components can be further queried and evaluated in within R, or the sequence can be saved to an output file.
 
 `debar` contains functions for outputting sequences in either fastq or fasta format (`write_fastq` and `write_fasta` respectively). When a sequence is output, the `name` field of the DNAseq object is used to create the header line for the sequence and the `outseq` field becomes the sequence written to the file. Both output options have an `append` option, for which the default is `TRUE`. When `TRUE` the output is appended to an existing file with the specified name (`filename` parameter), if changed to `FALSE` than an existing file will be overwritten.
@@ -210,10 +220,8 @@ write_fastq(ex, filename = "out.fq" , append = FALSE, keep_phred = FALSE, phred_
 ```
 
 
-## Batch analyses in R
+### Batch analyses in R
 
-
-## Recommended paramater combinations 
 
 
 

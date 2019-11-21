@@ -4,7 +4,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 --------------------------------------------------------
 
-`debar` is an R package designed to denoise COI-5P DNA barcode data generated through high throughput sequencing data. 
+`debar` is an R package designed for denoising high throughput sequencing data for the animal DNA barcode marker COI-5P.
 
 
 ## Installation
@@ -25,12 +25,11 @@ The package's vignette contains detailed explanations of the functions and param
 vignette('debar-vignette')
 ```
 
-
 ### File-to-file denoising
 Denoising of COI-5P data with `debar` can be conducted in a file-to-file fashion using the `denoise_file` function. 
 
-All a user needs to do is specify the input and output files and any custom paramaters (see `?denoise` or the manual for exhautive list). The `denoise_file` function accepts barcode data in either `fastq` or `fasta` formats (gzipped (`.gz`) files are also permitted).
-Small example inputs are included with the package. After installation, these can be accessed as follows:
+All a user needs to do is specify the input and output files and any custom paramaters (see `?denoise` or the manual for exhautive list). The `denoise_file` function accepts barcode data in either `fastq` or `fasta` formats (gzipped (`.gz`) files are also permitted). Small example inputs are included with the package. After installation, these can be accessed as follows:
+
 ```
 #fasta
 fasta_example_file = system.file('extdata/coi_sequel_data_subset.fasta', package = 'debar')
@@ -41,38 +40,34 @@ gzfastq_example_file = system.file('extdata/coi_sequel_data_subset.fastq.gz', pa
 ```
 
 Note: running these examples will generate output files [in your current working directory!](https://support.rstudio.com/hc/en-us/articles/200711843-Working-Directories-and-Workspaces)
+
+A complete file can be denoised in a single line of R code, simply specift the input and output files.
 ```
 denoise_file(fastq_example_file, filename = "example_output.fastq")
 ```
-
-File-to-file denoising can also be parallelized across multiple CPU cores. The denoising of each sequences in the input file is conducted separately, so using multiple cores will decrease the time needed to complete denoising roughly by a factor of the number of cores used. If you are denoising complete sequencer outputs, it is highly reccommend that you do so with as many cores as possible. For example, denoising of 160,000 sequence reads on a 64-core server (all default paramaters) takes approximately 1hr and 42 minutes, while on a laptop with only 8 cores would take almost 14 hours!
-
-```
-#debar works best when the tasks are highly parallelized
-denoise_file(fastq_example_file, filename = "multicore-example_output.fastq", multicore = 8, log_file = TRUE, keep_rejects = TRUE) #set the multicore parameter to the number of CPU cores available
-```
-
-Certain parameter selections can further increase the speed with which `debar` can process data, but come with certain trade offs (that may or may not be worth consideration in the processing of your own data). The most drastic speed improvement is provided provided by disabling the direction check (dir_check). By default both the forward and reverse compliments of a read are compared to the PHMM, if your data consists only of forward reads, then disabling this option will result in a 30-50% reduction in processing. Other speed/accuracy trade offs are available and discussed within the 'Recommended parameter combinations' section of the package's vignette.
-
+If you are planning on utilizing `debar` on compete sequencing runs, please consut the package vignette section 'Paramater combinations - speed and accuracy tradeoffs' for suggestions on optimizing performance.
 
 ### Denoising within R
 
 The file-to-file denoising method should serve the purposes of the majority of users. However, you are also able to perform denoising of sequences from within R (for the purposes of parameter tuning, extraction of additional data etc.).
 
+```
+#read file
+```
 
+```
+#denoise
+?denoise # for an exhaustive list of parameter options.
+```
+
+The individual components of the 
 
 ## Version Notes
 
-Initial design and default parameters are based on using `debar` to process [single molecule real-time (SMRT) sequencing](https://www.pacb.com/smrt-science/smrt-sequencing/) on [the Pacific Biosciences SEQUEL platform](https://www.pacb.com/products-and-services/sequel-system/). Despite this, the package is designed to interface with fastq or fasta files of any origin (although the developers have yet to quantify performance on other data sources). The package uses a profile hidden Markov model (PHMMs) to identify and correct insertion and deletion errors within COI-5P sequences.
+Initial design and default parameters are based on using `debar` to process [single molecule real-time (SMRT) sequencing](https://www.pacb.com/smrt-science/smrt-sequencing/) outputs produced by [the Pacific Biosciences SEQUEL platform](https://www.pacb.com/products-and-services/sequel-system/). Despite this, the package is designed to interface with fastq or fasta files of any origin (although the developers have yet to quantify performance on other data sources). The package uses a profile hidden Markov model (PHMMs) to identify and correct insertion and deletion errors within COI-5P sequences. In the future we hope to quantify performance and provide informed hyperparamater choices for outputs from other sequencing platforms. If you are interested in beta testing `debar` on barcode or metabarcode data from other platforms, please [contact Cam](https://cnuge.github.io), we would be happy to work with you to optimize `debar`'s functionality.
 
 
 ## Acknowledgements
 
-
-
-
-
-
-
-
+Funding for the development of this software was provided by grants in Bioinformatics and Computational Biology from the Government of Canada through Genome Canada and Ontario Genomics and from the Ontario Research Fund. Funders played no role in the study design or preparation of this software.
 
