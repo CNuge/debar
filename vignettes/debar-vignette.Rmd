@@ -213,6 +213,8 @@ write_fastq(ex, filename = "out.fq" , append = FALSE, keep_phred = FALSE, phred_
 ## Batch analyses in R
 
 
+## Recommended paramater combinations 
+
 
 
 ```{r}
