@@ -30,6 +30,22 @@ preamble here
 
 ### Implementation
 
+## How it works
+ The package is designed to detect and correct insertion and deletion errors within sequencer outputs. This is accomplished through comparison of input sequences against a profile hidden Markov model [using the Viterbi algorithm](https://en.wikipedia.org/wiki/Viterbi_algorithm). The Viterbi path produced by this comparison is used to identify where insertion or deletion errors exist. Here is a small example of how the package corrects indels in this manner:
+
+```
+#Correcting insertions
+#the 'G' in this sequence is an insertion
+"ATCATGATC"
+#the sequence is compared to the PHMM, producing a Viterbi path
+#the 'G' is assigned a hidden state of 'insert', indicated by a 2 in the path
+"111112111"
+#debar uses this information to alter the sequence, removing the G
+"ATGATATG"
+```
+For deletion errors the inverse action is performed and a placeholder character is inserted.
+
+
 ### Dependencies
 `debar` is dependent on [the `aphid` package](https://github.com/shaunpwilkinson/aphid) for comparison of sequences against a COI-5P nucleotide PHMM. The package `ape` is a requirement because sequences are internally converted to `ape` "DNAbin" objects. The package `sequinr` is utilized in obtaining the reverse compliment of input sequences when needed.
 
