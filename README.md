@@ -76,6 +76,7 @@ denoised_seq = denoise(data$sequence[[1]],
                       to_file = FALSE)
 ?denoise # for an exhaustive list of parameter options.
 names(denoised_seq) # for list of available object components
+
 ```
 This will produce a DNAseq object, from which detailed informaiton related to a given read can be accessed using the dollar sign notation. The individual components of the `denoise` function can each be accessed and called individually. An detailed explanation of the denoising steps is provided in the package's vignette.
 
