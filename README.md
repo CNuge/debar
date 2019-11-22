@@ -9,19 +9,17 @@
 The result of this process is a series of indel corrected sequence reads. The censorship process effectively removes indel errors the majority of the time, but comes at the cost of missing information on corrected reads. High throughput sequencing in most cases yields multiple reads for a given sample, the combination of these denoised sequences allows the full barcode for a given sample or OTU to be obtained in most instances.
 
 ```
-#debar outputs for a given sample - indels corrected sequence length adjusted
-
-ctctacttg--------------agcaggaatagttggaatagctttaagtttactaattcgcgctgaactaggt
-ct---------------tgcatgagcaggaatagttggaatagctttaagtttactaattcgcgctgaactaggt
-ctctacttgatttttggtgcatgagcaggaatagttggaatagctttaagttt--------------aactaggt
+# example of debar outputs for a given sample 
+# indels corrected and area masked with 'N' placeholders
+CTCTACTTGNNNNNNNNNNNNNNAGCAGGAATAGTTGGAATAGCTTTAAGTTTACTAATTCGCGCTGAACTAGGT
+CTNNNNNNNNNNNNNNNTGCATGAGCAGGAATAGTTGGAATAGCTTTAAGTTTACTAATTCGCGCTGAACTAGGT
+CTCTACTTGATTTTTGGTGCATGAGCAGGAATAGTTGGAATAGCTTTAAGTTTNNNNNNNNNNNNNNAACTAGGT
 
 # following assignment to samples (barcoding) or OTU clustering (metabarcoding)
 # a denoised barcode can be obtained from the consensus of the denoised reads 
 
-ctctacttgatttttggtgcatgagcaggaatagttggaatagctttaagtttactaattcgcgctgaactaggt
-
+CTCTACTTGATTTTTGGTGCATGAGCAGGAATAGTTGGAATAGCTTTAAGTTTACTAATTCGCGCTGAACTAGGT
 ```
-
 
 ## Installation
 
@@ -60,29 +58,31 @@ A complete file can be denoised in a single line of R code, simply specify the i
 ```
 denoise_file(fastq_example_file, filename = "example_output.fastq")
 ```
-If you are planning on utilizing `debar` on compete sequencing runs, please consult the package vignette section 'Parameter combinations - speed and accuracy trade-offs' for suggestions on how to optimize performance in different situations.
+If you are planning on utilizing `debar` on complete sequencing runs, please consult the package vignette section 'Parameter combinations - speed and accuracy trade-offs' for suggestions on how to optimize performance in different situations.
 
 ### Denoising within R
 
-The file-to-file denoising method should serve the purposes of the majority of users. However, you are also able to perform denoising of sequences from within R (for the purposes of parameter tuning, extraction of additional data etc.).
-
-
+The file-to-file denoising method should serve the purposes of the majority of users. However, you are also able to perform denoising of sequences from within R (for the purposes of parameter tuning, extraction of additional data etc.). Debar contians functions for reading in either fasta or fastq files
 ```
 #read file
-
+data = read_fastq(fastq_example_file)
 ```
-
+The denoise function can be used to process a given read and optionally its associated quality information as well.
 ```
 #denoise
-
+denoised_seq = denoise(data$sequence[[1]], 
+                      name = data$header_data[[1]],
+                      quality = data$quality[[1]], 
+                      to_file = FALSE)
 ?denoise # for an exhaustive list of parameter options.
+names(denoised_seq) # for list of available object components
 ```
-
-The individual components of the denoise function can each be accessed and called individually. An detailed explanation of the denoising steps is provided in the package's vignette.
+This will produce a DNAseq object, from which detailed informaiton related to a given read can be accessed using the dollar sign notation. The individual components of the `denoise` function can each be accessed and called individually. An detailed explanation of the denoising steps is provided in the package's vignette.
 
 ## Version Notes
 
-Initial design and default parameters are based on using `debar` to process [single molecule real-time (SMRT) sequencing](https://www.pacb.com/smrt-science/smrt-sequencing/) outputs produced by [the Pacific Biosciences SEQUEL platform](https://www.pacb.com/products-and-services/sequel-system/). Despite this, the package is designed to interface with fastq or fasta files of any origin (although the developers have yet to quantify performance on other data sources). The package uses a profile hidden Markov model (PHMMs) to identify and correct insertion and deletion errors within COI-5P sequences. In the future we hope to quantify performance and provide informed hyperparamater choices for outputs from other sequencing platforms. If you are interested in beta testing `debar` on barcode or metabarcode data from other platforms, please [contact Cam](https://cnuge.github.io), we would be happy to work with you to optimize `debar`'s functionality for other sequencing platforms.
+Initial design and default parameters are based on using `debar` to process [single molecule real-time (SMRT) sequencing](https://www.pacb.com/smrt-science/smrt-sequencing/) outputs produced by [the Pacific Biosciences SEQUEL platform](https://www.pacb.com/products-and-services/sequel-system/). Despite this, the package is designed to interface with fastq or fasta files of any origin (although the developers have yet to quantify performance on other data sources).
+In the future we hope to quantify performance and provide informed hyperparamater choices for outputs from other sequencing platforms. If you are interested in beta testing `debar` on barcode or metabarcode data from other platforms, please [contact Cam](https://cnuge.github.io), we would be happy to work with you to optimize `debar`'s functionality for other sequencing platforms.
 
 ## Acknowledgements
 
