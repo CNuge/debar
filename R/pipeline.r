@@ -323,4 +323,3 @@ denoise_file.default = function(x, ..., outfile = 'output.fastq',  file_type = "
   print("Done.")
 }
 
-

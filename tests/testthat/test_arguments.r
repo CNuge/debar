@@ -6,9 +6,9 @@ test_that("Input arguments are handled correctly.", {
   data = read_fastq(fastq_gz_real_file)
   
   #
-  ex1 = denoise(data$sequence[[71]], keep_phred = FALSE, to_file = FALSE)
-  #x[['adjustment_count']] ==  2
-  expect_equal(ex1[['adjustment_count']], 2)
+  ex1 = denoise(data$sequence[[1]], keep_phred = FALSE, to_file = FALSE)
+  #x[['adjustment_count']] ==  1
+  expect_equal(ex1[['adjustment_count']], 1)
   #is.null(ex1[['phred']]) == TRUE
   expect_equal(is.null(ex1[['phred']]), TRUE)
   
