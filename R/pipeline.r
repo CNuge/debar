@@ -3,10 +3,11 @@
 #'
 #' This function runs the complete denoising pipeline for a given input sequence and its corresponding
 #' name and phred scores. The default behaviour is set to interface with fastq files (standard output for
-#' most sequencers). If you are working with fata from a fasta file (no quality information) then you will
-#' obligated to pass the following paramater: `keep_phred = FALSE`. Since the pipeline is designed for recieving or 
-#' outputting either fasta or fastq data, this function is hevaily paramaterized. Note that not all paramaters will
-#' affect all use cases (i.e. if your outformat is to a fasta file, then the phred_placeholder paramater is ignored
+#' most sequencers). 
+#' 
+#' Since the pipeline is designed for recieving or outputting either fasta or fastq data, this function is 
+#' hevaily paramaterized. Note that not all paramaters will affect all use cases (i.e. if your outformat is to 
+#' a fasta file, then the phred_placeholder paramater is ignored
 #' as this option only pertains to fastq outputs). The user is encouraged to read the vignette for a detailed 
 #' walkthrough of the denoiser pipeline that will help identify the paramaters that relate to their given needs.
 #' 
@@ -113,7 +114,10 @@ denoise.default = function(x, ...,
                              ){
 
   dat = DNAseq(x, name = name , phred = phred)
-
+  if(is.null(dat$phred)){
+    keep_phred = FALSE
+  } 
+  
   if(phred_test==TRUE){
     dat = phred_check(dat, min_avg_qv = min_avg_qv, 
                            max_perc_low = max_perc_low, 
@@ -323,3 +327,44 @@ denoise_file.default = function(x, ..., outfile = 'output.fastq',  file_type = "
   print("Done.")
 }
 
+
+
+#' List-to-list denoising of COI barcode sequences.
+#' 
+#' This function provides a shortcut for running the denoise function
+#' on a list of sequences. The to_return option can be used to control
+#' whether this function returns a list of sequence strings (default), 
+#' or a list of DNA seq objects.
+#'
+#'
+#' @param x A list like object of barcode sequences.
+#' @param to_return Indicate whether a the function should return a list of 
+#' sequence ('seq') or the full DNAseq object ('DNAseq). Default is ('seq')
+#' @param ... additional arguments to pass to the denoise algorithm.
+#' @seealso \code{\link{denoise}}
+#' @examples
+#' ex_list = list( example_nt_string_errors, example_nt_string )
+#' #return a list of denoised sequences
+#' ex_out = denoise_list(ex_list)
+#' #return just 
+#' ex_DNAseq_out = denoise_list(ex_list, to_return = 'DNAseq')
+#'
+#' @export
+#' @name denoise_list  
+denoise_list = function(x, to_return = 'seq', ...){
+  
+  out = lapply(1:length(x), function(i){
+    denoise(x[i], to_file = FALSE, keep_phred = FALSE)
+  })
+  
+  if(to_return == 'seq'){
+    seqs = lapply(out, function(x){
+      x[['outseq']]
+    })
+    
+    return(seqs)
+  }
+  
+  return(out)
+  
+}

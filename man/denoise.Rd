@@ -97,10 +97,12 @@ a class object of code{"DNAseq"}
 \description{
 This function runs the complete denoising pipeline for a given input sequence and its corresponding
 name and phred scores. The default behaviour is set to interface with fastq files (standard output for
-most sequencers). If you are working with fata from a fasta file (no quality information) then you will
-obligated to pass the following paramater: `keep_phred = FALSE`. Since the pipeline is designed for recieving or 
-outputting either fasta or fastq data, this function is hevaily paramaterized. Note that not all paramaters will
-affect all use cases (i.e. if your outformat is to a fasta file, then the phred_placeholder paramater is ignored
+most sequencers).
+}
+\details{
+Since the pipeline is designed for recieving or outputting either fasta or fastq data, this function is 
+hevaily paramaterized. Note that not all paramaters will affect all use cases (i.e. if your outformat is to 
+a fasta file, then the phred_placeholder paramater is ignored
 as this option only pertains to fastq outputs). The user is encouraged to read the vignette for a detailed 
 walkthrough of the denoiser pipeline that will help identify the paramaters that relate to their given needs.
 }

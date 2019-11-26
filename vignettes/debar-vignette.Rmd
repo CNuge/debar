@@ -77,9 +77,14 @@ Thats all it takes to get `debar` removing errors from COI barcode data. Below t
 
 ### Denoising metabarcode data
 
- is most effective when applied to to the reads in an operational taxonomic unit (OTU). At this stage reads have already been demultiplexed, dereplicated and filtered based on quality, `debar` can provide a more accurate consensus sequence for an OTU by removing errors in component reads and ensuring that all data conform to the known amplicon structure. Since  `debar` operates on a sequence by seqeucne basis 
+ When working with metabarcode data, `debar` can be applied to to the reads in an operational taxonomic unit (OTU). At this stage reads have already been demultiplexed, dereplicated and filtered based on quality, `debar` can provide a more accurate consensus sequence for an OTU by removing errors in component reads and ensuring that all data conform to the known amplicon structure. Since  `debar` operates on a sequence by seqeucne basis it can also be used to process low abundance reads (those with only one or two reads) in an attempt to salvage low abundance barcodes.
 
-The result of this process is a series of indel corrected sequence reads. The censorship process effectively removes indel errors the majority of the time, but comes at the cost of missing information on corrected reads. High throughput sequencing in most cases yields multiple reads for a given sample, the combination of these denoised sequences allows the full barcode for a given sample or OTU to be obtained in most instances.
+Metabarcode data is best processed using the `denoise_list` function. Where the list being processed is composed of one or more sequences from a given OTU.
+```
+
+```
+
+The result of this process is a series of indel corrected sequence reads. The censorship process effectively removes indel errors the majority of the time and also restores the proper length of the sequence. This comes at the cost of missing information in individual. The combination of denoised sequences from a given sample or OTU allows the full barcode for a given sample or OTU to be obtained in most instances using the `consensus` function. 
 
 ```
 # truncated example of debar outputs for a given sample 
