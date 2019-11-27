@@ -17,9 +17,9 @@ Read in raw data from a fastq file.
 }
 \examples{
 #read in an unzipped fastq file
-fastq_example_file = system.file('extdata/sequel_smrt_subset.fastq', package = 'seqdenoise')
+fastq_example_file = system.file('extdata/coi_sequel_data_subset.fastq', package = 'debar')
 data = read_fastq(fastq_example_file)
 #read in a gzipped fastq file and do not keep the phred scores
-gz_fastq_example_file = system.file('extdata/sequel_smrt_subset.fastq.gz', package = 'seqdenoise')
+gz_fastq_example_file = system.file('extdata/coi_sequel_data_subset.fastq', package = 'debar')
 data2 = read_fastq(gz_fastq_example_file, keep_quality = FALSE)
 }

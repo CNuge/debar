@@ -13,6 +13,6 @@ read_fasta(x)
 Read in raw data from a fasta file.
 }
 \examples{
-fasta_example_file = system.file('extdata/ccs_subset.fasta', package = 'seqdenoise')
+fasta_example_file = system.file('extdata/coi_sequel_data_subset.fastq', package = 'debar')
 data = read_fasta(fasta_example_file)
 }

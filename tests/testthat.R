@@ -1,4 +1,4 @@
 library(testthat)
 library(debar)
 
-test_check("seqdenoise")
+test_check("debar")

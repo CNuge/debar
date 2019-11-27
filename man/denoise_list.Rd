@@ -4,13 +4,15 @@
 \alias{denoise_list}
 \title{List-to-list denoising of COI barcode sequences.}
 \usage{
-denoise_list(x, to_return = "seq", ...)
+denoise_list(x, to_return = "seq", cores = 1, ...)
 }
 \arguments{
 \item{x}{A list like object of barcode sequences.}
 
 \item{to_return}{Indicate whether a the function should return a list of 
 sequence ('seq') or the full DNAseq object ('DNAseq). Default is ('seq')}
+
+\item{cores}{The number of cores across which to thread the denosiing. Default is 1.}
 
 \item{...}{additional arguments to pass to the denoise algorithm.}
 }
@@ -22,12 +24,13 @@ or a list of DNA seq objects.
 }
 \examples{
 #denoise a list of sequences
+out = denoise_list(ex_nt_list)
 #denoise and add placehers to outputs 
-to establish common reading frame (pre - consensus)
+#to establish common reading frame (pre - consensus)
 out2 = denoise_list(ex_nt_list, keep_flanks=FALSE)
 
 #return a list of DNAseq objects 
-ex_DNAseq_out = denoise_list(ex_list, to_return = 'DNAseq')
+ex_DNAseq_out = denoise_list(ex_nt_list, to_return = 'DNAseq')
 
 }
 \seealso{

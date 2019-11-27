@@ -20,12 +20,15 @@ denoise_file(x, ...)
 
 \item{file_type}{The format of the file to be denoised. Options are fastq or fasta. Default is fastq.}
 
+\item{to_file}{Boolean indicating whether the sequence should be written to a file. Default is TRUE.}
+
 \item{log_file}{Boolean indicating if a log file should be produced. Default is FALSE.}
 
 \item{keep_rejects}{Boolean indicating if the bad reads should be written to a separate file (with the name
 "rejects_" + outfile). Defaut is FALSE.}
 
-\item{multicore}{An integer specifying the number of cores over which to multithread the denoising process.}
+\item{multicore}{An integer specifying the number of cores over which to multithread the denoising process. 
+Default is FALSE, meaning the process is not multithreaded.}
 }
 \description{
 This function allows for direct input to output exectution of the denoising pipeline. All paramaters for the 

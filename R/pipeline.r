@@ -67,7 +67,7 @@
 #' 
 #' #fastq data from a file
 #' #previously run
-#' fastq_example_file = system.file('extdata/sequel_smrt_subset.fastq', package = 'seqdenoise')
+#' fastq_example_file = system.file('extdata/coi_sequel_data_subset.fastq', package = 'debar')
 #' data = read_fastq(fastq_example_file)
 #' #denoise the first sequence in the file
 #' #use a custom censor length and no amino acid check
@@ -228,11 +228,12 @@ meta_check = function(x, log_data = list(), log_file = FALSE, keep_rejects = FAL
 #' @param x The name of the file to denoise sequences from.
 #' @param outfile The name of the file to output sequences to.
 #' @param file_type The format of the file to be denoised. Options are fastq or fasta. Default is fastq.
+#' @param to_file Boolean indicating whether the sequence should be written to a file. Default is TRUE.
 #' @param log_file Boolean indicating if a log file should be produced. Default is FALSE.
 #' @param keep_rejects Boolean indicating if the bad reads should be written to a separate file (with the name
 #' "rejects_" + outfile). Defaut is FALSE.
 #' @param multicore An integer specifying the number of cores over which to multithread the denoising process. 
-# 'Default is FALSE, meaning the process is not multithreaded.
+#' Default is FALSE, meaning the process is not multithreaded.
 #' @param ... additional arguments to be passed to the \link{denoise} and input/output functions.
 #'
 #' @seealso \code{\link{denoise}}
@@ -346,25 +347,26 @@ denoise_file.default = function(x, ..., outfile = 'output.fastq',  file_type = "
 #' @param x A list like object of barcode sequences.
 #' @param to_return Indicate whether a the function should return a list of 
 #' sequence ('seq') or the full DNAseq object ('DNAseq). Default is ('seq')
+#' @param cores The number of cores across which to thread the denosiing. Default is 1.
 #' @param ... additional arguments to pass to the denoise algorithm.
 #' @seealso \code{\link{denoise}}
 #' @examples
 #' #denoise a list of sequences
-# 'out = denoise_list(ex_nt_list)
+#' out = denoise_list(ex_nt_list)
 #' #denoise and add placehers to outputs 
-#' to establish common reading frame (pre - consensus)
+#' #to establish common reading frame (pre - consensus)
 #' out2 = denoise_list(ex_nt_list, keep_flanks=FALSE)
 #' 
 #' #return a list of DNAseq objects 
-#' ex_DNAseq_out = denoise_list(ex_list, to_return = 'DNAseq')
+#' ex_DNAseq_out = denoise_list(ex_nt_list, to_return = 'DNAseq')
 #'
 #' @export
 #' @name denoise_list  
-denoise_list = function(x, to_return = 'seq', ...){
+denoise_list = function(x, to_return = 'seq', cores = 1, ...){
   
-  out = lapply(x, function(y){
+  out = parallel::mclapply(x, function(y){
     denoise(y, to_file = FALSE, keep_phred = FALSE, ...)
-  })
+  }, mc.cores = cores)
   
   if(to_return == 'seq'){
     seqs = lapply(out, function(y){
