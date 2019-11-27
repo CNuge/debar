@@ -21,10 +21,12 @@ whether this function returns a list of sequence strings (default),
 or a list of DNA seq objects.
 }
 \examples{
-ex_list = list( example_nt_string_errors, example_nt_string )
-#return a list of denoised sequences
-ex_out = denoise_list(ex_list)
-#return just 
+#denoise a list of sequences
+#denoise and add placehers to outputs 
+to establish common reading frame (pre - consensus)
+out2 = denoise_list(ex_nt_list, keep_flanks=FALSE)
+
+#return a list of DNAseq objects 
 ex_DNAseq_out = denoise_list(ex_list, to_return = 'DNAseq')
 
 }

@@ -1,8 +1,15 @@
 #load('R/sysdata.rda')
-#use_data(nt_PHMM, example_nt_string, example_nt_string_errors, overwrite = TRUE, internal = TRUE)
+#use_data(nt_PHMM, example_nt_string, example_nt_string_errors,ex_nt_list, overwrite = TRUE, internal = TRUE)
 #then load for dev with:
 # load('R/sysdata.rda')
 
+
+###############################################################################
+#'An example of a list of four coi5p sequences, each containing indel errors.
+#'
+#'
+"ex_nt_list"
+###############################################################################
 
 ###############################################################################
 #' Nucleotide profile hidden markov model for seqdenoise.

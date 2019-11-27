@@ -8,8 +8,8 @@
 denoise_file(x, ...)
 
 \method{denoise_file}{default}(x, ..., outfile = "output.fastq",
-  file_type = "fastq", log_file = FALSE, keep_rejects = FALSE,
-  multicore = FALSE)
+  file_type = "fastq", to_file = TRUE, log_file = FALSE,
+  keep_rejects = FALSE, multicore = FALSE)
 }
 \arguments{
 \item{x}{The name of the file to denoise sequences from.}

@@ -12,7 +12,7 @@ denoise(x, ...)
   max_perc_ultra_low = 0.05, dir_check = TRUE, double_pass = TRUE,
   min_match = 100, max_inserts = 400, censor_length = 7,
   added_phred = "*", adjust_limit = 5, ambig_char = "N",
-  to_file = TRUE, keep_flanks = TRUE, keep_phred = TRUE,
+  to_file = FALSE, keep_flanks = TRUE, keep_phred = TRUE,
   outformat = "fastq", terminate_rejects = TRUE, outfile = NULL,
   phred_placeholder = "#", aa_check = TRUE, trans_table = 0,
   frame_offset = 0, append = TRUE)

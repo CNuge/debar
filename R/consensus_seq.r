@@ -23,16 +23,13 @@ col_mode = function(col_data) {
 
 
 
-#' Take the list of adjusted sequences and obtain the consensus sequence.
+#' Take the list of denoised sequences and obtain the consensus sequence.
 #'
 #' @param x The list of adjusted DNA sequences, post censorship and AA correction
 #' @seealso \code{\link{denoise_list}}
 #' @examples
-#' 
-#' #build another sequence with an error
-#' err_2= gsub('ccggatgaactgtatat', 'ccggatgaaactgtatat',example_nt_string)
-#' ex_list = list( example_nt_string_errors,  err_2)
-#' ex_out = denoise_list(ex_list)
+#' #denoise list of sequences with the k
+#' ex_out = denoise_list(ex_nt_list, keep_flanks=FALSE)
 #' 
 #' barcode_seq = consensus_sequence(ex_out)
 #' @export

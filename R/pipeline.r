@@ -100,7 +100,7 @@ denoise.default = function(x, ...,
                              added_phred = "*",
                              adjust_limit = 5,
                              ambig_char = "N",
-                             to_file = TRUE,
+                             to_file = FALSE,
                              keep_flanks = TRUE,
                              keep_phred = TRUE,
                              outformat = "fastq",
@@ -246,7 +246,7 @@ denoise_file = function(x, ...){
 #' @rdname denoise_file
 #' @export
 denoise_file.default = function(x, ..., outfile = 'output.fastq',  file_type = "fastq", 
-                                  log_file = FALSE, keep_rejects = FALSE, multicore = FALSE){
+                                  to_file = TRUE, log_file = FALSE, keep_rejects = FALSE, multicore = FALSE){
   #set up additional output paramaters if needed
   if(keep_rejects == TRUE){
     reject_filename = paste0("rejects_", outfile)
@@ -278,7 +278,10 @@ denoise_file.default = function(x, ..., outfile = 'output.fastq',  file_type = "
   print(paste0("Denoising data from file"))
   if(multicore == FALSE){
     for(i in 1:length(data$sequence)){
-      temp = denoise(data$sequence[[i]], outfile = outfile, name = data$header_data[[i]], phred = data$quality[[i]], ...)
+      temp = denoise(data$sequence[[i]], to_file = to_file, 
+                                          outfile = outfile, 
+                                          name = data$header_data[[i]], 
+                                          phred = data$quality[[i]], ...)
       log_data = meta_check(x = temp, log_data = log_data, 
                                   keep_rejects = keep_rejects, 
                                   log_file = log_file,
@@ -288,7 +291,10 @@ denoise_file.default = function(x, ..., outfile = 'output.fastq',  file_type = "
     print(paste0("multithreading across ", multicore, " cores."))
     if(log_file == FALSE){
       parallel::mclapply(1:length(data$sequence), function(i, ...){
-        temp = denoise(data$sequence[[i]], outfile = outfile, name = data$header_data[[i]], phred = data$quality[[i]], ...)
+        temp = denoise(data$sequence[[i]], to_file = to_file, 
+                                            outfile = outfile, 
+                                            name = data$header_data[[i]], 
+                                            phred = data$quality[[i]], ...)
         meta_check(x = temp, log_data = FALSE, 
                              keep_rejects = keep_rejects, 
                              log_file = log_file,
@@ -343,23 +349,26 @@ denoise_file.default = function(x, ..., outfile = 'output.fastq',  file_type = "
 #' @param ... additional arguments to pass to the denoise algorithm.
 #' @seealso \code{\link{denoise}}
 #' @examples
-#' ex_list = list( example_nt_string_errors, example_nt_string )
-#' #return a list of denoised sequences
-#' ex_out = denoise_list(ex_list)
-#' #return just 
+#' #denoise a list of sequences
+# 'out = denoise_list(ex_nt_list)
+#' #denoise and add placehers to outputs 
+#' to establish common reading frame (pre - consensus)
+#' out2 = denoise_list(ex_nt_list, keep_flanks=FALSE)
+#' 
+#' #return a list of DNAseq objects 
 #' ex_DNAseq_out = denoise_list(ex_list, to_return = 'DNAseq')
 #'
 #' @export
 #' @name denoise_list  
 denoise_list = function(x, to_return = 'seq', ...){
   
-  out = lapply(1:length(x), function(i){
-    denoise(x[i], to_file = FALSE, keep_phred = FALSE)
+  out = lapply(x, function(y){
+    denoise(y, to_file = FALSE, keep_phred = FALSE, ...)
   })
   
   if(to_return == 'seq'){
-    seqs = lapply(out, function(x){
-      x[['outseq']]
+    seqs = lapply(out, function(y){
+      y[['outseq']]
     })
     
     return(seqs)

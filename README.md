@@ -10,7 +10,7 @@
 
 The `debar` denoising method is designed to increase the accuracy of reported barcode sequences. It is therefore best applied when the accuracy of a barcode is paramount, namely in the generation of novel barcode sequences or in the acquisition of accurate consensus sequences for operational taxonomic units (OTUs).
 
-The package was initially designed for processing [single molecule real-time (SMRT) sequencing](https://www.pacb.com/smrt-science/smrt-sequencing/) outputs produced by [the Pacific Biosciences SEQUEL platform](https://www.pacb.com/products-and-services/sequel-system/). However, the methods are robust to COI sequence data of any origin. If you intend to apply debar in the denoising of metabarcode data, it is recommended that you do so after quality filtering and dereplication of reads. Please consult the package vignette for recommended parameters and examples of integration into metabarcoding workflows. 
+The package was initially designed for processing [single molecule real-time (SMRT) sequencing](https://www.pacb.com/smrt-science/smrt-sequencing/) outputs produced by [the Pacific Biosciences SEQUEL platform](https://www.pacb.com/products-and-services/sequel-system/). However, the method are amplicon based and not sequencer based and should therefore be robust to COI sequence data of any origin. If you intend to apply debar in the denoising of metabarcode data, it is recommended that you do so after quality filtering and dereplication of reads. Please consult the package vignette for recommended parameters and examples of integration into barcoding and metabarcoding workflows. 
 
 ## Installation
 
@@ -21,7 +21,7 @@ The development version of `debar` can be installed directly from GitHub. You'll
 #install.packages("knitr") #required if build_vignettes = TRUE
 #library(devtools) 
 devtools::install_github("CNuge/debar", build_vignettes = TRUE)
-library(coil)
+library(debar)
 ```
 ## Use and examples
 
@@ -30,27 +30,27 @@ The package's vignette contains detailed explanations of the functions and param
 vignette('debar-vignette')
 ```
 
-### File-to-file denoising
-Denoising of COI-5P barcode data with `debar` can be conducted in a file-to-file fashion using the `denoise_file` function. 
-
-All a user needs to do is specify the input and output files and as well as any deviations from the default parameters they wish to apply (see `?denoise` or the manual for exhaustive parameter list). The sequences in the input file will be denoised and written to the output file in the specified format. The `denoise_file` function accepts barcode data in either `fastq` or `fasta` formats (gzipped (`.gz`) files are also permitted). Small example inputs are included with the package. 
-
-A complete file can be denoised in a single line of R code, simply specify the input and output files. When processing fastq files, `debar` preserves the phred scores.
-
-*Note*: running the following example will generate an output file [in your current working directory!](https://support.rstudio.com/hc/en-us/articles/200711843-Working-Directories-and-Workspaces)
-```
-#gzipped fastq
-gzfastq_example_file = system.file('extdata/coi_sequel_data_subset.fastq.gz', package = 'debar')
-
-denoise_file(gzfastq_example_file, outfile = "example_output.fastq")
-```
-If you are planning on utilizing `debar` for large input files, please consult the package vignette section 'Parameter combinations - speed and accuracy trade-offs' for suggestions on how to optimize performance when scaling to tens or hundreds of thousands of sequences.
-
 ### Denoising within R
 
 `debar` can also be used to perform denoising of sequences from within R (an especially useful feature for tasks such as denoising sequences in an OTU prior to determining the consensus sequence, or in obtaining common haplotypes for an OTU). 
 
-The denoise function can be used to process a given read and (optionally) its associated quality information as well.
+A list of sequences for a given haplotype can be denoised using the `denoise_list` function
+
+```
+# ex_nt_list is an example list of four 
+ex_out = denoise_list(ex_nt_list)
+
+```
+
+Optionally, when multiple sequences are available from a given sample (or OTU) they can be denoised as a group. Passing the `keep_flanks=FALSE` option to the function will produce denoised outputs with a common reading frame (leading placeholder Ns are added as needed). The `consensus_sequence` function can then be used to obtain a consensus from the denoised sequences.
+```
+ex_out = denoise_list(ex_nt_list, keep_flanks=FALSE)
+ex_out #each output individually has some missing information
+barcode_seq = consensus_sequence(ex_out)
+barcode_seq #aligned through the denoising process, a consensus without missing information can be obtained
+```
+
+The denoise function can be used to process a single read and (optionally) its associated quality information as well.
 ```
 #read a file of example sequences 
 #fastq
@@ -67,6 +67,22 @@ names(denoised_seq) # for list of available object components
 
 ```
 This will produce a DNAseq object, from which detailed information related to a given read can be accessed using the dollar sign notation. 
+
+### File-to-file denoising
+Denoising of COI-5P barcode data with `debar` can be conducted in a file-to-file fashion using the `denoise_file` function. 
+
+All a user needs to do is specify the input and output files and as well as any deviations from the default parameters they wish to apply (see `?denoise` or the manual for exhaustive parameter list). The sequences in the input file will be denoised and written to the output file in the specified format. The `denoise_file` function accepts barcode data in either `fastq` or `fasta` formats (gzipped (`.gz`) files are also permitted). Small example inputs are included with the package. 
+
+A complete file can be denoised in a single line of R code, simply specify the input and output files. When processing fastq files, `debar` preserves the phred scores.
+
+*Note*: running the following example will generate an output file [in your current working directory!](https://support.rstudio.com/hc/en-us/articles/200711843-Working-Directories-and-Workspaces)
+```
+#gzipped fastq
+gzfastq_example_file = system.file('extdata/coi_sequel_data_subset.fastq.gz', package = 'debar')
+
+denoise_file(gzfastq_example_file, outfile = "example_output.fastq")
+```
+If you are planning on utilizing `debar` for large input files, please consult the package vignette section 'Parameter combinations - speed and accuracy trade-offs' for suggestions on how to optimize performance when scaling to tens or hundreds of thousands of sequences.
 
 ## Version Notes
 

@@ -1,7 +1,4 @@
 test_that("fastq phred scores can be processed and maintained correctly", {
-  fastq_gz_real_file = system.file('extdata/sequel_smrt_subset.fastq.gz', package = 'seqdenoise')
-  
-  test_data = read_fastq(fastq_gz_real_file, keep_quality = TRUE)
 
 
   ##############################################################3
