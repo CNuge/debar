@@ -4,13 +4,15 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 --------------------------------------------------------
 
-`debar` is an R package designed for denoising sequence data for the animal DNA barcode marker cytochrome c oxidase I (COI-5P, or the five prime portion of COI). The package is designed to detect and correct insertion and deletion errors within barcode sequences. This is accomplished through comparison of input sequences against a profile hidden Markov (PHMM) model [using the Viterbi algorithm](https://en.wikipedia.org/wiki/Viterbi_algorithm) and adjustment of the sequence based on the reported Viterbi path (`debar` depends on functions from the R package [aphid](https://CRAN.R-project.org/package=aphid) for running the Viterbi algorithm). Inserted base pairs are removed and deleted base pairs are accounted for through the introduction of a placeholder character. Since the PHMM is a probabilistic representation of the COI barcode, corrections are not always perfect. For this reason `debar` censors base pairs adjacent to reported indel sites, turning them into placeholder characters (default is 7bp in either direction, this feature can be disabled). Testing has shown that this censorship results in the correct sequence length being restored and erroneous base pairs being masked the vast majority of the time (>95%). 
+`debar` is an R package designed for denoising sequence data for the animal DNA barcode marker: cytochrome c oxidase I (COI-5P, or the five prime portion of COI). The package is designed to detect and correct insertion and deletion errors within barcode sequences. This is accomplished through comparison of input sequences against a profile hidden Markov (PHMM) model [using the Viterbi algorithm](https://en.wikipedia.org/wiki/Viterbi_algorithm) and adjustment of the sequence based on the reported Viterbi path (`debar` depends on functions from the R package [aphid](https://CRAN.R-project.org/package=aphid) for the PHMM strucutre and for running the Viterbi algorithm).
+
+Inserted base pairs are removed and deleted base pairs are accounted for through the introduction of a placeholder character. Since the PHMM is a probabilistic representation of the COI barcode, corrections are not always perfect. For this reason `debar` censors base pairs adjacent to reported indel sites, turning them into placeholder characters (default is 7bp in either direction, this feature can be disabled). Testing has shown that this censorship results in the correct sequence length being restored and erroneous base pairs being masked the vast majority of the time (>95%). Multiple denoised and censored reads from a sample can then be combined to obtain denoised barcode. 
 
 ## Intended use
 
 The `debar` denoising method is designed to increase the accuracy of reported barcode sequences. It is therefore best applied when the accuracy of a barcode is paramount, namely in the generation of novel barcode sequences. In the case of metabarcoding analysis `debar` can allow for denoised halpotypes to be obtained for operational taxonomic units (OTUs).
 
-The package was initially designed for processing [single molecule real-time (SMRT) sequencing](https://www.pacb.com/smrt-science/smrt-sequencing/) outputs produced by [the Pacific Biosciences SEQUEL platform](https://www.pacb.com/products-and-services/sequel-system/). However, the method are amplicon based and not sequencer based and should therefore be robust to COI sequence data of any origin. If you intend to apply debar in the denoising of metabarcode data, it is recommended that you do so after quality filtering and dereplication of reads. Please consult the package vignette for recommended parameters and examples of integration into barcoding and metabarcoding workflows. 
+The package was initially designed for processing [single molecule real-time (SMRT) sequencing](https://www.pacb.com/smrt-science/smrt-sequencing/) outputs produced by [the Pacific Biosciences SEQUEL platform](https://www.pacb.com/products-and-services/sequel-system/). However, the method is barcode-based (as opposed to sequencer-based) and should therefore be robust to COI sequence data of any origin. If you intend to apply debar in the denoising of metabarcode data, it is recommended that you do so after quality filtering and dereplication of reads. Please consult the package vignette for recommended parameters and examples of integration into barcoding and metabarcoding workflows. 
 
 ## Installation
 
@@ -29,28 +31,14 @@ The package's vignette contains detailed explanations of the functions and param
 ```
 vignette('debar-vignette')
 ```
+A second vignette, with a detailed explination of the denoising process is also included:
+```
+vignette('debar-algorithm-details')
+```
 
 ### Denoising within R
 
-`debar` can also be used to perform denoising of sequences from within R (an especially useful feature for tasks such as denoising sequences in an OTU prior to determining the consensus sequence, or in obtaining common haplotypes for an OTU). 
-
-A list of sequences for a given haplotype can be denoised using the `denoise_list` function
-
-```
-# ex_nt_list is an example list of four 
-ex_out = denoise_list(ex_nt_list)
-
-```
-
-Optionally, when multiple sequences are available from a given sample (or OTU) they can be denoised as a group. Passing the `keep_flanks=FALSE` option to the function will produce denoised outputs with a common reading frame (leading placeholder Ns are added as needed). The `consensus_sequence` function can then be used to obtain a consensus from the denoised sequences.
-```
-ex_out = denoise_list(ex_nt_list, keep_flanks=FALSE)
-ex_out #each output individually has some missing information
-barcode_seq = consensus_sequence(ex_out)
-barcode_seq #aligned through the denoising process, a consensus without missing information can be obtained
-```
-
-The denoise function can be used to process a single read and (optionally) its associated quality information as well.
+`debar` can be used to perform denoising of sequences from within R. The `denoise` function can be used to process a single read and (optionally) its associated quality information as well.
 ```
 #read a file of example sequences 
 #fastq
@@ -67,6 +55,23 @@ names(denoised_seq) # for list of available object components
 
 ```
 This will produce a DNAseq object, from which detailed information related to a given read can be accessed using the dollar sign notation. 
+
+#### Batch processing
+A list of sequences for a given haplotype can be denoised using the `denoise_list` function. This is an especially useful feature for tasks such as denoising sequences in an OTU prior to determining the consensus sequence, or in obtaining common haplotypes for an OTU. The `denoise_list` function is parallelized and can be run acrosss multiple cores (specify the number available with the `cores` argument)
+
+```
+# ex_nt_list is an example list of four barcode sequences that contain errors.
+ex_out = denoise_list(ex_nt_list, cores = 2)
+```
+
+Optionally, when multiple sequences are available from a given sample (or OTU) they can be denoised as a group. Passing the `keep_flanks=FALSE` option to the function will produce denoised outputs with a common reading frame (leading placeholder Ns are added as needed). The `consensus_sequence` function can then be used to obtain a consensus from the denoised sequences.
+```
+ex_out = denoise_list(ex_nt_list, keep_flanks=FALSE)
+ex_out #each output individually has some missing information
+barcode_seq = consensus_sequence(ex_out)
+barcode_seq #aligned through the denoising process, a consensus without missing information can be obtained
+```
+
 
 ### File-to-file denoising
 Denoising of COI-5P barcode data with `debar` can be conducted in a file-to-file fashion using the `denoise_file` function. 
