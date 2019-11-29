@@ -64,7 +64,7 @@ ex_out = denoise_list(ex_nt_list)
  
 `denoise_list` operates on a sequence-by-sequence basis and is therefore parallelized to improve performance. The `cores` argument allows a user to specify the number of cores across which the processes should be parallelized.
 
-```{r}
+```{r, eval=FALSE}
 ex_out = denoise_list(ex_nt_list, cores = 4)
 ```
 
