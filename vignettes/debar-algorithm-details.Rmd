@@ -4,7 +4,7 @@ author: "Cameron M. Nugent"
 data: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{debar-vignette}
+  %\VignetteIndexEntry{debar-algorithm-details}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
