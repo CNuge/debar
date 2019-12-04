@@ -196,5 +196,5 @@ write_wrapper.DNAseq = function(x, ...,
                   append = append, ...)
     }
   }
-  reutrn(x)
+  return(x)
 }
