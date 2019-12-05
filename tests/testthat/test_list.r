@@ -17,4 +17,6 @@ test_that("A list of sequences are denoised properly.", {
                     #one bp gets dropped from the final sequence when flanks are not kept... odd little quirk
   expect_equal(all.equal(expected2, list_seq_output2), TRUE)
 
+  list_seq_output3 = denoise_list(ex_nt_list, to_return = "DNAseq", keep_flanks=FALSE, dir_check = FALSE)
+  
   })
