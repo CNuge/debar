@@ -1,10 +1,4 @@
 
-#' build an AAbin with ape.
-#'
-#' @keywords internal
-individual_AAbin = function(aa_string){
-  return(ape::as.AAbin(strsplit(as.character(aa_string),"")))
-}
 
 #' Find the first stop codon in the amino acid sequence. 
 #' Return the corresponding nucleotide mask start position.
@@ -61,12 +55,10 @@ aa_check.DNAseq = function(x, ..., trans_table = 0, frame_offset = 0){
   if(trans_table == 0){
     x$aaSeq = censored_translation(paste(x$adjusted_sequence, collapse=""), reading_frame = (frame_offset+1))
   }else{
-    #split the DNA string into a vector, all characters to lower case
-    dna_list = strsplit(gsub('-', 'n', as.character(tolower(x$adjusted_sequence))),"")
-    dna_vec = dna_list[[1]]
+    #turn the dashes into n so that we can interface with sequinr
+    dna_list = gsub('-', 'n', as.character(tolower(x$adjusted_sequence)))
     #translate using the designated numcode, returns a vector of AAs
-    aa_vec = seqinr::translate(dna_vec, frame = frame_offset, numcode=trans_table, ambiguous= TRUE, NAstring = '-')
-    
+    aa_vec = seqinr::translate(dna_list, frame = 0, numcode=trans_table, ambiguous= TRUE, NAstring = '-')
     x$aaSeq = paste(aa_vec, collapse= "")
   }
   
