@@ -1,13 +1,4 @@
 
-
-#' Find the first stop codon in the amino acid sequence. 
-#' Return the corresponding nucleotide mask start position.
-#'
-#' @keywords internal
-first_stop = function(aa_str){
-  (nchar(strsplit(aa_str, '\\*')[[1]][[1]])+1)*3
-}
-
 #' Translate the sequence and it for stop codons
 #'
 #' A side product of the framing and adjustment functions is that the reading frame of the sequence is established
