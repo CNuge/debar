@@ -17,11 +17,7 @@
 #' @param phred an optional character string. The phred score string corresponding to the nucleotide string.
 #' If passed then the input phred scores will be modified along with the nucleotides and carried through
 #' to the sequence output. Default = NULL.
-#' @param phred_test Default = TRUE.
 #' @param keep_phred Should the original PHRED scores be kept in the output? Default is TRUE.
-#' @param min_avg_qv The minimum average phred score for a read to be retained.
-#' @param max_perc_low The maximum frequency of nucleotides in the string with QV values lower than 20. Default is 0.25
-#' @param max_perc_ultra_low The maximum frequency of nucleotides in the string with QV values lower than 10. Default is 5
 #' @param dir_check A boolean indicating if both the forward and reverse compliments of a sequence should 
 #' be checked against the PHMM. Default is TRUE.
 #' @param double_pass A boolean indicating if a second pass through the Viterbi algorithm should be conducted for sequences
@@ -88,10 +84,6 @@ denoise = function(x, ...){
 denoise.default = function(x, ...,
                              name = character(),
                              phred = NULL, 
-                             phred_test = TRUE,
-                             min_avg_qv = 20,
-                             max_perc_low = 0.25,
-                             max_perc_ultra_low = 0.05,
                              dir_check = TRUE,
                              double_pass = TRUE,
                              min_match = 100,
@@ -118,19 +110,6 @@ denoise.default = function(x, ...,
     keep_phred = FALSE
   } 
   
-  if(phred_test==TRUE){
-    dat = phred_check(dat, min_avg_qv = min_avg_qv, 
-                           max_perc_low = max_perc_low, 
-                           max_perc_ultra_low = max_perc_ultra_low, 
-                           ...)  
-  }else{
-    dat$reject = FALSE
-  }
-  
-  if(dat$reject == TRUE && !is.null(dat$phred) && terminate_rejects == TRUE){
-    return(dat)
-  }
-
   dat = frame(dat, dir_check = dir_check,
                    double_pass = double_pass,
                    min_match = min_match,
@@ -251,13 +230,13 @@ denoise_file.default = function(x, ..., outfile = 'output.fastq',  informat = "f
                                   to_file = TRUE, log_file = FALSE, keep_rejects = FALSE, multicore = FALSE){
   #set up additional output paramaters if needed
   if(keep_rejects == TRUE){
-    reject_filename = paste0("rejects_", outfile)
+    reject_filename = paste(c(strsplit(outfile,"\\.")[[1]][[1]], "_rejects.", strsplit(outfile,"\\.")[[1]][[2]]), collapse = "")  
   }
   if(log_file == TRUE){
     log_data = list(input_file = x, total_reads = 0, good_count = 0, reject_count = 0, good_denoised = 0, good_unaltered = 0,  
                     start_time = Sys.time(), end_time = NA, time_elapsed = NA)
     
-    log_filename = paste(c("log_", strsplit(outfile,"\\.")[[1]], ".out"), collapse = "")  
+    log_filename = paste(c(strsplit(outfile,"\\.")[[1]], "_log.out"), collapse = "")  
   }else{
     log_data = list()
   }

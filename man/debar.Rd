@@ -34,7 +34,6 @@ data structure and goal.
 \item \code{\link{write_fastq}} Write a denoised sequence and associated quality information to the specified fastq file.
 
 \item \code{\link{DNAseq}} Builds a DNAseq class object
-\item \code{\link{phred_check}} Check that specified quality thresholds are met for a sequence read.
 \item \code{\link{frame}} Match a sequence against the COI-5P PHMM using the 
 Viterbi algorithm to establish the reading frame,
 optional rejection of sequence based on the quality of the match to the PHMM.

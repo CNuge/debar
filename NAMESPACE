@@ -1,6 +1,5 @@
 exportPattern("^[[:alpha:]]+")
 
-S3method(phred_check, DNAseq)
 S3method(print, DNAseq)
 S3method(frame, DNAseq)
 S3method(aa_check, DNAseq)

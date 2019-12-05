@@ -36,11 +36,6 @@ test_that("fastq phred scores can be processed and maintained correctly", {
                          
   test_seqdenoise3 = DNAseq(t3_seq, name = "test3", phred = t3_phred)
   
-  #phred check should not flag this one
-  test_seqdenoise3 = phred_check(test_seqdenoise3)
-  #test_seqdenoise3$reject == FALSE
-  expect_equal(test_seqdenoise3$reject, FALSE)
-  
   test_seqdenoise3 = frame(test_seqdenoise3)
   test_seqdenoise3 = adjust(test_seqdenoise3, censor_length = 0)
   test_seqdenoise3 = outseq(test_seqdenoise3)
@@ -50,21 +45,8 @@ test_that("fastq phred scores can be processed and maintained correctly", {
   #test_seqdenoise3$outphred == t3_phred_out_expected
   expect_equal(test_seqdenoise3$outphred, t3_phred_out_expected)
   
-  
-  ########################
-  # This one has doctored low QV and should therefore be rejected
-  t4_seq = "AGTTAACAAATCATAAAGATATTGGTACCTTATACTTTATTTTTGGAGCTTGAGCTGGTATAATTGGCACATCCCTTAGTATTATTATTCGTGCAGAATTAGGACATCCAGGTACATTTATTGGTAATGACNNNNNNNNNNNTGTTATTGTTACTGCTCATGCCTTTATTATAATTTTTTTCATAGTTATACCAATTATAATCGGTGGATTTGGAAATTGACTTGTACCTTTAATATTAGGTGCCCCCGATATAGCCTTTCCCCNNNNNNNNNNTATAAGATTTTGAATATTACCCCCTTCTATTACTTTATTACTAACAAGAAGACTTGTAGAGAATGGAGCAGGTACCGGATGAACAGTTTACCCACCATTAGCCGCTAATATTTCTCATGCTGGATCCTCAGTTGACCTAGCAATTTTCTCTTTACACTTAGCTGGGATTTCTTCCATTCTAGGAGCTGTAAATTTTATTACTACAATTATCAATATACGATCAAATGGAATTTCTTTCGACCGTATGCCTTTATTTGTATGATCTGTCTTTATTACAGCTATTTTATTACTTTTATCATTGCCTGTTTTAGCCGGAGCAATTACAATATTATTAACTGATCGTAATTTAAATACATCATTCTTTGACCCTGCAGGAGGGGGAGATCCAATTCTTTACCAACATTTATTTTGATTTTTGGTCATCCATGAAGTTTA"
-  t4_phred="euq_9f[cx+>w[ng$qcyerornojy^:ebaqgvigh}q$nsaie]wkmlb7vmo=xfh{{4ezz@g$2>_>gpduqv$d8aslz=_kreydpogohj}shpfbx;gh_=i=l^pzu{|>[jppudcrmozuyypviked_h>oe5$0nw^qbd_&$axh_jdt0[us?btbdqbg[c9yzxeqrbtpk$^nysxcjau]c{zyt9jijefrjthkzsx[vnce;cqi<n-w>$]*x<lnl]q99jopiqhjas[qq2bvdpitly/gp]d|tni:winz{:ci}rw[hm[ub_ktmfw_evvdxwlouipinqjn_lisfsb)jcvrf]dhl_^$:w[]gfjb$wx?als{{1cj$kuxlhszp_qdr[:gex[la7$d_a$nbkxws0$.$5kvb;-plhaclh>^************************************************************************************************************************************************************************************************************************************************************************************************************"
-  
-  test_seqdenoise4 = DNAseq(t4_seq, name = "test4", phred = t4_phred)
-  test_seqdenoise4 = phred_check(test_seqdenoise4)
-  
-  #test_seqdenoise4$reject == TRUE
-  expect_equal(test_seqdenoise4$reject, TRUE)
-  
-  
+
   #####################
-  # This one appears to be dropping the phred scores in the fq output, see if you can pin down the bug
   #@m54146_190221_235805/15859816/ccs
   t5_seq = "GAGTCAGAGATCTATGGATCACTTGTGCAAGCATCACATCGTAGTAAACTTCTGGGTGTCCAAAAAAATCAAAATAAATGTTGATATAAAATTGGATCACCTCCTCCTGCTGGGTCAAAGAAAGATGTATTTAAATTTCGGTCGGTTAATAATATTGTAATAGCTCCAGCTAATACAGGTAGAGATAAAAGTAATAAAATAGCAGTAATTACAACAGATCATACAAATAAAGGTATTCGATCAAATGTAATACCTGTTGATCGTATATTAATTACAGTAGTAATGAAATTTACGGCTCCTAAAATAGAAGAAATACCAGCTAAATGTAATGAAAAAAATAGCTAAATCAACTGAGGCTCCTCCATGAGCAATCCCTGCTGATAGAGGAGGGTAAACTGTTCAACCAGTTCCAGCTCCATTTTCTACTATACTACTAGCTAATAATAATGTAAGAGAAGGGGGTAATATTCAAAAACTTATATTACCCCCTTCTCTTACATTATTATTAGCTAGTAGTATAGTAGAAAATGGAGCTGGAACTGGTTGAACAGTTTACCCTCCTCTATCAGCAGGGATTGCTCATGGAGGAGCCTCAGTTGATTTAGCTATTTTTTCATTACATTTAGCTGGTACTTCTTCTATTTTAGGAGCCGTAAATTTCATTACTACTGTAATTAATATACGATCAACAGGTATTACATTTGATCGAATACCTTTATTTGTATGATCTGTTGTAATTACTGCTATTTTATTACTTTTATCTCTACCTGTATTAGCTGGAGCTATTACAATATTATTAACCGACCGAAATTTAAATACATCTTTCTTTGACCCAGCAGGAGGAGGTGATCCAATTTTATATCAACATTTATTTTGATTTTTTGGACATCCAGAAGTTTACTACGATGTGATGCTTGCACAAGTGATCCATAGATCTCTGACTC"
   t5_phred = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~V~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~0~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~:~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~t~~~~~~~~~~~~a~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~V~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"

@@ -49,17 +49,6 @@ print("Available in the current DNAseq object:")
 names(ex)
 ```
 
-#### Checking sequence quality with Phred scores (optional)
-
-If you're denoising data from a fastq file, you may wish to utilize the `phred_check` function as well. This function can help separate out low quality reads from a data set in an efficient manner. Instead of running every single sequence through the statistical models used for denoising, this pre-check can be used to remove sequences with quality values not eclipsing the given thresholds. The quality thresholds filter reads if they do not meet a minimum average phred score (`min_avg_qv`), if the frequency of low quality reads (QV < 20) is too high (`max_perc_low`) or if the frequency of ultra low quality reads (QV <10) is too high (`max_perc_ultra_low`). If these thresholds are eclipsed, the `DNAseq` object's `reject` field will be `TRUE`.
-
-```{r}
-#run the phred_check with the default paramaters
-ex = phred_check(ex)
-
-ex$reject #this read meets the phred_check thresholds, so it should not be rejected based on this information
-```
-
 
 #### Framing the barcode sequence
 

@@ -8,14 +8,13 @@
 denoise(x, ...)
 
 \method{denoise}{default}(x, ..., name = character(), phred = NULL,
-  phred_test = TRUE, min_avg_qv = 20, max_perc_low = 0.25,
-  max_perc_ultra_low = 0.05, dir_check = TRUE, double_pass = TRUE,
-  min_match = 100, max_inserts = 400, censor_length = 7,
-  added_phred = "*", adjust_limit = 5, ambig_char = "N",
-  to_file = FALSE, keep_flanks = TRUE, keep_phred = TRUE,
-  outformat = "fastq", terminate_rejects = TRUE, outfile = NULL,
-  phred_placeholder = "#", aa_check = TRUE, trans_table = 0,
-  frame_offset = 0, append = TRUE)
+  dir_check = TRUE, double_pass = TRUE, min_match = 100,
+  max_inserts = 400, censor_length = 7, added_phred = "*",
+  adjust_limit = 5, ambig_char = "N", to_file = FALSE,
+  keep_flanks = TRUE, keep_phred = TRUE, outformat = "fastq",
+  terminate_rejects = TRUE, outfile = NULL, phred_placeholder = "#",
+  aa_check = TRUE, trans_table = 0, frame_offset = 0,
+  append = TRUE)
 }
 \arguments{
 \item{x}{a DNA sequence string.}
@@ -27,14 +26,6 @@ denoise(x, ...)
 \item{phred}{an optional character string. The phred score string corresponding to the nucleotide string.
 If passed then the input phred scores will be modified along with the nucleotides and carried through
 to the sequence output. Default = NULL.}
-
-\item{phred_test}{Default = TRUE.}
-
-\item{min_avg_qv}{The minimum average phred score for a read to be retained.}
-
-\item{max_perc_low}{The maximum frequency of nucleotides in the string with QV values lower than 20. Default is 0.25}
-
-\item{max_perc_ultra_low}{The maximum frequency of nucleotides in the string with QV values lower than 10. Default is 5}
 
 \item{dir_check}{A boolean indicating if both the forward and reverse compliments of a sequence should 
 be checked against the PHMM. Default is TRUE.}

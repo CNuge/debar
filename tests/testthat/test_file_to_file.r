@@ -31,7 +31,11 @@ test_that("The file to file denoising pipeline performs as expected.", {
   # Write to a fasta file
   #
   temp4 = file.path(tempdir(), "temp_out.fasta")  
+  temp_rej = file.path(tempdir(), "temp_out_rejects.fasta")
+  temp_log = file.path(tempdir(), "temp_out_log.out")
   on.exit(unlink(temp4))
+  on.exit(unlink(temp_rej))
+  on.exit(unlink(temp_log))
   
   denoise_file(fasta_test_file, outfile = temp4, informat = 'fasta', outformat="fasta",
                keep_phred = FALSE, phred_placeholder = "~", 
@@ -40,6 +44,13 @@ test_that("The file to file denoising pipeline performs as expected.", {
   denoise_file(fastq_test_file, outfile = temp4, informat = "fastq",
                log_file = FALSE, keep_rejects = FALSE, double_pass = FALSE, dir_check = FALSE)
   
+  temp4 = 'out.fq'
+  #other param combos
+  denoise_file(fastq_test_file, outfile = temp4, informat = "fastq",
+               log_file = FALSE, keep_rejects = TRUE, double_pass = FALSE, dir_check = FALSE)
+
+  denoise_file(fastq_test_file, outfile = temp4, informat = "fastq",
+               log_file = TRUE, keep_rejects = TRUE, double_pass = FALSE, dir_check = FALSE)
   
   # Test bad calls of file types
   expect_error(denoise_file(fastq_test_file, outfile = temp4, informat="text",
