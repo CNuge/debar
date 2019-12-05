@@ -8,8 +8,8 @@
 denoise_file(x, ...)
 
 \method{denoise_file}{default}(x, ..., outfile = "output.fastq",
-  file_type = "fastq", to_file = TRUE, log_file = FALSE,
-  keep_rejects = FALSE, multicore = FALSE)
+  informat = "fastq", outformat = "fastq", to_file = TRUE,
+  log_file = FALSE, keep_rejects = FALSE, multicore = FALSE)
 }
 \arguments{
 \item{x}{The name of the file to denoise sequences from.}
@@ -18,7 +18,9 @@ denoise_file(x, ...)
 
 \item{outfile}{The name of the file to output sequences to.}
 
-\item{file_type}{The format of the file to be denoised. Options are fastq or fasta. Default is fastq.}
+\item{informat}{The format of the file to be denoised. Options are fastq or fasta. Default is fastq.}
+
+\item{outformat}{The format of the output file. Options are fasta or fastq (default) format.}
 
 \item{to_file}{Boolean indicating whether the sequence should be written to a file. Default is TRUE.}
 

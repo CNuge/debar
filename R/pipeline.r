@@ -227,7 +227,8 @@ meta_check = function(x, log_data = list(), log_file = FALSE, keep_rejects = FAL
 #' 
 #' @param x The name of the file to denoise sequences from.
 #' @param outfile The name of the file to output sequences to.
-#' @param file_type The format of the file to be denoised. Options are fastq or fasta. Default is fastq.
+#' @param informat The format of the file to be denoised. Options are fastq or fasta. Default is fastq.
+#' @param outformat The format of the output file. Options are fasta or fastq (default) format.
 #' @param to_file Boolean indicating whether the sequence should be written to a file. Default is TRUE.
 #' @param log_file Boolean indicating if a log file should be produced. Default is FALSE.
 #' @param keep_rejects Boolean indicating if the bad reads should be written to a separate file (with the name
@@ -246,7 +247,7 @@ denoise_file = function(x, ...){
 
 #' @rdname denoise_file
 #' @export
-denoise_file.default = function(x, ..., outfile = 'output.fastq',  file_type = "fastq", 
+denoise_file.default = function(x, ..., outfile = 'output.fastq',  informat = "fastq", outformat = 'fastq',
                                   to_file = TRUE, log_file = FALSE, keep_rejects = FALSE, multicore = FALSE){
   #set up additional output paramaters if needed
   if(keep_rejects == TRUE){
@@ -262,14 +263,14 @@ denoise_file.default = function(x, ..., outfile = 'output.fastq',  file_type = "
   }
   
   #read in the data
-  if(file_type == "fastq"){
+  if(informat == "fastq"){
     print(paste0("Reading fastq file:", x))
     data = read_fastq(x)
-  }else if(file_type == "fasta"){
+  }else if(informat == "fasta"){
     print(paste0("Reading fasta file:", x))
     data = read_fasta(x)
   }else{
-    stop("file_type must be either fasta or fastq")
+    stop("informat must be either fasta or fastq")
   }
   
   if(substr(outfile, nchar(outfile)-2, nchar(outfile)) == ".gz"){
@@ -280,7 +281,8 @@ denoise_file.default = function(x, ..., outfile = 'output.fastq',  file_type = "
   if(multicore == FALSE){
     for(i in 1:length(data$sequence)){
       temp = denoise(data$sequence[[i]], to_file = to_file, 
-                                          outfile = outfile, 
+                                          outfile = outfile,
+                                          outformat = outformat,
                                           name = data$header_data[[i]], 
                                           phred = data$quality[[i]], ...)
       log_data = meta_check(x = temp, log_data = log_data, 
@@ -293,7 +295,8 @@ denoise_file.default = function(x, ..., outfile = 'output.fastq',  file_type = "
     if(log_file == FALSE){
       parallel::mclapply(1:length(data$sequence), function(i, ...){
         temp = denoise(data$sequence[[i]], to_file = to_file, 
-                                            outfile = outfile, 
+                                            outfile = outfile,
+                                            outformat = outformat,
                                             name = data$header_data[[i]], 
                                             phred = data$quality[[i]], ...)
         meta_check(x = temp, log_data = FALSE, 
@@ -305,7 +308,7 @@ denoise_file.default = function(x, ..., outfile = 'output.fastq',  file_type = "
     }else{
       log_row = list(total_reads = 0, good_count = 0, reject_count = 0, good_denoised = 0, good_unaltered = 0)
       log_rows = parallel::mclapply(1:length(data$sequence), function(i, ...){
-        temp = denoise(data$sequence[[i]], outfile = outfile, name = data$header_data[[i]], phred = data$quality[[i]], ...)
+        temp = denoise(data$sequence[[i]], outfile = outfile, outformat = outformat, name = data$header_data[[i]], phred = data$quality[[i]], ...)
         outrow = meta_check(x = temp, log_data = log_row, 
                    keep_rejects = keep_rejects, 
                    log_file = log_file,

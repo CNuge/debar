@@ -42,34 +42,5 @@ test_that("Sequence files are read, denoised and written properly.", {
   x4 = denoise(data2$sequence[[1]], name = data2$header[[1]], phred = data2$quality[[1]], double_pass = FALSE, dir_check = FALSE)
   write_fastq(x4 , outfile = temp2)
   
-  #test the full pipeline on a small sequence datasets
-  # have the 
-  fastq_test_file = system.file('extdata/small_unittest.fastq', package = 'debar')
-  fasta_test_file = system.file('extdata/small_unittest.fasta', package = 'debar')
-  
-  #
-  # Write to a fasta file
-  #
-  temp3 = file.path(tempdir(), "temp_out.fastq")
-  on.exit(unlink(temp3))
-  
-  denoise_file(fastq_test_file, outfile = temp3,  
-                log_file = FALSE, keep_rejects = FALSE, double_pass = FALSE, dir_check = FALSE)
-  
-  denoise_file(fasta_test_file, outfile = temp3, file_type = 'fasta', keep_phred = FALSE, phred_placeholder = "~", 
-              log_file = FALSE, keep_rejects = FALSE, double_pass = FALSE, dir_check = FALSE)
-  
-  
-  #
-  # Write to a fasta file
-  #
-  temp4 = file.path(tempdir(), "temp_out.fasta")  
-  on.exit(unlink(temp4))
-  
-  denoise_file(fasta_test_file, outfile = temp4, file_type = 'fasta', keep_phred = FALSE, phred_placeholder = "~", 
-               log_file = FALSE, keep_rejects = FALSE, double_pass = FALSE, dir_check = FALSE)
 
-  denoise_file(fastq_test_file, outfile = temp4, 
-               log_file = FALSE, keep_rejects = FALSE, double_pass = FALSE, dir_check = FALSE)
-  
 })
