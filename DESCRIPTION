@@ -1,6 +1,6 @@
 Package: debar
 Type: Package
-Title: A COI-5P barcode Data Denoiser
+Title: A Post-Clustering Denoiser for COI-5P Barcode Data
 Version: 0.1.0
 Author: Cameron M. Nugent
 Maintainer: Cameron M. Nugent <nugentc@uoguelph.ca>
@@ -19,7 +19,6 @@ Depends:
 Imports:
   ape,
   aphid,
-  gtools,
   seqinr,
   parallel
 Suggests: 

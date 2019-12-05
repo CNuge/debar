@@ -30,7 +30,8 @@ out = denoise_list(ex_nt_list)
 out2 = denoise_list(ex_nt_list, keep_flanks=FALSE)
 
 #return a list of DNAseq objects 
-ex_DNAseq_out = denoise_list(ex_nt_list, to_return = 'DNAseq')
+ex_DNAseq_out = denoise_list(ex_nt_list, to_return = 'DNAseq',
+ dir_check = FALSE, double_pass = FALSE)
 
 }
 \seealso{
