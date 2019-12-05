@@ -59,7 +59,7 @@ read_fasta = function(x){
   head_line = data[seq(1,length(data), 2)]
   head_line = substr(head_line, 2, nchar(head_line))
   
-  records = data.frame(header = head_line,
+  records = data.frame(header_data = head_line,
                        sequence = data[seq(2,length(data), 2)], 
                        stringsAsFactors = FALSE)
   

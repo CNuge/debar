@@ -3,7 +3,7 @@
 \docType{data}
 \name{example_nt_string}
 \alias{example_nt_string}
-\title{Example coi5p DNA sequence string}
+\title{Example coi5p DNA sequence string.}
 \format{An object of class \code{character} of length 1.}
 \usage{
 example_nt_string

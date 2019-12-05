@@ -3,7 +3,7 @@
 \docType{data}
 \name{nt_PHMM}
 \alias{nt_PHMM}
-\title{Nucleotide profile hidden markov model for seqdenoise.}
+\title{Nucleotide profile hidden markov model for debar.}
 \format{An object of class \code{PHMM} of length 14.}
 \usage{
 nt_PHMM

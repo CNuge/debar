@@ -12,7 +12,7 @@
 ###############################################################################
 
 ###############################################################################
-#' Nucleotide profile hidden markov model for seqdenoise.
+#' Nucleotide profile hidden markov model for debar.
 #'
 #' This model is stored in the package and was trained on a representitive
 #' sample of the barcode of life database (http://www.boldsystems.org/index.php).
@@ -22,7 +22,7 @@
 ###############################################################################
 
 ###############################################################################
-#' Example coi5p DNA sequence string
+#' Example coi5p DNA sequence string.
 #'
 #' This string of barcode data is used in the package documentation's examples
 #' and within the vignette demonstrating how to use the package.
