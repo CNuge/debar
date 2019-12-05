@@ -4,8 +4,8 @@ print.DNAseq = function(x, ...){
   desc_string = "A DNAseq object.\n"
   
   lines = c(desc_string)
-  if(length(x$id) != 0){
-    l2 = paste("\nSample ID: ", x$id, "\n", sep = "")  
+  if(length(x$name) != 0){
+    l2 = paste("Sample ID: ", x$name, "\n", sep = "")  
     lines = c(lines, l2)
   }
   l3 = paste("Raw Sequence:\n", 
