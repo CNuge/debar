@@ -45,11 +45,15 @@ test_that("The file to file denoising pipeline performs as expected.", {
                log_file = FALSE, keep_rejects = FALSE, double_pass = FALSE, dir_check = FALSE)
   
   temp4 = 'out.fq'
+  
   #other param combos
   denoise_file(fastq_test_file, outfile = temp4, informat = "fastq",
                log_file = FALSE, keep_rejects = TRUE, double_pass = FALSE, dir_check = FALSE)
 
   denoise_file(fastq_test_file, outfile = temp4, informat = "fastq",
+               log_file = TRUE, keep_rejects = TRUE, double_pass = FALSE, dir_check = FALSE)
+  
+  denoise_file(fastq_test_file, outfile = temp4, informat = "fastq",  multicore = 2,
                log_file = TRUE, keep_rejects = TRUE, double_pass = FALSE, dir_check = FALSE)
   
   # Test bad calls of file types
