@@ -16,4 +16,8 @@ test_that("Amino acid sequences are checked properly.", {
   ex_data3 = aa_check(ex_data, trans_table = 11)
   expect_equal(ex_data3$reject, TRUE)
   
+  #cleanup tests for the hard to hit lines
+  expect_equal(translate_codon("NNA"), "-")
+  expect_equal(translate_codon("Ann"), "-")
+  
   })

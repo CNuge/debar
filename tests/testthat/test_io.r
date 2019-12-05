@@ -38,6 +38,9 @@ test_that("Sequence files are read, denoised and written properly.", {
   x3 = denoise(data1$sequence[[1]], data1$header[[1]], double_pass = FALSE, dir_check = FALSE)
   write_fastq(x3 , outfile = temp2, keep_phred = FALSE, phred_placeholder = "~")
   
+  #error if writing fastq with no phred data
+  expect_error(  write_fastq(x3 , outfile = temp2), "Cannot keep the phred scores for a DNAseq with no phred inputs")
+  
   #write to fastq with quality data
   x4 = denoise(data2$sequence[[1]], name = data2$header[[1]], phred = data2$quality[[1]], double_pass = FALSE, dir_check = FALSE)
   write_fastq(x4 , outfile = temp2)
