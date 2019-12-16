@@ -20,7 +20,7 @@ test_that("The file to file denoising pipeline performs as expected.", {
   
   denoise_file(fasta_test_file, outfile = temp3,  multicore = 2,
                informat = 'fasta', outformat="fastq",
-               keep_phred = FALSE, phred_placeholder = "~", 
+               keep_phred = FALSE, phred_placeholder = "~",
                log_file = FALSE, keep_rejects = FALSE, double_pass = FALSE, dir_check = FALSE)
   
   denoise_file(fasta_test_file, outfile = temp3, informat = 'fasta', outformat="fastq",

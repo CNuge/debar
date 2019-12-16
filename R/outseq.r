@@ -4,7 +4,10 @@
 #' 
 #' @param x a DNAseq class object.
 #' @param ... additional arguments to be passed between methods.
-#' @param keep_flanks Default is TRUE.
+#' @param keep_flanks Should the regions of the input sequence outside of the barcode region be readded to the denoised sequence
+#' prior to outputting to the file. Options are TRUE, FALSE and 'right'. The 'right' option will keep the trailing flank
+#' but remove the leading flank. Default is TRUE. 
+#' False will lead to only the denoised sequence for the 657bp barcode region being output to the file.
 #' @param ambig_char The character to use for ambigious positions in the sequence.
 #' @param adjust_limit the maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
 #' then the entire read is masked with ambigious characters. Default is 5.
@@ -67,6 +70,22 @@ outseq.DNAseq = function(x, ..., keep_flanks = TRUE, ambig_char = "N", adjust_li
                            names(x$data$raw_removed_end)), # part removed from the end of first frame() call
                          collapse = "")
     }
+  }else if(keep_flanks == 'right'){
+
+    x$outseq = paste(c(x$adjusted_sequence, #the 'sweet spot' that is denoised
+                         x$data$adjusted_trimmed, # part removed in adj_seq
+                         x$frame_dat$removed_end, #part removed in second frame() call
+                         x$data$raw_removed_end), # part removed from the end of first frame() call
+                       collapse = "")
+    
+    if(!is.null(names(x$adjusted_sequence)) || !is.null(names(x$frame_dat$removed_lead))|| !is.null(names(x$data$raw_removed_front))){
+      x$outphred = paste(c(names(x$adjusted_sequence), #the 'sweet spot' that is denoised
+                           names(x$data$adjusted_trimmed), # part removed in adj_seq
+                           names(x$frame_dat$removed_end), #part removed in second frame() call
+                           names(x$data$raw_removed_end)), # part removed from the end of first frame() call
+                         collapse = "")
+    }
+      
   }else{
     x$outseq = paste(x$adjusted_sequence, collapse = "")
     if(!is.null(names(x$adjusted_sequence))){

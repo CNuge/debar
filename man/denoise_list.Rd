@@ -24,10 +24,8 @@ or a list of DNA seq objects.
 }
 \examples{
 #denoise a list of sequences
-out = denoise_list(ex_nt_list)
+out = denoise_list(ex_nt_list, dir_check = FALSE, double_pass = FALSE)
 #denoise and add placehers to outputs 
-#to establish common reading frame (pre - consensus)
-out2 = denoise_list(ex_nt_list, keep_flanks=FALSE)
 
 #return a list of DNAseq objects 
 ex_DNAseq_out = denoise_list(ex_nt_list, to_return = 'DNAseq',

@@ -10,6 +10,9 @@ consensus_sequence(x)
 \arguments{
 \item{x}{The list of adjusted DNA sequences, post censorship and AA correction}
 }
+\value{
+A string containing the consensus nucleotide sequence.
+}
 \description{
 Take the list of denoised sequences and obtain the consensus sequence.
 }

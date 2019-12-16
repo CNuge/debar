@@ -6,6 +6,9 @@
 \usage{
 col_mode(col_data)
 }
+\value{
+A single character string.
+}
 \description{
 Determining the most common character in each column.
 }

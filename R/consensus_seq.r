@@ -1,5 +1,6 @@
 #' Determining the most common character in each column.
 #'
+#' @return A single character string.
 #' @keywords internal
 col_mode = function(col_data) {
   if (!is.factor(col_data)){
@@ -32,6 +33,7 @@ col_mode = function(col_data) {
 #' ex_out = denoise_list(ex_nt_list, keep_flanks=FALSE)
 #' 
 #' barcode_seq = consensus_sequence(ex_out)
+#' @return A string containing the consensus nucleotide sequence.
 #' @export
 #' @name consensus
 consensus_sequence = function(x){

@@ -15,7 +15,10 @@ outseq(x, ...)
 
 \item{...}{additional arguments to be passed between methods.}
 
-\item{keep_flanks}{Default is TRUE.}
+\item{keep_flanks}{Should the regions of the input sequence outside of the barcode region be readded to the denoised sequence
+prior to outputting to the file. Options are TRUE, FALSE and 'right'. The 'right' option will keep the trailing flank
+but remove the leading flank. Default is TRUE. 
+False will lead to only the denoised sequence for the 657bp barcode region being output to the file.}
 
 \item{ambig_char}{The character to use for ambigious positions in the sequence.}
 

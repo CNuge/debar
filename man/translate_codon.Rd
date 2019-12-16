@@ -9,6 +9,9 @@ translate_codon(codon)
 \arguments{
 \item{codon}{a three letter DNA string.}
 }
+\value{
+a string.
+}
 \description{
 Translate a codon of DNA sequence using the censored translation table.
 this translates codons for which the amino acids is unambigious across

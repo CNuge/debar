@@ -37,8 +37,6 @@ triple_dels = function(x, path_start, path_end){
   }
 }
 
-#TODO - have adj_seq return an additional variable 'early_term' if 00000 or 22222 are encounteres
-# have adjust use this to set the value of reject to TRUE if early_term = TRUE
 
 #' Adjust the DNA sequence based on the ntPHMM path
 #'
@@ -47,6 +45,7 @@ triple_dels = function(x, path_start, path_end){
 #' @param censor_length number of base pairs in either direction of a PHMM correction
 #' to convert to placeholder characters.
 #' @param added_phred The phred character to use for characters inserted into the original sequence.
+#' @return a named list.
 #' @keywords internal
 adj_seq = function(frame_dat, path_out, censor_length = 3, added_phred = "*"){
   
@@ -191,8 +190,6 @@ adj_seq = function(frame_dat, path_out, censor_length = 3, added_phred = "*"){
   
   return(list(c(frame_dat$front, new_seq), adj_count, trimmed_end, censor_0s, censor_2s))
 }
-
-#c(new_seq, trimmed_end) == org_seq_vec
 
 #' Adjust the sequences based on the nt path outputs.
 #' 

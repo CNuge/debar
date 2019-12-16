@@ -29,7 +29,7 @@ test_that("Messy SEQUEL sequences are processed as anticipated", {
   test_seqdenoise2 = DNAseq(t2, name = "test1")
   test_seqdenoise2 = frame(test_seqdenoise2)
   test_seqdenoise2 = adjust(test_seqdenoise2,  censor_length = 5)
-  test_seqdenoise2 = outseq(test_seqdenoise2)
+  test_seqdenoise2 = outseq(test_seqdenoise2, keep_flanks = TRUE)
   
   #no corrections applied for this one
   #test_seqdenoise2$outseq == t2
@@ -66,6 +66,12 @@ test_that("Messy SEQUEL sequences are processed as anticipated", {
   
   #test_seqdenoise3_trimmed$outseq == trimmed_and_framed3
   expect_equal(test_seqdenoise3_trimmed$outseq, trimmed_and_framed3)
+  
+  right_keep_expected =   "NCATTATATTTTTTATTTGGAATTTGAGCAGGAATAATTGGAACATCATTAAGATTATTAATTCGAATAGAATTAGGAAATCCTGGATCCTTAATTGGAGATGACCAAATTTATAATAACTATTGTAAACAGCCCATGCATTTATTATAATTTTTTTTATAGTAATACCTATTATAATTGGAGGATTTGGAAATTGATTAATTCCTTTAATATTAGGTGCACCAGATATAGCATTCCCCCGAATAAATAATATAAGATTTTGATTATTACCCCCTTCCATTTTTCTTTTAATTTCAAGAAGAATCGTAGAAAAATGGAGCAGGAACAGGATGAACTGTTTACCCCCCCTTATCTTCTAACACCGCTCATAGAGGAAGATCCGTAGATTTAGCCATTTTTTCTCTTCATTTAGCTGGAATTTCCTCAATTCTAGGAGCAGTAAATTTTATTTCTACAGTAATTAATATACGAGCTAAAAAAATAATATTTGACCAAATACCCCTATTTATTTGAGCTGTAGCTATTACTGCATTATTATTATTATTATCATTACCAGTTTTAGCAGGAGCTATTACTATATTATTAACAGATCGAAATTTAAATACATCTTTTTTTGACCCAGCTGGAGGAGGAGACCCAATTTTATACCAACATTTATTTTGATTTTTTGGACACCCTGAAGTTTA"
+
+  test_seqdenoise3_keep_right = outseq(test_seqdenoise3, keep_flanks = 'right')
+
+  expect_equal(test_seqdenoise3_keep_right$outseq, right_keep_expected)
   
   ############################################################################
   # Real read test 4

@@ -54,7 +54,8 @@ then the entire read is rejected. Default is 3.}
 \item{to_file}{Boolean indicating whether the sequence should be written to a file. Default is TRUE.}
 
 \item{keep_flanks}{Should the regions of the input sequence outside of the barcode region be readded to the denoised sequence
-prior to outputting to the file. Default is TRUE. 
+prior to outputting to the file. Options are TRUE, FALSE and 'right'. The 'right' option will keep the trailing flank
+but remove the leading flank. Default is TRUE. 
 False will lead to only the denoised sequence for the 657bp barcode region being output to the file.}
 
 \item{keep_phred}{Should the original PHRED scores be kept in the output? Default is TRUE.}

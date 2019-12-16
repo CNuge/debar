@@ -34,7 +34,8 @@
 #' @param adjust_limit the maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
 #' then the entire read is rejected. Default is 3.
 #' @param keep_flanks Should the regions of the input sequence outside of the barcode region be readded to the denoised sequence
-#' prior to outputting to the file. Default is TRUE. 
+#' prior to outputting to the file. Options are TRUE, FALSE and 'right'. The 'right' option will keep the trailing flank
+#' but remove the leading flank. Default is TRUE. 
 #' False will lead to only the denoised sequence for the 657bp barcode region being output to the file.
 #' @param ambig_char The character to use for ambigious positions in the sequence that is output to the file. Default is N.
 #' @param to_file Boolean indicating whether the sequence should be written to a file. Default is TRUE.
@@ -334,10 +335,8 @@ denoise_file.default = function(x, ..., outfile = 'output.fastq',  informat = "f
 #' @seealso \code{\link{denoise}}
 #' @examples
 #' #denoise a list of sequences
-#' out = denoise_list(ex_nt_list)
+#' out = denoise_list(ex_nt_list, dir_check = FALSE, double_pass = FALSE)
 #' #denoise and add placehers to outputs 
-#' #to establish common reading frame (pre - consensus)
-#' out2 = denoise_list(ex_nt_list, keep_flanks=FALSE)
 #' 
 #' #return a list of DNAseq objects 
 #' ex_DNAseq_out = denoise_list(ex_nt_list, to_return = 'DNAseq',

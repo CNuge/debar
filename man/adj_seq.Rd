@@ -16,6 +16,9 @@ to convert to placeholder characters.}
 
 \item{added_phred}{The phred character to use for characters inserted into the original sequence.}
 }
+\value{
+a named list.
+}
 \description{
 Adjust the DNA sequence based on the ntPHMM path
 }
