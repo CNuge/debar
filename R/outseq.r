@@ -17,7 +17,8 @@
 #' @seealso \code{\link{adjust}}
 #' @examples
 #' #previously run
-#' excess_string = paste0("CCCCCC", example_nt_string_errors, "CCCCCCCC", collapse="")
+#' excess_string = paste0("CCCCCC", example_nt_string_errors, 
+#'                        "CCCCCCCC", collapse="")
 #' ex_data = DNAseq(excess_string, name = 'ex1')
 #' ex_data =  frame(ex_data)
 #' ex_data = adjust(ex_data)
@@ -31,8 +32,8 @@
 #' ex_data = outseq(ex_data, keep_flanks = FALSE)
 #' ex_data$outseq #view the output sequence
 #' #Ns added to the front to buffer trimmed region
-#' #Note some sequence is lost due to the strange path match that occurs at the 
-#' #front of the sequence.
+#' #Note some sequence is lost due to the strange 
+#' #path match that occurs at the front of the sequence.
 #' ex_data$data$path
 #' @name outseq
 #' @export

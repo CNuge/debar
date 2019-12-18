@@ -107,7 +107,8 @@ ex_data = denoise(example_nt_string_errors,
 
 #fastq data from a file
 #previously run
-fastq_example_file = system.file('extdata/coi_sequel_data_subset.fastq', package = 'debar')
+fastq_example_file = system.file('extdata/coi_sequel_data_subset.fastq', 
+                                 package = 'debar')
 data = read_fastq(fastq_example_file)
 #denoise the first sequence in the file
 #use a custom censor length and no amino acid check

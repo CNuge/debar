@@ -6,12 +6,6 @@
 #' translate those for which the amino acid varies,
 #' but rather outputs a ? in the string.
 #' @param codon a three letter DNA string.
-#' @details
-#' Censored translation table:
-#'            FFLLSSSSYY?*CCWWLLLLPPPPHHQQRRRRII?MTTTTNN?KSS??VVVVAAAADDEEGGGG
-#'   Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
-#'   Base2  = TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG
-#'   Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
 #' @return a string.
 #' @keywords internal
 translate_codon = function(codon){
@@ -64,12 +58,6 @@ translate_codon = function(codon){
 #' first codon, can pass 1, 2 or 3. For 2 and 3 the first 1 and 2 bp will be
 #' dropped from translation respectively.
 #' @seealso \code{\link{aa_check}}
-#' @details
-#' Censored translation table:
-#'      AA  = FFLLSSSSYY?*CCWWLLLLPPPPHHQQRRRRII?MTTTTNN?KSS??VVVVAAAADDEEGGGG
-#'   Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
-#'   Base2  = TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG
-#'   Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
 #' @export
 censored_translation = function(dna_str, reading_frame = 1){
 	num_bp = nchar(dna_str)

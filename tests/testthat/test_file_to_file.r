@@ -1,6 +1,5 @@
 test_that("The file to file denoising pipeline performs as expected.", {
   #test the full pipeline on a small sequence datasets
-  # have the 
   fastq_test_file = system.file('extdata/small_unittest.fastq', package = 'debar')
   fasta_test_file = system.file('extdata/small_unittest.fasta', package = 'debar')
   
@@ -17,12 +16,12 @@ test_that("The file to file denoising pipeline performs as expected.", {
   #test multicore
   denoise_file(fastq_test_file, outfile = temp3,  multicore = 2,
                log_file = FALSE, keep_rejects = FALSE, double_pass = FALSE, dir_check = FALSE)
-  
+
   denoise_file(fasta_test_file, outfile = temp3,  multicore = 2,
                informat = 'fasta', outformat="fastq",
                keep_phred = FALSE, phred_placeholder = "~",
                log_file = FALSE, keep_rejects = FALSE, double_pass = FALSE, dir_check = FALSE)
-  
+
   denoise_file(fasta_test_file, outfile = temp3, informat = 'fasta', outformat="fastq",
                keep_phred = FALSE, phred_placeholder = "~", 
                log_file = FALSE, keep_rejects = FALSE, double_pass = FALSE, dir_check = FALSE)
@@ -55,7 +54,7 @@ test_that("The file to file denoising pipeline performs as expected.", {
   
   denoise_file(fastq_test_file, outfile = temp4, informat = "fastq",  multicore = 2,
                log_file = TRUE, keep_rejects = TRUE, double_pass = FALSE, dir_check = FALSE)
-  
+
   # Test bad calls of file types
   expect_error(denoise_file(fastq_test_file, outfile = temp4, informat="text",
                             log_file = FALSE, keep_rejects = FALSE, double_pass = FALSE, dir_check = FALSE),
