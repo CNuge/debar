@@ -18,6 +18,13 @@ The package was initially designed for processing [single molecule real-time (SM
 
 ## Installation
 
+`debar` can be installed directly from CRAN.
+
+```
+install.packages("debar")
+library(debar)
+```
+
 The development version of `debar` can be installed directly from GitHub. You'll need to have the R package `devtools` installed and loaded. Also note if the build_vignettes option is set to true, you will need to have the R package `knitr` installed.
 
 ```
