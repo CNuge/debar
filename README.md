@@ -1,6 +1,7 @@
 # debar
 ## DEnoise BARcode data with profile hidden Markov models 
 [![Build Status](https://travis-ci.com/CNuge/debar.svg?token=H6eQaqsE1kLqYX3zZ1Xz&branch=master)](https://travis-ci.com/CNuge/debar)
+[![CRAN_Status_Badge](https://r-pkg.org/badges/version/debar)](https://CRAN.R-project.org/package=debar)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 [![codecov](https://codecov.io/gh/CNuge/debar/branch/master/graph/badge.svg)](https://codecov.io/gh/CNuge/debar)
 --------------------------------------------------------
