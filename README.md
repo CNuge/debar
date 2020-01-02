@@ -1,9 +1,10 @@
 # debar
 ## DEnoise BARcode data with profile hidden Markov models 
 [![Build Status](https://travis-ci.com/CNuge/debar.svg?token=H6eQaqsE1kLqYX3zZ1Xz&branch=master)](https://travis-ci.com/CNuge/debar)
-[![CRAN_Status_Badge](https://r-pkg.org/badges/version/debar)](https://CRAN.R-project.org/package=debar)
-[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 [![codecov](https://codecov.io/gh/CNuge/debar/branch/master/graph/badge.svg)](https://codecov.io/gh/CNuge/debar)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+[![CRAN_Status_Badge](https://r-pkg.org/badges/version/debar)](https://CRAN.R-project.org/package=debar)
+[![](https://cranlogs.r-pkg.org/badges/grand-total/debar)](https://CRAN.R-project.org/package=debar)
 --------------------------------------------------------
 
 `debar` is an R package designed for denoising sequence data for the animal DNA barcode marker: cytochrome c oxidase I (COI-5P, or the five prime portion of COI). The package is designed to detect and correct insertion and deletion errors within barcode sequences. This is accomplished through comparison of input sequences against a profile hidden Markov (PHMM) model [using the Viterbi algorithm](https://en.wikipedia.org/wiki/Viterbi_algorithm) and adjustment of the sequence based on the reported Viterbi path (`debar` depends on functions from the R package [aphid](https://CRAN.R-project.org/package=aphid) for the PHMM strucutre and for running the Viterbi algorithm).
