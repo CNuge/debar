@@ -21,8 +21,10 @@ rev_comp = function(x){
 #' Optimal orientation is determined by the direction with the longer string of consecutive 
 #' ones in the path
 #' @param x a DNAseq class object.
+#' @param nt_PHMM The profile hidden Markov model against which the sequence should be compared.
+#' Default is the full COI-5P nucleotide PHMM (nt_coi_PHMM). 
 #' 
-dir_check = function(x){
+dir_check = function(x, nt_PHMM = debar::nt_coi_PHMM){
   #run this for fwd
   fwd_ntBin = individual_DNAbin(toupper(x))
   fwd_ntPHMMout = aphid::Viterbi(nt_PHMM, fwd_ntBin, odds = FALSE)
@@ -224,6 +226,10 @@ set_frame = function(org_seq_vec, path_out){
 #' @param terminate_rejects Should a check be made to enusre minimum homology of the input sequence to the PHMM.
 #' Makes sure the match conditions are met prior to continuing with the framing of the sequence. If conditions not
 #' met then the function is stopped and the sequence labelled for rejection.
+#' @param nt_PHMM The profile hidden Markov model against which the sequence should be compared.
+#' Default is the full COI-5P nucleotide PHMM (nt_coi_PHMM). A  PHMM for a sub-section of the 
+#' COI-5P region can be generated using the subsetPHMM function of the R package coil, 
+#' or a novel PHMM can be trained using the R package aphid.
 #' @param ... additional arguments to be passed between methods.
 #' @return a class object of code{"DNAseq"} 
 #' @seealso \code{\link{DNAseq}}
@@ -244,7 +250,12 @@ frame = function(x, ...){
 
 #' @rdname frame
 #' @export
-frame.DNAseq = function(x, ..., dir_check = TRUE, double_pass = TRUE, min_match = 100, max_inserts = 400, terminate_rejects = TRUE){
+frame.DNAseq = function(x, ..., dir_check = TRUE, 
+                                double_pass = TRUE, 
+                                min_match = 100, 
+                                max_inserts = 400, 
+                                terminate_rejects = TRUE,
+                                nt_PHMM = debar::nt_coi_PHMM){
   
   if(dir_check == TRUE){
     dir_out = dir_check(x$raw)

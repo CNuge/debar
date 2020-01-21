@@ -8,7 +8,8 @@
 frame(x, ...)
 
 \method{frame}{DNAseq}(x, ..., dir_check = TRUE, double_pass = TRUE,
-  min_match = 100, max_inserts = 400, terminate_rejects = TRUE)
+  min_match = 100, max_inserts = 400, terminate_rejects = TRUE,
+  nt_PHMM = debar::nt_coi_PHMM)
 }
 \arguments{
 \item{x}{a DNAseq class object.}
@@ -32,6 +33,11 @@ Default is 400.}
 \item{terminate_rejects}{Should a check be made to enusre minimum homology of the input sequence to the PHMM.
 Makes sure the match conditions are met prior to continuing with the framing of the sequence. If conditions not
 met then the function is stopped and the sequence labelled for rejection.}
+
+\item{nt_PHMM}{The profile hidden Markov model against which the sequence should be compared.
+Default is the full COI-5P nucleotide PHMM (nt_coi_PHMM). A  PHMM for a sub-section of the 
+COI-5P region can be generated using the subsetPHMM function of the R package coil, 
+or a novel PHMM can be trained using the R package aphid.}
 }
 \value{
 a class object of code{"DNAseq"}

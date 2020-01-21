@@ -1,5 +1,5 @@
 #load('R/sysdata.rda')
-#use_data(nt_PHMM, example_nt_string, example_nt_string_errors,ex_nt_list, overwrite = TRUE, internal = TRUE)
+#use_data(nt_coi_PHMM, example_nt_string, example_nt_string_errors, ex_nt_list, overwrite = TRUE, internal = TRUE)
 #then load for dev with:
 # load('R/sysdata.rda')
 
@@ -18,7 +18,7 @@
 #' sample of the barcode of life database (http://www.boldsystems.org/index.php).
 #'
 #' @keywords internal
-"nt_PHMM"
+"nt_coi_PHMM"
 ###############################################################################
 
 ###############################################################################

@@ -38,6 +38,10 @@
 #' but remove the leading flank. Default is TRUE. 
 #' False will lead to only the denoised sequence for the 657bp barcode region being output to the file.
 #' @param ambig_char The character to use for ambigious positions in the sequence that is output to the file. Default is N.
+#' @param nt_PHMM The profile hidden Markov model against which the sequence should be compared.
+#' Default is the full COI-5P nucleotide PHMM (nt_coi_PHMM). A  PHMM for a sub-section of the 
+#' COI-5P region can be generated using the subsetPHMM function of the R package coil, 
+#' or a novel PHMM can be trained using the R package aphid.
 #' @param to_file Boolean indicating whether the sequence should be written to a file. Default is TRUE.
 #' @param outformat The format of the output file. Options are fasta or fastq (default) format.
 #' @param outfile The name of the file to output the data to. Default filenames are respectively: denoised.fasta or denoised.fastq.
@@ -94,6 +98,7 @@ denoise.default = function(x, ...,
                              added_phred = "*",
                              adjust_limit = 5,
                              ambig_char = "N",
+                             nt_PHMM = debar::nt_coi_PHMM,
                              to_file = FALSE,
                              keep_flanks = TRUE,
                              keep_phred = TRUE,
@@ -117,6 +122,7 @@ denoise.default = function(x, ...,
                    min_match = min_match,
                    max_inserts = max_inserts,
                    terminate_rejects= terminate_rejects,
+                   nt_PHMM = nt_PHMM,
                    ...)
   
   if(dat$reject == TRUE && terminate_rejects == TRUE){

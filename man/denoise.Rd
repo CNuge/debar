@@ -10,11 +10,11 @@ denoise(x, ...)
 \method{denoise}{default}(x, ..., name = character(), phred = NULL,
   dir_check = TRUE, double_pass = TRUE, min_match = 100,
   max_inserts = 400, censor_length = 7, added_phred = "*",
-  adjust_limit = 5, ambig_char = "N", to_file = FALSE,
-  keep_flanks = TRUE, keep_phred = TRUE, outformat = "fastq",
-  terminate_rejects = TRUE, outfile = NULL, phred_placeholder = "#",
-  aa_check = TRUE, trans_table = 0, frame_offset = 0,
-  append = TRUE)
+  adjust_limit = 5, ambig_char = "N", nt_PHMM = debar::nt_coi_PHMM,
+  to_file = FALSE, keep_flanks = TRUE, keep_phred = TRUE,
+  outformat = "fastq", terminate_rejects = TRUE, outfile = NULL,
+  phred_placeholder = "#", aa_check = TRUE, trans_table = 0,
+  frame_offset = 0, append = TRUE)
 }
 \arguments{
 \item{x}{a DNA sequence string.}
@@ -50,6 +50,11 @@ to convert to placeholder characters. Default is 7.}
 then the entire read is rejected. Default is 3.}
 
 \item{ambig_char}{The character to use for ambigious positions in the sequence that is output to the file. Default is N.}
+
+\item{nt_PHMM}{The profile hidden Markov model against which the sequence should be compared.
+Default is the full COI-5P nucleotide PHMM (nt_coi_PHMM). A  PHMM for a sub-section of the 
+COI-5P region can be generated using the subsetPHMM function of the R package coil, 
+or a novel PHMM can be trained using the R package aphid.}
 
 \item{to_file}{Boolean indicating whether the sequence should be written to a file. Default is TRUE.}
 

@@ -4,10 +4,13 @@
 \alias{dir_check}
 \title{Take an input sequence and align both the forward and reverse compliments to the PHMM}
 \usage{
-dir_check(x)
+dir_check(x, nt_PHMM = debar::nt_coi_PHMM)
 }
 \arguments{
 \item{x}{a DNAseq class object.}
+
+\item{nt_PHMM}{The profile hidden Markov model against which the sequence should be compared.
+Default is the full COI-5P nucleotide PHMM (nt_coi_PHMM).}
 }
 \description{
 The fuction returns the sequence, DNAbin and Path and score of the optimal orientation.
