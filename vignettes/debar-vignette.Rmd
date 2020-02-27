@@ -2,7 +2,7 @@
 title: "debar - DEnoising COI-5P BARcode data"
 author: "Cameron M. Nugent"
 data: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: rmarkdown::html_vignette # pdf_document
 vignette: >
   %\VignetteIndexEntry{debar-vignette}
   %\VignetteEngine{knitr::rmarkdown}
@@ -95,11 +95,14 @@ All that is needed is for the input and output files to be specified. The progra
 
 ```{r}
 #The following example file is used as an input in the vignette
-fastq_example_file = system.file('extdata/coi_sequel_data_subset.fastq.gz', package = 'debar')
+fastq_example_file = system.file('extdata/coi_sequel_data_subset.fastq.gz', 
+                                 package = 'debar')
 
 #other example data also available in debar:
-#fastq_example_file = system.file('extdata/coi_sequel_data_subset.fastq', package = 'debar')
-#fasta_example_file = system.file('extdata/coi_sequel_data_subset.fasta', package = 'debar')
+#fastq_example_file = system.file('extdata/coi_sequel_data_subset.fastq', 
+#                                 package = 'debar')
+#fasta_example_file = system.file('extdata/coi_sequel_data_subset.fasta', 
+#                                 package = 'debar')
 ```
 
 #### File-to-file example
@@ -111,7 +114,8 @@ fastq_example_file = system.file('extdata/coi_sequel_data_subset.fastq.gz', pack
 # If you do wish to run these examples, then please double check your working directory!
 denoise_file(fastq_example_file, filename = "example_output.fastq")
 
-denoise_file(fastq_example_file, filename = "multicore-example_output.fastq", multicore = 8, log_file = TRUE, keep_rejects = TRUE)
+denoise_file(fastq_example_file, filename = "multicore-example_output.fastq", 
+                          multicore = 8, log_file = TRUE, keep_rejects = TRUE)
 
 ```
 
@@ -120,9 +124,11 @@ denoise_file(fastq_example_file, filename = "multicore-example_output.fastq", mu
 
 File-to-file denoising can also be parallelized across multiple CPU cores. The denoising of each sequences in the input file is conducted separately, so using multiple cores will decrease the time needed to complete denoising roughly by a factor of the number of cores used. If you are denoising complete sequencer outputs, it is highly reccommend that you do so with as many cores as possible. For example, denoising of 160,000 sequence reads on a 64-core server (all default paramaters) takes approximately 1hr and 42 minutes, while on a laptop with only 8 cores would take almost 14 hours!
 
-```
+```{r, eval = FALSE}
 #debar works best when the tasks are highly parallelized
-denoise_file(fastq_example_file, filename = "multicore-example_output.fastq", multicore = 8, log_file = TRUE, keep_rejects = TRUE) #set the multicore parameter to the number of CPU cores available
+denoise_file(fastq_example_file, filename = "multicore-example_output.fastq", 
+             multicore = 8, log_file = TRUE, keep_rejects = TRUE) 
+#set the multicore parameter to the number of CPU cores available
 ```
 
 Certain parameter selections can further increase the speed with which `debar` can process data, but come with certain trade offs (that may or may not be worth consideration in the processing of your own data). The most drastic speed improvement is provided provided by disabling the direction check (dir_check). By default both the forward and reverse compliments of a read are compared to the PHMM, if your data consists only of forward reads, then disabling this option will result in a 30-50% reduction in processing. Other speed/accuracy trade offs are available and discussed within the 'Recommended parameter combinations' section of the package's vignette.
