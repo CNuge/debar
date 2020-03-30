@@ -258,7 +258,7 @@ frame.DNAseq = function(x, ..., dir_check = TRUE,
                                 nt_PHMM = debar::nt_coi_PHMM){
   
   if(dir_check == TRUE){
-    dir_out = dir_check(x$raw)
+    dir_out = dir_check(x$raw, nt_PHMM=nt_PHMM)
     #parse the outputs from the optimal direction.
     x$raw = dir_out$raw
     x$data$ntBin = dir_out$ntBin

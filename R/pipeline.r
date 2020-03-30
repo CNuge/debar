@@ -118,12 +118,12 @@ denoise.default = function(x, ...,
   } 
   
   dat = frame(dat, dir_check = dir_check,
-                   double_pass = double_pass,
-                   min_match = min_match,
-                   max_inserts = max_inserts,
-                   terminate_rejects= terminate_rejects,
-                   nt_PHMM = nt_PHMM,
-                   ...)
+                 double_pass = double_pass,
+                 min_match = min_match,
+                 max_inserts = max_inserts,
+                 terminate_rejects= terminate_rejects,
+                 nt_PHMM = nt_PHMM,
+                 ...)
   
   if(dat$reject == TRUE && terminate_rejects == TRUE){
     return(dat)
