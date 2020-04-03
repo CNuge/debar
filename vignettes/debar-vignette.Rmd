@@ -133,6 +133,30 @@ denoise_file(fastq_example_file, filename = "multicore-example_output.fastq",
 
 Certain parameter selections can further increase the speed with which `debar` can process data, but come with certain trade offs (that may or may not be worth consideration in the processing of your own data). The most drastic speed improvement is provided provided by disabling the direction check (dir_check). By default both the forward and reverse compliments of a read are compared to the PHMM, if your data consists only of forward reads, then disabling this option will result in a 30-50% reduction in processing. Other speed/accuracy trade offs are available and discussed within the 'Recommended parameter combinations' section of the package's vignette.
 
+### Denoising metabarcode data
+
+DNA metabarcoding analyses often target shorter, standardized sections of the full COI barcode region for amplification and sequencing. If the targeted section is known, the performance of debar can be optimized by denoising the sequence using a customized subset of the complete PHMM, corresponding to given region. This will reduce the probability of spurious profile matches, and increase the accuracy of the indel corrections performed.
+
+debar's sister package, [coil](https://github.com/CNuge/coil) contains a function `subsetPHMM`, which can be used to extract a section of the complete 657bp PHMM for the COI region. Below this process, and the application of the custom model in the denoising of a barcode sequence fragment are demonstrated.
+
+```{r}
+#install.packages('coil')
+
+# These variables define the region of the Folmer region we are targeting.
+nt_start = 295
+nt_end = 636
+
+# Take the complete PHMM, and create a new PHMM that represents a specific subsection of the COI Folmer region.
+subsection_phmm = coil::subsetPHMM(debar::nt_coi_PHMM, start = nt_start, end = nt_end)
+
+# Here is an example sequence with a T added at position 81.
+ex_error = "tccgcaggagtagaagctggagcaggaaccggatgaactgtatatcctcctttagcaggtaatttagcacatgctggccacctctgttgatttagccatcttttcccttcatttggccggtatctcatcaattttagcctctattaattttattacaactattattaatataaaacccccaactatttctcaatatcaaacaccattatttgtttgatctattcttatcaccactgttcttctactccttgctctccctgttcttgcagccggaattacaatattattaacagaccgcaacctcaacactacattctttgaccccgcagggggaggggacc"
+
+# Run the denoise function, with the constrained PHMM.
+subset_has_error_outpt = denoise(ex_error, nt_PHMM = subsection_phmm)
+
+subset_has_error_outpt
+```
 
 ## Acknowledgements
 
