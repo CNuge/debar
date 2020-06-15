@@ -15,7 +15,7 @@ library(debar)
 ```
 
 ## Introduction
-`debar` is an R package designed for denoising high throughput sequencing data for the animal DNA barcode marker cytochrome c oxidase I (COI-5P, or the five prime portion of COI). The package is designed to detect and correct insertion and deletion errors within sequencer outputs. This is accomplished through comparison of input sequences against a profile hidden Markov model [using the Viterbi algorithm](https://en.wikipedia.org/wiki/Viterbi_algorithm)(`debar` depends on functions from the R package [aphid](https://CRAN.R-project.org/package=aphid) for running the Viterbi algorithm). Inserted base pairs are removed and deleted base pairs are accounted for through the introduction of a placeholder character. Since the PHMM is a probabilistic representation of the COI barcode, corrections are not alway perfect. For this reason `debar` censors base pairs adjacent to reported indel sites, turning them into placeholder characters (default is 7bp in either direction, this feature can be disabled). Testing has shown that this censorship results in the correct sequence length being restored, and erroneous base pairs being masked the vast majority of the time (>95%). 
+`debar` is an R package designed for denoising high throughput sequencing data for the animal DNA barcode marker cytochrome c oxidase I (COI-5P, or the five prime portion of COI). The package is designed to detect and correct insertion and deletion errors within sequencer outputs. This is accomplished through comparison of input sequences against a profile hidden Markov model [using the Viterbi algorithm](https://en.wikipedia.org/wiki/Viterbi_algorithm) (`debar` depends on functions from the R package [aphid](https://CRAN.R-project.org/package=aphid) for running the Viterbi algorithm). Inserted base pairs are removed and deleted base pairs are accounted for through the introduction of a placeholder character. Since the PHMM is a probabilistic representation of the COI barcode, corrections are not always perfect. For this reason `debar` censors base pairs adjacent to reported indel sites, turning them into placeholder characters (default is 7bp in either direction, this feature can be disabled). Testing has shown that this censorship results in the correct sequence length being restored, and erroneous base pairs being masked the vast majority of the time (>95%). 
 
 ### Implementation
 
@@ -43,7 +43,7 @@ For deletion errors the inverse action is performed and a placeholder character 
 
 ### Denoising a list of sequences
 
- When working with sequence data in R, `debar` can be applied to a set of reads (either those linked to a given sample or those from a given set of clustered sequences). Note that for best performance reads should already be demultiplexed, dereplicated and filtered based on quality. A list of sequences can be denoised with the `denoise_list` function.
+ When working with sequence data in R, `debar` can be applied to a set of reads (either those linked to a given sample or those from a given set of clustered sequences). Note that for best performance reads should already be demultiplexed, dereplicated, and filtered based on quality. A list of sequences can be denoised with the `denoise_list` function.
 
 ```{r}
 ex_out = denoise_list(ex_nt_list)
@@ -63,7 +63,7 @@ ex_out = denoise_list(ex_nt_list, keep_flanks=FALSE)
 
 ### Obtaining a consensus sequence
 
-`debar` can provide a more accurate consensus sequence for a sample by removing errors in component reads and ensuring that all data conform to the known amplicon structure. The denoising process yields a series of indel corrected sequence reads, which can be combined to obtian a biologically informed consensus if the reads are derived from a single sample or from a sufficiently similar set of metabarcode outputs. The censorship process effectively removes indel errors the majority of the time and also restores the proper length of the sequence. This comes at the cost of missing information in individual. The combination of denoised sequences from a given sample or amplicon variant allows the full barcode to be obtained in most instances using the `consensus_sequence` function. 
+`debar` can provide a more accurate consensus sequence for a sample by removing errors in component reads and ensuring that all data conform to the known amplicon structure. The denoising process yields a series of indel corrected sequence reads, which can be combined to obtain a biologically informed consensus if the reads are derived from a single sample or from a sufficiently similar set of metabarcode outputs. The censorship process effectively removes indel errors the majority of the time and also restores the proper length of the sequence. This comes at the cost of missing information in individual sequences. The combination of denoised sequences from a given sample or amplicon variant allows the full barcode to be obtained in most instances using the `consensus_sequence` function. 
 
 ```{r}
 barcode_out = consensus_sequence(ex_out)
@@ -81,13 +81,13 @@ CTCTACTTGATTTTTGGTGCATGAGCAGGAATAGTTGGAATAGCTTTAAGTTTNNNNNNNNNNNNNNAACTAGGT
 
 CTCTACTTGATTTTTGGTGCATGAGCAGGAATAGTTGGAATAGCTTTAAGTTTACTAATTCGCGCTGAACTAGGT
 ```
-Note: If you are interested in identifying which consensus sequences do not conform to the COI amplicon strucutre, as opposed to denoising the sequences, then consider employing `debar`s sister package: [`coil`](https://CRAN.R-project.org/package=coil)
+Note: If you are interested in identifying which consensus sequences do not conform to the COI amplicon structure, as opposed to denoising the sequences, then consider employing `debar`s sister package: [`coil`](https://CRAN.R-project.org/package=coil)
 
 ### File-to-file denoising
 
-The progam contains a wrapper function `denoise_file` that allows for a user to run the entire denoiser pipeline in a single step (there are quantitatively informed defaults for executing the full pipline, but it is highly reccommended that a user acclimate themselves to the `denoise` pipeline options to ensure that the paramaters make sense for their given dataset and analysis goals).
+The program contains a wrapper function `denoise_file` that allows for a user to run the entire denoiser pipeline in a single step (there are quantitatively informed defaults for executing the full pipeline, but it is highly recommended that a user acclimate themselves to the `denoise` pipeline options to ensure that the parameters make sense for their given data set and analysis goals).
 
-All that is needed is for the input and output files to be specified. The program by default will read in the input file, run each sequence through the denoising algorithm, and then output the denoised sequences to the specified output file. The denoise pipeline contains certain rules (that a user can control - see below for details on these paramaters) that lead to some sequences being rejected entirely, the `keep_rejects` option allows a user to output these rejected sequences to another file for futher inspection. The program also has an option for generating a simple log file, and allows for multicore execution of the denoising pipeline by simply specify the number of cores the process should utilize. Additionally you can type `?denoise` to see a list of all available denoise paramaters that can be passed to the `denoise_file` wrapper function as well (paramaters are explored in more detail below).
+All that is needed is for the input and output files to be specified. The program by default will read in the input file, run each sequence through the denoising algorithm, and then output the denoised sequences to the specified output file. The denoise pipeline contains certain rules (that a user can control - see below for details on these parameters) that lead to some sequences being rejected entirely, the `keep_rejects` option allows a user to output these rejected sequences to another file for further inspection. The program also has an option for generating a simple log file, and allows for multicore execution of the denoising pipeline by simply specify the number of cores the process should utilize. Additionally you can type `?denoise` to see a list of all available denoise parameters that can be passed to the `denoise_file` wrapper function as well (parameters are explored in more detail below).
 
 #### Data structure
 
@@ -120,9 +120,9 @@ denoise_file(fastq_example_file, filename = "multicore-example_output.fastq",
 ```
 
 
-#### Paramater combinations - speed and accuracy tradeoffs
+#### Parameter combinations - speed and accuracy trade offs
 
-File-to-file denoising can also be parallelized across multiple CPU cores. The denoising of each sequences in the input file is conducted separately, so using multiple cores will decrease the time needed to complete denoising roughly by a factor of the number of cores used. If you are denoising complete sequencer outputs, it is highly reccommend that you do so with as many cores as possible. For example, denoising of 160,000 sequence reads on a 64-core server (all default paramaters) takes approximately 1hr and 42 minutes, while on a laptop with only 8 cores would take almost 14 hours!
+File-to-file denoising can also be parallelized across multiple CPU cores. The denoising of each sequences in the input file is conducted separately, so using multiple cores will decrease the time needed to complete denoising roughly by a factor of the number of cores used. If you are denoising complete sequencer outputs, it is highly recommended that you do so with as many cores as possible. For example, denoising of 160,000 sequence reads on a 64-core server (all default parameters) takes approximately 1hr and 42 minutes, while on a laptop with only 8 cores would take almost 14 hours!
 
 ```{r, eval = FALSE}
 #debar works best when the tasks are highly parallelized
@@ -131,7 +131,7 @@ denoise_file(fastq_example_file, filename = "multicore-example_output.fastq",
 #set the multicore parameter to the number of CPU cores available
 ```
 
-Certain parameter selections can further increase the speed with which `debar` can process data, but come with certain trade offs (that may or may not be worth consideration in the processing of your own data). The most drastic speed improvement is provided provided by disabling the direction check (dir_check). By default both the forward and reverse compliments of a read are compared to the PHMM, if your data consists only of forward reads, then disabling this option will result in a 30-50% reduction in processing. Other speed/accuracy trade offs are available and discussed within the 'Recommended parameter combinations' section of the package's vignette.
+Certain parameter selections can further increase the speed with which `debar` can process data, but come with certain trade offs (that may or may not be worth consideration in the processing of your own data). The most drastic speed improvement is provided by disabling the direction check (dir_check). By default both the forward and reverse compliments of a read are compared to the PHMM, if your data consists only of forward reads, then disabling this option will result in a 30-50% reduction in processing. Other speed/accuracy trade offs are available and discussed within the 'Recommended parameter combinations' section of the package's vignette.
 
 ### Denoising metabarcode data
 
