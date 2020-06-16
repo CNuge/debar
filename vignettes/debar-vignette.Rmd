@@ -2,7 +2,7 @@
 title: "debar - DEnoising COI-5P BARcode data"
 author: "Cameron M. Nugent"
 data: "`r Sys.Date()`"
-output: rmarkdown::html_vignette # pdf_document
+output: pdf_document #rmarkdown::html_vignette # 
 vignette: >
   %\VignetteIndexEntry{debar-vignette}
   %\VignetteEngine{knitr::rmarkdown}
@@ -146,12 +146,18 @@ debar's sister package, [coil](https://github.com/CNuge/coil) contains a functio
 nt_start = 295
 nt_end = 636
 
-# Take the complete PHMM, and create a new PHMM that represents a specific subsection of the COI Folmer region.
+# Take the complete PHMM, and create a new PHMM that represents 
+#a specific subsection of the COI Folmer region.
 subsection_phmm = coil::subsetPHMM(debar::nt_coi_PHMM, start = nt_start, end = nt_end)
 
 # Here is an example sequence with a T added at position 81.
-ex_error = "tccgcaggagtagaagctggagcaggaaccggatgaactgtatatcctcctttagcaggtaatttagcacatgctggccacctctgttgatttagccatcttttcccttcatttggccggtatctcatcaattttagcctctattaattttattacaactattattaatataaaacccccaactatttctcaatatcaaacaccattatttgtttgatctattcttatcaccactgttcttctactccttgctctccctgttcttgcagccggaattacaatattattaacagaccgcaacctcaacactacattctttgaccccgcagggggaggggacc"
-
+ex_error = paste0(c("tccgcaggagtagaagctggagcaggaaccggatgaactg",
+"tatatcctcctttagcaggtaatttagcacatgctggccacctctgttgatttagccatctttt",
+"cccttcatttggccggtatctcatcaattttagcctctattaattttattacaactattatta",
+"atataaaacccccaactatttctcaatatcaaacaccattatttgtttgatctattcttatcac",
+"cactgttcttctactccttgctctccctgttcttgcagccggaattacaatattattaacagacc",
+"gcaacctcaacactacattctttgaccccgcagggggaggggacc"), collapse = "")
+  
 # Run the denoise function, with the constrained PHMM.
 subset_has_error_outpt = denoise(ex_error, nt_PHMM = subsection_phmm)
 
