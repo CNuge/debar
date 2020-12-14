@@ -1,4 +1,4 @@
-#' Print a concise summary of the DNAseq object
+#' Print a concise summary of the DNAseq object.
 #' @keywords internal
 print.DNAseq = function(x, ...){
   desc_string = "A DNAseq object.\n"

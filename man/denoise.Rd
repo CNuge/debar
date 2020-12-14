@@ -7,23 +7,41 @@
 \usage{
 denoise(x, ...)
 
-\method{denoise}{default}(x, ..., name = character(), phred = NULL,
-  dir_check = TRUE, double_pass = TRUE, min_match = 100,
-  max_inserts = 400, censor_length = 7, added_phred = "*",
-  adjust_limit = 5, ambig_char = "N", nt_PHMM = debar::nt_coi_PHMM,
-  to_file = FALSE, keep_flanks = TRUE, keep_phred = TRUE,
-  outformat = "fastq", terminate_rejects = TRUE, outfile = NULL,
-  phred_placeholder = "#", aa_check = TRUE, trans_table = 0,
-  frame_offset = 0, append = TRUE)
+\method{denoise}{default}(
+  x,
+  ...,
+  name = character(),
+  phred = NULL,
+  dir_check = TRUE,
+  double_pass = TRUE,
+  min_match = 100,
+  max_inserts = 400,
+  censor_length = 7,
+  added_phred = "*",
+  adjust_limit = 5,
+  ambig_char = "N",
+  nt_PHMM = debar::nt_coi_PHMM,
+  to_file = FALSE,
+  keep_flanks = TRUE,
+  keep_phred = TRUE,
+  outformat = "fastq",
+  terminate_rejects = TRUE,
+  outfile = NULL,
+  phred_placeholder = "#",
+  aa_check = TRUE,
+  trans_table = 0,
+  frame_offset = 0,
+  append = TRUE
+)
 }
 \arguments{
-\item{x}{a DNA sequence string.}
+\item{x}{A DNA sequence string.}
 
-\item{...}{additional arguments to be passed between methods.}
+\item{...}{Additional arguments to be passed between methods.}
 
-\item{name}{an optional character string. Identifier for the sequence.}
+\item{name}{An optional character string. Identifier for the sequence.}
 
-\item{phred}{an optional character string. The phred score string corresponding to the nucleotide string.
+\item{phred}{An optional character string. The phred score string corresponding to the nucleotide string.
 If passed then the input phred scores will be modified along with the nucleotides and carried through
 to the sequence output. Default = NULL.}
 
@@ -41,12 +59,12 @@ Otherwise flag the sequence as a reject.}
 (including the flanking regions). If this number is
 exceeded than the entire read will be discarded if terminate_rejects = TRUE. Default is 400.}
 
-\item{censor_length}{the number of base pairs in either direction of a PHMM correction
+\item{censor_length}{The number of base pairs in either direction of a PHMM correction
 to convert to placeholder characters. Default is 7.}
 
 \item{added_phred}{The phred character to use for characters inserted into the original sequence.}
 
-\item{adjust_limit}{the maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
+\item{adjust_limit}{The maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
 then the entire read is rejected. Default is 3.}
 
 \item{ambig_char}{The character to use for ambigious positions in the sequence that is output to the file. Default is N.}

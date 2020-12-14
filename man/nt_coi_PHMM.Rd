@@ -4,7 +4,9 @@
 \name{nt_coi_PHMM}
 \alias{nt_coi_PHMM}
 \title{Nucleotide profile hidden markov model for debar.}
-\format{An object of class \code{PHMM} of length 14.}
+\format{
+An object of class \code{PHMM} of length 14.
+}
 \usage{
 nt_coi_PHMM
 }

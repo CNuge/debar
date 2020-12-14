@@ -2,8 +2,8 @@
 #' Get the final denoised output sequence for a read.
 #'
 #' 
-#' @param x a DNAseq class object.
-#' @param ... additional arguments to be passed between methods.
+#' @param x A DNAseq class object.
+#' @param ... Additional arguments to be passed between methods.
 #' @param keep_flanks Should the regions of the input sequence outside of the barcode region be readded to the denoised sequence
 #' prior to outputting to the file. Options are TRUE, FALSE and 'right'. The 'right' option will keep the trailing flank
 #' but remove the leading flank. Default is TRUE. 

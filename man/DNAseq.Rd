@@ -7,18 +7,18 @@
 DNAseq(x = character(), name = character(), phred = NULL)
 }
 \arguments{
-\item{x}{a nucleotide string.
+\item{x}{A nucleotide string.
 Valid characters within the nucleotide string are: a,t,g,c,-,n.
 The nucleotide string can be input as upper case, but will be automatically converted to lower case.}
 
-\item{name}{an optional character string. Identifier for the sequence.}
+\item{name}{An optional character string. Identifier for the sequence.}
 
-\item{phred}{an optional character string. The phred score string corresponding to the nucleotide string.
+\item{phred}{An optional character string. The phred score string corresponding to the nucleotide string.
 If passed then the input phred scores will be modified along with the nucleotides and carried through
 to the sequence output. Default = NULL.}
 }
 \value{
-an object of class \code{"coi5p"}
+An object of class \code{"DNAseq"}
 }
 \description{
 This can optionally include the DNA sequence's corresponding PHRED quality values and a sequencer identifier as well.

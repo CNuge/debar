@@ -2,11 +2,11 @@
 % Please edit documentation in R/print.r
 \name{print.DNAseq}
 \alias{print.DNAseq}
-\title{Print a concise summary of the DNAseq object}
+\title{Print a concise summary of the DNAseq object.}
 \usage{
 \method{print}{DNAseq}(x, ...)
 }
 \description{
-Print a concise summary of the DNAseq object
+Print a concise summary of the DNAseq object.
 }
 \keyword{internal}

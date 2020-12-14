@@ -2,11 +2,11 @@
 % Please edit documentation in R/frame_seq.r
 \name{individual_DNAbin}
 \alias{individual_DNAbin}
-\title{build an DNAbin with ape.}
+\title{Build an DNAbin with ape.}
 \usage{
 individual_DNAbin(dna_string)
 }
 \description{
-Switches the dashes in the seq - to n
+Switches the dashes in the seq ('-') to 'n'.
 }
 \keyword{internal}

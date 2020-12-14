@@ -1,6 +1,6 @@
-#' build an DNAbin with ape.
+#' Build an DNAbin with ape.
 #'
-#' Switches the dashes in the seq - to n
+#' Switches the dashes in the seq ('-') to 'n'.
 #'
 #' @keywords internal
 individual_DNAbin = function(dna_string){
@@ -8,19 +8,19 @@ individual_DNAbin = function(dna_string){
 }
 
 
-#' Return the reverse compliment for a DNA sequence
+#' Return the reverse compliment for a DNA sequence.
 #' @keywords internal
 rev_comp = function(x){
   return(seqinr::c2s(rev(seqinr::comp(seqinr::s2c(x)))))
 }
 
 
-#' Take an input sequence and align both the forward and reverse compliments to the PHMM
+#' Take an input sequence and align both the forward and reverse compliments to the PHMM.
 #' 
 #' The fuction returns the sequence, DNAbin and Path and score of the optimal orientation.
 #' Optimal orientation is determined by the direction with the longer string of consecutive 
 #' ones in the path
-#' @param x a DNAseq class object.
+#' @param x A DNAseq class object.
 #' @param nt_PHMM The profile hidden Markov model against which the sequence should be compared.
 #' Default is the full COI-5P nucleotide PHMM (nt_coi_PHMM). 
 #' 
@@ -72,8 +72,8 @@ leading_ins = function(seq_path){
 }
 
 
-#' check sequence for an early large string of deletions, if it exists then
-#' return the starting index by which to slice the path and the string
+#' Check sequence for an early large string of deletions, if it exists then
+#' return the starting index by which to slice the path and the string.
 #' @keywords internal
 ins_front_trim = function(path_out, search_scope = 15){
   if(sum(path_out[1:search_scope] == 2)>2){
@@ -96,7 +96,7 @@ ins_front_trim = function(path_out, search_scope = 15){
 #' a run of only 3 additional matches on the back. The front of the sequence is high
 #' priority because it is necessary to ensure the sequence is in frame.
 #' whereas matching on the back is more lenient as insertions and deletions
-#' can be tolerated here without large implications for the rest of the sequence
+#' can be tolerated here without large implications for the rest of the sequence.
 #' @keywords internal
 set_frame = function(org_seq_vec, path_out){
   
@@ -212,7 +212,7 @@ set_frame = function(org_seq_vec, path_out){
 #' be flagged for rejection. If you are dealing with sequence fragments much shorter than the entire COI-5P region you
 #' should lower these values.
 #' 
-#' @param x a DNAseq class object.
+#' @param x A DNAseq class object.
 #' @param dir_check A boolean indicating if both the forward and reverse compliments of a sequence should 
 #' be checked against the PHMM. Default is TRUE.
 #' @param double_pass A boolean indicating if a second pass through the Viterbi algorithm should be conducted for sequences

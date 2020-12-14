@@ -1,18 +1,18 @@
 
-#' Translate the sequence and it for stop codons
+#' Translate a sequence and assess it for the presence of stop codons.
 #'
 #' A side product of the framing and adjustment functions is that the reading frame of the sequence is established
 #' and translation can be conducted with high confidence. If the adjustment did in fact correct indel errors, the
 #' translated sequence should feature no stop codons. If stop codons are present this is grounds for rejection as 
-#' indel errors (or some other large issue) persists in the sequence.
+#' indel errors (or some other issue) persists in the sequence.
 #' 
 #' This test has limitations, as any indels late in the DNA sequence may not lead to stop codons existing. Additionally
 #' by default censored translation is used by this function when producing the amino acid sequence, so as to 
 #' eliminate taxonomic bias against organisms with esoteric translation tables. The likelihood of catching errors is
 #' increased if the genetic code corresponding to sequences is known.
 #' 
-#' @param x a ccs_reads class object.
-#' @param ... additional arguments to be passed between methods.
+#' @param x A ccs_reads class object.
+#' @param ... Additional arguments to be passed between methods.
 #' @param trans_table The translation table to use for translating from nucleotides to amino acids. Default is "auto", meaning
 #' that the translation table will be inferred from the ccs_reads object's order.
 #' @param frame_offset The offset to the reading frame to be applied for translation. By default the offset

@@ -72,8 +72,8 @@ read_fasta = function(x){
 #' Output the denoised consensus sequence to a fasta file.
 #'
 #' 
-#' @param x a DNAseq class object.
-#' @param ... additional arguments to be passed between methods.
+#' @param x A DNAseq class object.
+#' @param ... Additional arguments to be passed between methods.
 #' @param outfile The name of the file to output the data to. Default is "denoised.fasta".
 #' @param append Should the ccs consensus sequence be appended to the output file?(TRUE) 
 #' Or overwrite the file?(FALSE) Default is TRUE.
@@ -104,8 +104,8 @@ write_fasta.DNAseq = function(x, ...,
 #' Output the denoised sequence to a fastq format with placeholder phred scores.
 #'
 #' 
-#' @param x a DNAseq class object.
-#' @param ... additional arguments to be passed between methods.
+#' @param x A DNAseq class object.
+#' @param ... Additional arguments to be passed between methods.
 #' @param outfile The name of the file to output the data to. Default is "denoised.fasta".
 #' @param append Should the ccs consensus sequence be appended to the output file?(TRUE) 
 #' Or overwrite the file?(FALSE) Default is TRUE.
@@ -150,8 +150,8 @@ write_fastq.DNAseq = function(x, ...,
 
 #' A wrapper function to deploy the fastq and fata output functions.
 #' 
-#' @param x a DNAseq class object.
-#' @param ... additional arguments to be passed between methods.
+#' @param x A DNAseq class object.
+#' @param ... Additional arguments to be passed between methods.
 #' @param outfile The name of the file to output the data to. Default is "denoised.fasta".
 #' @param outformat The format of the output data, either fasta for fastq. Default is fastq.
 #' @param append Should the ccs consensus sequence be appended to the output file?(TRUE) 

@@ -7,13 +7,12 @@
 \usage{
 write_fasta(x, ...)
 
-\method{write_fasta}{DNAseq}(x, ..., outfile = "denoised.fasta",
-  append = TRUE)
+\method{write_fasta}{DNAseq}(x, ..., outfile = "denoised.fasta", append = TRUE)
 }
 \arguments{
-\item{x}{a DNAseq class object.}
+\item{x}{A DNAseq class object.}
 
-\item{...}{additional arguments to be passed between methods.}
+\item{...}{Additional arguments to be passed between methods.}
 
 \item{outfile}{The name of the file to output the data to. Default is "denoised.fasta".}
 

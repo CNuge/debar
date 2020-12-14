@@ -4,7 +4,9 @@
 \name{example_nt_string_errors}
 \alias{example_nt_string_errors}
 \title{Example coi5p DNA sequence string with insertion and deletion errors.}
-\format{An object of class \code{character} of length 1.}
+\format{
+An object of class \code{character} of length 1.
+}
 \usage{
 example_nt_string_errors
 }

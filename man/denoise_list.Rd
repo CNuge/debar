@@ -14,7 +14,7 @@ sequence ('seq') or the full DNAseq object ('DNAseq). Default is ('seq')}
 
 \item{cores}{The number of cores across which to thread the denosiing. Default is 1.}
 
-\item{...}{additional arguments to pass to the denoise algorithm.}
+\item{...}{Additional arguments to pass to the denoise algorithm.}
 }
 \description{
 This function provides a shortcut for running the denoise function

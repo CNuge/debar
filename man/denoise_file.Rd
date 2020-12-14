@@ -7,14 +7,22 @@
 \usage{
 denoise_file(x, ...)
 
-\method{denoise_file}{default}(x, ..., outfile = "output.fastq",
-  informat = "fastq", outformat = "fastq", to_file = TRUE,
-  log_file = FALSE, keep_rejects = FALSE, multicore = FALSE)
+\method{denoise_file}{default}(
+  x,
+  ...,
+  outfile = "output.fastq",
+  informat = "fastq",
+  outformat = "fastq",
+  to_file = TRUE,
+  log_file = FALSE,
+  keep_rejects = FALSE,
+  multicore = FALSE
+)
 }
 \arguments{
 \item{x}{The name of the file to denoise sequences from.}
 
-\item{...}{additional arguments to be passed to the \link{denoise} and input/output functions.}
+\item{...}{Additional arguments to be passed to the \link{denoise} and input/output functions.}
 
 \item{outfile}{The name of the file to output sequences to.}
 

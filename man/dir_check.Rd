@@ -2,12 +2,12 @@
 % Please edit documentation in R/frame_seq.r
 \name{dir_check}
 \alias{dir_check}
-\title{Take an input sequence and align both the forward and reverse compliments to the PHMM}
+\title{Take an input sequence and align both the forward and reverse compliments to the PHMM.}
 \usage{
 dir_check(x, nt_PHMM = debar::nt_coi_PHMM)
 }
 \arguments{
-\item{x}{a DNAseq class object.}
+\item{x}{A DNAseq class object.}
 
 \item{nt_PHMM}{The profile hidden Markov model against which the sequence should be compared.
 Default is the full COI-5P nucleotide PHMM (nt_coi_PHMM).}

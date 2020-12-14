@@ -7,13 +7,12 @@
 \usage{
 outseq(x, ...)
 
-\method{outseq}{DNAseq}(x, ..., keep_flanks = TRUE, ambig_char = "N",
-  adjust_limit = 5)
+\method{outseq}{DNAseq}(x, ..., keep_flanks = TRUE, ambig_char = "N", adjust_limit = 5)
 }
 \arguments{
-\item{x}{a DNAseq class object.}
+\item{x}{A DNAseq class object.}
 
-\item{...}{additional arguments to be passed between methods.}
+\item{...}{Additional arguments to be passed between methods.}
 
 \item{keep_flanks}{Should the regions of the input sequence outside of the barcode region be readded to the denoised sequence
 prior to outputting to the file. Options are TRUE, FALSE and 'right'. The 'right' option will keep the trailing flank

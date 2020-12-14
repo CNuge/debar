@@ -3,7 +3,6 @@
 \docType{package}
 \name{debar}
 \alias{debar}
-\alias{debar-package}
 \title{\pkg{debar}}
 \description{
 \pkg{debar} is an R package designed for the identification and removal 

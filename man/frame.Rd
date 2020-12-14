@@ -7,12 +7,19 @@
 \usage{
 frame(x, ...)
 
-\method{frame}{DNAseq}(x, ..., dir_check = TRUE, double_pass = TRUE,
-  min_match = 100, max_inserts = 400, terminate_rejects = TRUE,
-  nt_PHMM = debar::nt_coi_PHMM)
+\method{frame}{DNAseq}(
+  x,
+  ...,
+  dir_check = TRUE,
+  double_pass = TRUE,
+  min_match = 100,
+  max_inserts = 400,
+  terminate_rejects = TRUE,
+  nt_PHMM = debar::nt_coi_PHMM
+)
 }
 \arguments{
-\item{x}{a DNAseq class object.}
+\item{x}{A DNAseq class object.}
 
 \item{...}{additional arguments to be passed between methods.}
 

@@ -3,16 +3,16 @@
 \name{aa_check}
 \alias{aa_check}
 \alias{aa_check.DNAseq}
-\title{Translate the sequence and it for stop codons}
+\title{Translate a sequence and assess it for the presence of stop codons.}
 \usage{
 aa_check(x, ...)
 
 \method{aa_check}{DNAseq}(x, ..., trans_table = 0, frame_offset = 0)
 }
 \arguments{
-\item{x}{a ccs_reads class object.}
+\item{x}{A ccs_reads class object.}
 
-\item{...}{additional arguments to be passed between methods.}
+\item{...}{Additional arguments to be passed between methods.}
 
 \item{trans_table}{The translation table to use for translating from nucleotides to amino acids. Default is "auto", meaning
 that the translation table will be inferred from the ccs_reads object's order.}
@@ -29,7 +29,7 @@ a class object of code{"ccs_reads"}
 A side product of the framing and adjustment functions is that the reading frame of the sequence is established
 and translation can be conducted with high confidence. If the adjustment did in fact correct indel errors, the
 translated sequence should feature no stop codons. If stop codons are present this is grounds for rejection as 
-indel errors (or some other large issue) persists in the sequence.
+indel errors (or some other issue) persists in the sequence.
 }
 \details{
 This test has limitations, as any indels late in the DNA sequence may not lead to stop codons existing. Additionally

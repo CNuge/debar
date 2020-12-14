@@ -11,10 +11,10 @@
 #' as this option only pertains to fastq outputs). The user is encouraged to read the vignette for a detailed 
 #' walkthrough of the denoiser pipeline that will help identify the paramaters that relate to their given needs.
 #' 
-#' @param x a DNA sequence string.
-#' @param ... additional arguments to be passed between methods.
-#' @param name an optional character string. Identifier for the sequence.
-#' @param phred an optional character string. The phred score string corresponding to the nucleotide string.
+#' @param x A DNA sequence string.
+#' @param ... Additional arguments to be passed between methods.
+#' @param name An optional character string. Identifier for the sequence.
+#' @param phred An optional character string. The phred score string corresponding to the nucleotide string.
 #' If passed then the input phred scores will be modified along with the nucleotides and carried through
 #' to the sequence output. Default = NULL.
 #' @param keep_phred Should the original PHRED scores be kept in the output? Default is TRUE.
@@ -28,10 +28,10 @@
 #' @param max_inserts The maximum number of sequention insert states occuring in a sequence 
 #' (including the flanking regions). If this number is
 #' exceeded than the entire read will be discarded if terminate_rejects = TRUE. Default is 400.
-#' @param censor_length the number of base pairs in either direction of a PHMM correction
+#' @param censor_length The number of base pairs in either direction of a PHMM correction
 #' to convert to placeholder characters. Default is 7.
 #' @param added_phred The phred character to use for characters inserted into the original sequence.
-#' @param adjust_limit the maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
+#' @param adjust_limit The maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
 #' then the entire read is rejected. Default is 3.
 #' @param keep_flanks Should the regions of the input sequence outside of the barcode region be readded to the denoised sequence
 #' prior to outputting to the file. Options are TRUE, FALSE and 'right'. The 'right' option will keep the trailing flank
@@ -222,7 +222,7 @@ meta_check = function(x, log_data = list(), log_file = FALSE, keep_rejects = FAL
 #' "rejects_" + outfile). Defaut is FALSE.
 #' @param multicore An integer specifying the number of cores over which to multithread the denoising process. 
 #' Default is FALSE, meaning the process is not multithreaded.
-#' @param ... additional arguments to be passed to the \link{denoise} and input/output functions.
+#' @param ... Additional arguments to be passed to the \link{denoise} and input/output functions.
 #'
 #' @seealso \code{\link{denoise}}
 #'
@@ -338,7 +338,7 @@ denoise_file.default = function(x, ..., outfile = 'output.fastq',  informat = "f
 #' @param to_return Indicate whether a the function should return a list of 
 #' sequence ('seq') or the full DNAseq object ('DNAseq). Default is ('seq')
 #' @param cores The number of cores across which to thread the denosiing. Default is 1.
-#' @param ... additional arguments to pass to the denoise algorithm.
+#' @param ... Additional arguments to pass to the denoise algorithm.
 #' @seealso \code{\link{denoise}}
 #' @examples
 #' #denoise a list of sequences
