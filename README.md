@@ -37,7 +37,7 @@ library(debar)
 ```
 ## Use and examples
 
-The package's vignette contains detailed explanations of the functions and parameters of the `debar` denoising pipeline. The use is encouraged to read this document in order to get oriented and effectively deploy `debar` in the denoising of their own data. Following package installation, the vignette can be accessed from within R through the following command:
+The package's vignette contains detailed explanations of the functions and parameters of the `debar` denoising pipeline. The user is encouraged to read this document in order to get oriented and effectively deploy `debar` in the denoising of their own data. Following package installation, the vignette can be accessed from within R through the following command:
 ```
 vignette('debar-vignette')
 ```
