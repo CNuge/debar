@@ -1,7 +1,7 @@
 Package: debar
 Type: Package
 Title: A Post-Clustering Denoiser for COI-5P Barcode Data
-Version: 0.1.0
+Version: 1.0.0
 Author: Cameron M. Nugent
 Maintainer: Cameron M. Nugent <nugentc@uoguelph.ca>
 Description: The 'debar' sequence processing pipeline is designed for denoising high throughput 

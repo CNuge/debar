@@ -29,6 +29,7 @@ denoise(x, ...)
   outfile = NULL,
   phred_placeholder = "#",
   aa_check = TRUE,
+  triple_translate = FALSE,
   trans_table = 0,
   frame_offset = 0,
   append = TRUE
@@ -94,6 +95,8 @@ match thresholds should be terminated early (prior to sequence adjustment and wr
 Used with write_fastq and keep_phred == FALSE only.}
 
 \item{aa_check}{Boolean indicating whether the amino acid sequence should be generated and assessed for stop codons. Default = TRUE.}
+
+\item{triple_translate}{Boolean indicating whether the amino acid check should include all three reading frames. Default = FALSE.}
 
 \item{trans_table}{The translation table to use for translating from nucleotides to amino acids. Default is 0, meaning
 that censored translation is performed (amigious codons ignored). Used only when aa_check = TRUE.}

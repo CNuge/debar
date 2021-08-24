@@ -52,6 +52,7 @@
 #' @param terminate_rejects Boolean indicating if analysis of sequences that fail to meet phred quality score or path 
 #' match thresholds should be terminated early (prior to sequence adjustment and writing to file). Default it true.
 #' @param aa_check Boolean indicating whether the amino acid sequence should be generated and assessed for stop codons. Default = TRUE.
+#' @param triple_translate Boolean indicating whether the amino acid check should include all three reading frames. Default = FALSE.
 #' @param trans_table The translation table to use for translating from nucleotides to amino acids. Default is 0, meaning
 #' that censored translation is performed (amigious codons ignored). Used only when aa_check = TRUE.
 #' @param frame_offset The offset to the reading frame to be applied for translation. By default the offset
@@ -107,6 +108,7 @@ denoise.default = function(x, ...,
                              outfile = NULL, 
                              phred_placeholder = "#",
                              aa_check = TRUE, 
+                             triple_translate = FALSE,
                              trans_table = 0,
                              frame_offset = 0,
                              append = TRUE
@@ -133,9 +135,29 @@ denoise.default = function(x, ...,
                     added_phred = added_phred,
                     ...)
   if(aa_check == TRUE){
-    dat = aa_check(dat, trans_table = trans_table, 
-                        frame_offset = frame_offset,
-                        ...)
+    if(triple_translate == TRUE){
+      #first reading frame
+      d0 = aa_check(dat, trans_table = trans_table, frame_offset = 0, ...)
+      #second reading frame
+      d1 = aa_check(dat, trans_table = trans_table, frame_offset = 1, ...)
+      #third reading frame
+      d2 = aa_check(dat, trans_table = trans_table, frame_offset = 2, ...)
+
+      if(d0$stop_codons == FALSE){
+        dat = d0
+      }else if(d1$stop_codons == FALSE){
+        dat = d1
+      }else if(d2$stop_codons == FALSE){
+        dat = d2
+      }else{
+        dat = d0 #if none of the frame offsets produce a good sequence, then return the non-offset version.
+      }
+    }
+    else{
+      dat = aa_check(dat, trans_table = trans_table, 
+                     frame_offset = frame_offset,
+                     ...)
+    }
   }
 
   if(dat$reject == TRUE && terminate_rejects == TRUE){

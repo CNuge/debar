@@ -1,2 +1,2 @@
 "input_file","total_reads","good_count","reject_count","good_denoised","good_unaltered","start_time","end_time","time_elapsed"
-"/home/cnuge/bin/debar/inst/extdata/small_unittest.fastq",2,2,0,2,0,2020-12-14 07:17:58,2020-12-14 07:18:00,0.0202560901641846
+"/home/cnuge/bin/debar/inst/extdata/small_unittest.fastq",2,2,0,2,0,2021-08-24 14:50:37,2021-08-24 14:50:38,0.0165837526321411
