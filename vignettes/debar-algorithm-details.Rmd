@@ -89,14 +89,31 @@ ex$adjusted_sequence[150:164]
 
 #### Amino Acid check
 
-  Following the framing and adjustment of the sequence, `aa_check` can be used to translate the adjusted DNA sequence to amino acids and conduct a check of the amino acid sequence for the presence of stop codons. This is easier (i.e. translation is only performed once) because the `frame` function sets the DNA sequences in a common orientation and reading frame. The `aa_check` function's search for stop codons provides a simple double check of the `adjust` algorithm's performance. If stop codons are present then this indicates that reading frame shifts have not been corrected properly in the adjustment phase. Sequences of this kind will be flagged for rejection. This check is not perfect, as any persisting frame shifts late in the sequence may not be sufficiently disruptive to produce a stop codon.
+  Following the framing and adjustment of the sequence, `aa_check` can be used to translate the adjusted DNA sequence to amino acids and conduct a check of the amino acid sequence for the presence of stop codons. The `aa_check` function's search for stop codons provides a simple double check of the `adjust` algorithm's performance. If stop codons are present then this indicates that reading frame shifts have not been corrected properly in the adjustment phase. Sequences of this kind will be flagged for rejection. This check is not perfect, as any persisting frame shifts late in the sequence may not be sufficiently disruptive to produce a stop codon. 
   
-  A few more technical notes of the `aa_check` function: 1. sequences are translated using [the censored translation table described and implemented within `coil`](https://github.com/CNuge/coil/blob/master/vignettes/coil-vignette.Rmd). This is done so that the `aa_check` function is not biased against taxonomic groups that employ more esoteric translation tables. You can override the default behaviour and pass [the number of the genetic code](https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi) if it is known for certain (with `trans_table` parameter) or even override the reading frame used for translation with the parameter `frame_offset`.  2. If you are familiar with `coil`](https://github.com/CNuge/coil) you will be aware that it compares translated sequences against an amino acid PHMM to identify sequences with errors. This is not done within the present amino acid check namely in the interest of speed (comparing sequences to the PHMMs is computationally costly) and because the potentially large number of placeholder characters in a sequence resulting from the `adjust` algorithm would lower the likelihood scores of the corresponding amino acid sequences (due to a surplus of placeholders) and lead to a large number of false rejections. 
-
 ```{r}
 ex = aa_check(ex) #the default behaviour should suit >99% of user's needs
   
 ```
+
+  By default, translation is only performed once as it is assumed that the `frame` function has correctly set the DNA sequences in a common orientation and reading frame. In some cases this assumption may be violated (i.e. the algorithm is consistently placing a series of samples in the incorrect reading frame), when running the `denoise` function, setting the `triple_translate` option to `TRUE` (the default is `FALSE`) will cause the sequence to be translated in all three possible reading frames. In this case, if *any* of the three reading frames do not produce a stop codon then the sequence will be considered to pass the amino acid check. Setting the `triple_translate` argument to `TRUE` is a tradeoff, sequences that present framing issues will not be unnecessarily discarded, but the `aa_check` will also produce more erroneous passes (due to one of the three reading frames not including a stop codon due to chance alone). Computation time is also increased, as the translation function is called up to three times for each sequence.
+
+```{r}
+i = 33 #the row number from the example dataframe to be analyzed in the single sequence demonstration
+#here the full pipeline is run usin the denoise function.
+trans_ex = denoise(data$sequence[[i]],                           
+                          name = "example1",
+                      		ambig_char = "N",
+                          aa_check = TRUE, #this is the default
+                          triple_translate = TRUE) #this is changed to TRUE, all three reading frames tried, 
+                        
+trans_ex$aaSeq
+trans_ex$stop_codons
+```
+
+  
+  A few more technical notes of the `aa_check` function: 1. sequences are translated using [the censored translation table described and implemented within `coil`](https://github.com/CNuge/coil/blob/master/vignettes/coil-vignette.Rmd). This is done so that the `aa_check` function is not biased against taxonomic groups that employ more esoteric translation tables. You can override the default behaviour and pass [the number of the genetic code](https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi) if it is known for certain (with `trans_table` parameter) or even override the reading frame used for translation with the parameter `frame_offset`.  2. If you are familiar with `coil`](https://github.com/CNuge/coil) you will be aware that it compares translated sequences against an amino acid PHMM to identify sequences with errors. This is not done within the present amino acid check namely in the interest of speed (comparing sequences to the PHMMs is computationally costly) and because the potentially large number of placeholder characters in a sequence resulting from the `adjust` algorithm would lower the likelihood scores of the corresponding amino acid sequences (due to a surplus of placeholders) and lead to a large number of false rejections. 
+
 
 #### Creating the output sequence
 
@@ -140,7 +157,7 @@ write_fasta(ex, filename = "out.fa" , append = FALSE) #will overwrite out.fa wit
 The `write_fastq` file contains two additional parameters relating to the handling of PHRED quality scores. If `keep_phred` is set to `TRUE`, then the PHRED scores contained in the DNAseq object will be used to build the PHRED line in the fastq record being output. If `keep_phred` is set to `FALSE`, or the DNAseq object does not possess PHRED scores (i.e. it originated from a fasta file) then the PHRED line will be filled with the specified `phred_placeholder` character specified by the user (or the default: `#`, an extremely low PHRED score of 2).
 
 ```{r} 
-write_fastq(ex, filename = "out.fq") # default - appends output sequence to the file and keeps the objects phred scores
+write_fastq(ex, filename = "out.fq",) # default - appends output sequence to the file and keeps the objects phred scores
 
 write_fastq(ex, filename = "out.fq" , append = FALSE, keep_phred = FALSE, phred_placeholder = "?") #alternative - overwrites 
 # file and discards the phred scores, replacing them with the character "?" the correct number of times.
