@@ -5,6 +5,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 [![CRAN_Status_Badge](https://r-pkg.org/badges/version/debar)](https://CRAN.R-project.org/package=debar)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/debar)](https://CRAN.R-project.org/package=debar)
+[![Generic badge](https://img.shields.io/badge/DOI-10.1111%2F1755--0998.13384-brightgreen.svg)](https://doi.org/10.1111/1755-0998.13384)
 --------------------------------------------------------
 
 `debar` is an R package designed for denoising sequence data for the animal DNA barcode marker: cytochrome c oxidase I (COI-5P, or the five prime portion of COI). The package is designed to detect and correct insertion and deletion errors within barcode sequences. This is accomplished through comparison of input sequences against a profile hidden Markov (PHMM) model [using the Viterbi algorithm](https://en.wikipedia.org/wiki/Viterbi_algorithm) and adjustment of the sequence based on the reported Viterbi path (`debar` depends on functions from the R package [aphid](https://CRAN.R-project.org/package=aphid) for the PHMM structure and for running the Viterbi algorithm).
@@ -103,6 +104,12 @@ If you are planning on utilizing `debar` for large input files, please consult t
 
 Initial design and default parameters are based on using `debar` to process the circular consensus sequences of [single molecule real-time (SMRT) sequencing](https://www.pacb.com/smrt-science/smrt-sequencing/) outputs produced by [the Pacific Biosciences SEQUEL platform](https://www.pacb.com/products-and-services/sequel-system/). Despite this, the package is designed to interface with fastq or fasta files of any origin (although the developers have yet to quantify performance on other data sources).
 In the future we hope to quantify performance and provide informed hyper-parameter choices for outputs from other sequencing platforms. If you are interested in beta testing `debar` on barcode or metabarcode data from other platforms, please [contact Cam](https://cnuge.github.io), we would be happy to work with you to optimize `debar`'s functionality for other sequencing platforms.
+
+## Citation
+
+If you use debar in your research, please consider citing the following publication:
+
+Nugent CM, Elliott TA, Ratnasingham S, Hebert PD, Adamowicz SJ. Debar: A sequence‐by‐sequence denoiser for COI‐5P DNA barcode data. Molecular Ecology Resources. 2021 Nov;21(8):2832-46.
 
 ## Acknowledgements
 
