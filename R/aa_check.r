@@ -19,7 +19,7 @@
 #' is zero, so the first character in the framed sequence is considered the first nucelotide of the first codon.
 #' Passing frame_offset = 1 would offset the sequence by one and therefore make the second character in the
 #' framed sequence the the first nucelotide of the first codon.
-#' @return a class object of code{"ccs_reads"} 
+#' @return a class object of \code{"ccs_reads"} 
 #' @seealso \code{\link{DNAseq}}
 #' @seealso \code{\link{frame}}
 #' @seealso \code{\link{adjust}}

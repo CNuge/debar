@@ -209,7 +209,7 @@ adj_seq = function(frame_dat, path_out, censor_length = 3, added_phred = "*"){
 #' @param censor_length The number of base pairs in either direction of a PHMM correction
 #' to convert to placeholder characters. Default is 7.
 #' @param added_phred The phred character to use for characters inserted into the original sequence. Default is "*".
-#' @return a class object of code{"ccs_reads"} 
+#' @return a class object of \code{"ccs_reads"} 
 #' @seealso \code{\link{DNAseq}}
 #' @seealso \code{\link{frame}}
 #' @examples

@@ -231,7 +231,7 @@ set_frame = function(org_seq_vec, path_out){
 #' COI-5P region can be generated using the subsetPHMM function of the R package coil, 
 #' or a novel PHMM can be trained using the R package aphid.
 #' @param ... additional arguments to be passed between methods.
-#' @return a class object of code{"DNAseq"} 
+#' @return a class object of \code{"DNAseq"} 
 #' @seealso \code{\link{DNAseq}}
 #' @examples
 #' #previously called

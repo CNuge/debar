@@ -11,7 +11,7 @@
 #' @param ambig_char The character to use for ambigious positions in the sequence.
 #' @param adjust_limit the maximum number of corrections that can be applied to a sequence read. If this number is exceeded 
 #' then the entire read is masked with ambigious characters. Default is 5.
-#' @return a class object of code{"ccs_reads"} 
+#' @return a class object of \code{"ccs_reads"} 
 #' @seealso \code{\link{DNAseq}}
 #' @seealso \code{\link{frame}}
 #' @seealso \code{\link{adjust}}

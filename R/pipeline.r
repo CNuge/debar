@@ -59,7 +59,7 @@
 #' is zero, so the first character in the framed sequence is considered the first nucelotide of the first codon.
 #' Passing frame_offset = 1 would offset the sequence by one and therefore make the second character in the
 #' framed sequence the the first nucelotide of the first codon. Used only when aa_check = TRUE.
-#' @return a class object of code{"DNAseq"} 
+#' @return a class object of \code{"DNAseq"} 
 #' @examples
 #' # Denoise example sequence with default paramaters.
 #' ex_data = denoise(example_nt_string_errors, 

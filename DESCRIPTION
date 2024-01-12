@@ -1,9 +1,9 @@
 Package: debar
 Type: Package
 Title: A Post-Clustering Denoiser for COI-5P Barcode Data
-Version: 1.0.0
+Version: 1.0.1
 Author: Cameron M. Nugent
-Maintainer: Cameron M. Nugent <nugentc@uoguelph.ca>
+Maintainer: Cameron M. Nugent <camnugent@gmail.com>
 Description: The 'debar' sequence processing pipeline is designed for denoising high throughput 
     sequencing data for the animal DNA barcode marker cytochrome c oxidase I (COI). The package 
     is designed to detect and correct insertion and deletion errors within sequencer outputs. 

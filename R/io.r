@@ -77,7 +77,7 @@ read_fasta = function(x){
 #' @param outfile The name of the file to output the data to. Default is "denoised.fasta".
 #' @param append Should the ccs consensus sequence be appended to the output file?(TRUE) 
 #' Or overwrite the file?(FALSE) Default is TRUE.
-#' @return a class object of code{"DNAseq"} 
+#' @return a class object of \code{"DNAseq"} 
 #' @seealso \code{\link{DNAseq}}
 #' @seealso \code{\link{frame}}
 #' @seealso \code{\link{adjust}}
@@ -111,7 +111,7 @@ write_fasta.DNAseq = function(x, ...,
 #' Or overwrite the file?(FALSE) Default is TRUE.
 #' @param keep_phred Should the original PHRED scores be kept in the output? Default is TRUE.
 #' @param phred_placeholder The character to input for the phred score line. Default is '#'.
-#' @return a class object of code{"DNAseq"} 
+#' @return a class object of \code{"DNAseq"} 
 #' @seealso \code{\link{DNAseq}}
 #' @seealso \code{\link{frame}}
 #' @seealso \code{\link{adjust}}
@@ -158,7 +158,7 @@ write_fastq.DNAseq = function(x, ...,
 #' Or overwrite the file?(FALSE) Default is TRUE.
 #' @param keep_phred Should the original PHRED scores be kept in the output? Default is TRUE.
 #' @param phred_placeholder The character to input for the phred score line. Default is '#'.
-#' @return a class object of code{"DNAseq"}
+#' @return a class object of \code{"DNAseq"}
 #'
 #' @keywords internal
 #' @name write_wrapper
